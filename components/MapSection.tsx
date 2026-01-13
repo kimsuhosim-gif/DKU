@@ -4,6 +4,12 @@ import { ArrowLeft, MapPin, Camera, Star, Ruler, Info, ExternalLink } from 'luci
 import { Container as MapDiv, NaverMap, Marker, NavermapsProvider } from 'react-naver-maps';
 import { records, COURSE_LOCATIONS } from '../utils/golfData';
 
+declare global {
+  interface Window {
+    naver: any;
+  }
+}
+
 interface MapSectionProps {
   onBack: () => void;
 }
@@ -20,7 +26,7 @@ interface MapProject {
   score: number;
 }
 
-const NAVER_CLIENT_ID = "02j9jku1mt"; // 📌 Correct Client ID applied
+const NAVER_CLIENT_ID = "02j9jku1mt";
 
 const defaultCenter = {
   lat: 37.227445,
@@ -29,6 +35,15 @@ const defaultCenter = {
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    // Debug: Check if script is already there
+    if (window.naver && window.naver.maps) {
+      setIsLoaded(true);
+      return;
+    }
+  }, []);
 
   const projects: MapProject[] = useMemo(() => {
     return records.map((r, idx) => {
@@ -101,7 +116,9 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
 
         {/* Right: Naver Map */}
         <div className="lg:col-span-8 bg-sage-50 rounded-[4rem] relative overflow-hidden border border-sage-100 min-h-[600px] shadow-inner z-0">
-          <NavermapsProvider ncpClientId={NAVER_CLIENT_ID}>
+          <NavermapsProvider
+            ncpClientId={NAVER_CLIENT_ID}
+          >
             <MapDiv
               style={{ width: '100%', height: '100%', borderRadius: '4rem' }}
             >
@@ -110,6 +127,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                 defaultZoom={11}
                 center={selectedProject?.location || defaultCenter}
                 zoom={selectedProject ? 14 : 11}
+                onInit={() => setIsLoaded(true)}
               >
                 {projects.map(p => (
                   <Marker
@@ -122,6 +140,15 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
               </NaverMap>
             </MapDiv>
           </NavermapsProvider>
+
+          {!isLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-sage-50/50 backdrop-blur-sm z-10">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-8 h-8 border-2 border-sage-200 border-t-sage-400 rounded-full animate-spin"></div>
+                <span className="text-[10px] uppercase tracking-widest text-sage-400 font-bold">Loading Master Map...</span>
+              </div>
+            </div>
+          )}
 
           {/* Floating Info Card */}
           <AnimatePresence>
