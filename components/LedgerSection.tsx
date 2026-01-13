@@ -53,21 +53,37 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-[1.5rem] sm:rounded-[2.5rem] border border-champagne-100 bg-white shadow-sm -mx-2 sm:mx-0">
+      {/* Mobile Card Layout (Visible only on mobile) */}
+      <div className="block sm:hidden space-y-4 -mx-2">
+        {transactions.map((t, idx) => (
+          <div key={idx} className="bg-white p-5 rounded-2xl border border-champagne-100 shadow-sm flex flex-col space-y-3">
+            <div className="flex justify-between items-start">
+              <span className="text-[10px] text-sage-300 font-bold uppercase tracking-wider">{t.date}</span>
+              <span className={`text-xs font-bold ${t.type === 'income' ? 'text-green-600' : 'text-rose-500'}`}>
+                {t.type === 'income' ? '+' : '-'} ₩{Math.abs(t.amount).toLocaleString()}
+              </span>
+            </div>
+            <p className="text-sm font-medium text-sage-600 leading-snug">{t.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table Layout (Visible on sm and larger) */}
+      <div className="hidden sm:block overflow-x-auto rounded-[2.5rem] border border-champagne-100 bg-white shadow-sm">
         <table className="w-full text-left border-collapse min-w-[500px] sm:min-w-full">
           <thead>
             <tr className="bg-champagne-50/50">
-              <th className="px-4 sm:px-8 py-4 sm:py-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-sage-400 font-medium">Date</th>
-              <th className="px-4 sm:px-8 py-4 sm:py-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-sage-400 font-medium">Description</th>
-              <th className="px-4 sm:px-8 py-4 sm:py-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-sage-400 font-medium text-right">Amount</th>
+              <th className="px-8 py-6 text-[10px] uppercase tracking-widest text-sage-400 font-medium">Date</th>
+              <th className="px-8 py-6 text-[10px] uppercase tracking-widest text-sage-400 font-medium">Description</th>
+              <th className="px-8 py-6 text-[10px] uppercase tracking-widest text-sage-400 font-medium text-right">Amount</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-champagne-50">
             {transactions.map((t, idx) => (
               <tr key={idx} className="hover:bg-champagne-50/30 transition-colors">
-                <td className="px-4 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm text-sage-400 whitespace-nowrap">{t.date}</td>
-                <td className="px-4 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm font-medium text-sage-600 min-w-[150px]">{t.desc}</td>
-                <td className={`px-4 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm font-semibold text-right whitespace-nowrap ${t.type === 'income' ? 'text-green-600' : 'text-rose-500'}`}>
+                <td className="px-8 py-6 text-sm text-sage-400 whitespace-nowrap">{t.date}</td>
+                <td className="px-8 py-6 text-sm font-medium text-sage-600 min-w-[150px]">{t.desc}</td>
+                <td className={`px-8 py-6 text-sm font-semibold text-right whitespace-nowrap ${t.type === 'income' ? 'text-green-600' : 'text-rose-500'}`}>
                   {t.type === 'income' ? '+' : '-'} ₩{Math.abs(t.amount).toLocaleString()}
                 </td>
               </tr>
