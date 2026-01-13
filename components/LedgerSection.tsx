@@ -30,22 +30,22 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
         <span>Back to Dashboard</span>
       </button>
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 lg:mb-16 gap-6">
         <div>
-          <span className="text-sage-400 font-medium tracking-widest uppercase text-xs">Transparency</span>
-          <h2 className="text-5xl font-serif mt-4 text-sage-600">Fee Ledger</h2>
+          <span className="text-sage-400 font-medium tracking-widest uppercase text-[10px] sm:text-xs">Transparency</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif mt-2 sm:mt-4 text-sage-600">Fee Ledger</h2>
         </div>
-        <div className="flex flex-col items-end space-y-3">
-          <div className="text-right">
+        <div className="flex flex-col items-start md:items-end space-y-4 md:space-y-3 w-full md:w-auto">
+          <div className="text-left md:text-right w-full">
             <p className="text-[10px] uppercase tracking-[0.2em] text-sage-300 font-bold mb-1">Membership Fee Account</p>
-            <p className="text-sm font-serif text-sage-600">카카오뱅크 <span className="font-sans font-bold ml-2">3333-16-4428815</span></p>
+            <p className="text-sm font-serif text-sage-600">카카오뱅크 <span className="font-sans font-bold ml-1 sm:ml-2">3333-16-4428815</span></p>
             <p className="text-[11px] text-sage-400 mt-0.5">(예금주: 양창운)</p>
           </div>
-          <div className="flex space-x-3">
-            <button className="p-3 rounded-full border border-sage-100 text-sage-400 hover:bg-sage-50 transition-colors">
+          <div className="flex space-x-3 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+            <button className="p-3 rounded-full border border-sage-100 text-sage-400 hover:bg-sage-50 transition-colors flex-shrink-0">
               <Filter size={18} />
             </button>
-            <button className="flex items-center space-x-2 px-6 py-3 rounded-full bg-sage-600 text-white text-xs uppercase tracking-widest hover:bg-sage-500 transition-colors">
+            <button className="flex items-center space-x-2 px-4 sm:px-6 py-3 rounded-full bg-sage-600 text-white text-[10px] sm:text-xs uppercase tracking-widest hover:bg-sage-500 transition-colors whitespace-nowrap flex-shrink-0">
               <Download size={14} />
               <span>Statement</span>
             </button>
@@ -53,21 +53,21 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-[2.5rem] border border-champagne-100 bg-white shadow-sm">
-        <table className="w-full text-left border-collapse">
+      <div className="overflow-x-auto rounded-[1.5rem] sm:rounded-[2.5rem] border border-champagne-100 bg-white shadow-sm -mx-2 sm:mx-0">
+        <table className="w-full text-left border-collapse min-w-[500px] sm:min-w-full">
           <thead>
             <tr className="bg-champagne-50/50">
-              <th className="px-8 py-6 text-[10px] uppercase tracking-widest text-sage-400 font-medium">Date</th>
-              <th className="px-8 py-6 text-[10px] uppercase tracking-widest text-sage-400 font-medium">Description</th>
-              <th className="px-8 py-6 text-[10px] uppercase tracking-widest text-sage-400 font-medium text-right">Amount</th>
+              <th className="px-4 sm:px-8 py-4 sm:py-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-sage-400 font-medium">Date</th>
+              <th className="px-4 sm:px-8 py-4 sm:py-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-sage-400 font-medium">Description</th>
+              <th className="px-4 sm:px-8 py-4 sm:py-6 text-[9px] sm:text-[10px] uppercase tracking-widest text-sage-400 font-medium text-right">Amount</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-champagne-50">
             {transactions.map((t, idx) => (
               <tr key={idx} className="hover:bg-champagne-50/30 transition-colors">
-                <td className="px-8 py-6 text-sm text-sage-400">{t.date}</td>
-                <td className="px-8 py-6 text-sm font-medium text-sage-600">{t.desc}</td>
-                <td className={`px-8 py-6 text-sm font-semibold text-right ${t.type === 'income' ? 'text-green-600' : 'text-rose-500'}`}>
+                <td className="px-4 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm text-sage-400 whitespace-nowrap">{t.date}</td>
+                <td className="px-4 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm font-medium text-sage-600 min-w-[150px]">{t.desc}</td>
+                <td className={`px-4 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm font-semibold text-right whitespace-nowrap ${t.type === 'income' ? 'text-green-600' : 'text-rose-500'}`}>
                   {t.type === 'income' ? '+' : '-'} ₩{Math.abs(t.amount).toLocaleString()}
                 </td>
               </tr>
@@ -77,9 +77,9 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
       </div>
 
       <div className="mt-8 flex justify-end">
-        <div className="p-8 bg-sage-50 rounded-[2rem] min-w-[300px]">
-          <p className="text-xs uppercase tracking-widest text-sage-400">Current Balance</p>
-          <p className="text-3xl font-serif text-sage-600 mt-2 italic font-bold">₩{currentBalance.toLocaleString()}</p>
+        <div className="p-6 sm:p-8 bg-sage-50 rounded-[1.5rem] sm:rounded-[2rem] w-full sm:min-w-[300px] sm:w-auto text-right">
+          <p className="text-[10px] sm:text-xs uppercase tracking-widest text-sage-400">Current Balance</p>
+          <p className="text-2xl sm:text-3xl font-serif text-sage-600 mt-2 italic font-bold">₩{currentBalance.toLocaleString()}</p>
         </div>
       </div>
     </div>
