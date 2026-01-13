@@ -55,20 +55,20 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
         {members.map((member, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="group p-5 sm:p-8 rounded-3xl sm:rounded-[3rem] border border-champagne-100 bg-white hover:bg-champagne-50/50 transition-all duration-500 flex flex-col relative overflow-hidden"
+            className="group p-3.5 sm:p-8 rounded-2xl sm:rounded-[3rem] border border-champagne-100 bg-white hover:bg-champagne-50/50 transition-all duration-500 flex flex-col relative overflow-hidden"
           >
             {/* Background Decorative Element */}
             <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-sage-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
 
-            <div className="flex items-center space-x-4 sm:space-x-6 relative z-10">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-sage-50 flex items-center justify-center overflow-hidden shrink-0 shadow-inner border border-champagne-50">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 relative z-10">
+              <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-xl sm:rounded-3xl bg-sage-50 flex items-center justify-center overflow-hidden shrink-0 shadow-inner border border-champagne-50">
                 <img
                   src={member.img || `https://picsum.photos/seed/member${idx}/100/100`}
                   alt={member.name}
@@ -76,19 +76,19 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 />
               </div>
               <div className="flex-grow">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center space-x-2">
-                    <h4 className="text-xl sm:text-2xl font-sans font-bold text-sage-600">{member.name}</h4>
+                <div className="flex items-center justify-between mb-0.5 sm:mb-1">
+                  <div className="flex items-center space-x-1.5 sm:space-x-2">
+                    <h4 className="text-base sm:text-2xl font-sans font-bold text-sage-600 truncate">{member.name}</h4>
                     {/* Badge Rendering */}
                     <div className="flex space-x-1">
                       {member.role === '회장' && (
-                        <div className="p-1 bg-amber-100 text-amber-600 rounded-lg shadow-sm" title="회장">
-                          <Crown size={12} />
+                        <div className="p-0.5 sm:p-1 bg-amber-100 text-amber-600 rounded-md sm:rounded-lg shadow-sm" title="회장">
+                          <Crown size={10} />
                         </div>
                       )}
                       {member.role === '총무' && (
-                        <div className="p-1 bg-blue-100 text-blue-600 rounded-lg shadow-sm" title="총무">
-                          <Medal size={12} />
+                        <div className="p-0.5 sm:p-1 bg-blue-100 text-blue-600 rounded-md sm:rounded-lg shadow-sm" title="총무">
+                          <Medal size={10} />
                         </div>
                       )}
                       {member.wins > 0 && (
@@ -102,31 +102,31 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <p className="text-[9px] sm:text-[10px] text-sage-400 uppercase tracking-widest font-bold">{member.role}</p>
+                  <p className="text-[8px] sm:text-[10px] text-sage-400 uppercase tracking-widest font-bold">{member.role}</p>
                   {member.phone && (
                     <a
                       href={`tel:${member.phone}`}
-                      className="p-1.5 sm:p-2 rounded-xl bg-sage-50 text-sage-400 hover:bg-sage-600 hover:text-white transition-all duration-300 shadow-sm"
+                      className="p-1 sm:p-2 rounded-lg sm:rounded-xl bg-sage-50 text-sage-400 hover:bg-sage-600 hover:text-white transition-all duration-300 shadow-sm"
                     >
-                      <Phone size={10} sm:size={12} />
+                      <Phone size={8} />
                     </a>
                   )}
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 mt-6 sm:mt-8 relative z-10">
-              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-2 sm:px-3 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
-                <span className="text-[6px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-1">Handicap</span>
-                <span className="text-[10px] sm:text-xs font-sans font-bold text-sage-600">HC {member.handicap}</span>
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mt-4 sm:mt-8 relative z-10">
+              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
+                <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">HC</span>
+                <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.handicap}</span>
               </div>
-              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-2 sm:px-3 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
-                <span className="text-[6px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-1">Avg Score</span>
-                <span className="text-[10px] sm:text-xs font-sans font-bold text-sage-600">{member.averageScore}</span>
+              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
+                <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">Avg</span>
+                <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.averageScore}</span>
               </div>
-              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-2 sm:px-3 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
-                <span className="text-[6px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-1">Rounds</span>
-                <span className="text-[10px] sm:text-xs font-sans font-bold text-sage-600">{member.rounds}회</span>
+              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
+                <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">Rnd</span>
+                <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.rounds}</span>
               </div>
             </div>
 
