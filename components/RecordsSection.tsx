@@ -24,7 +24,7 @@ const RecordsSection: React.FC<RecordsSectionProps> = ({ onBack }) => {
       <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
         <div>
           <span className="text-sage-400 font-medium tracking-widest uppercase text-xs">Official Records</span>
-          <h2 className="text-5xl font-serif mt-4 text-sage-600">Rounding History</h2>
+          <h2 className="text-3xl sm:text-5xl font-serif mt-4 text-sage-600">Rounding History</h2>
         </div>
         <p className="text-sage-400 max-w-sm text-sm italic">
           "Great shots are moments, but records are forever."
@@ -49,7 +49,7 @@ const RecordsSection: React.FC<RecordsSectionProps> = ({ onBack }) => {
                       <Calendar size={14} />
                       <span className="text-xs tracking-widest uppercase">{record.date}</span>
                     </div>
-                    <h3 className="text-3xl font-serif text-sage-600 mb-2">{record.location}</h3>
+                    <h3 className="text-xl md:text-3xl font-serif text-sage-600 mb-2">{record.location}</h3>
                     <div className="flex items-center space-x-2 text-sage-500">
                       <Trophy size={16} className="text-amber-500" />
                       <span className="text-sm font-medium">Winner: {record.winner} ({record.score})</span>
