@@ -45,20 +45,18 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
 
     return (
         <div className="fixed inset-0 z-[9999] bg-sage-950 flex items-center justify-center p-6 overflow-hidden">
-            {/* Immersive Scenic Background with Quality Optimization */}
+            {/* Ultra-High Resolution Cinematic Background (4K) */}
             <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700"
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
                 style={{
-                    backgroundImage: 'url("/images/luxury_golf_bg.png")',
+                    backgroundImage: 'url("https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&q=100&w=3840")',
                     imageRendering: 'auto'
                 }}
             >
-                {/* Advanced Noise/Grain overlay to mask pixelation and add cinematic feel */}
-                <div className="absolute inset-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
-
-                {/* Multi-layered overlays for depth and quality enhancement */}
-                <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-sage-950/90 via-sage-950/10 to-sage-950/30" />
+                {/* Visual texture & Depth enhancements */}
+                <div className="absolute inset-0 opacity-[0.2] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-sage-950/90 via-transparent to-sage-950/30" />
             </div>
 
             <motion.div
