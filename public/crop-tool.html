@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 이미지 크롭 도구</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .profile-item {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .profile-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .profile-item h3 {
+            margin: 5px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .profile-item p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .download-btn {
+            background: #2196F3;
+        }
+
+        .download-btn:hover {
+            background: #0b7dda;
+        }
+
+        canvas {
+            display: none;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h2 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🏌️ 골프 클럽 멤버 프로필 이미지 크롭 도구</h1>
+
+    <div class="instructions">
+        <h2>사용 방법</h2>
+        <ol>
+            <li>아래 "모두 다운로드" 버튼을 클릭하면 모든 프로필 이미지가 자동으로 다운로드됩니다.</li>
+            <li>다운로드된 이미지들을 <code>public/images/profiles/</code> 폴더에 저장하세요.</li>
+            <li>개별 이미지를 다운로드하려면 각 프로필 아래의 "다운로드" 버튼을 클릭하세요.</li>
+        </ol>
+    </div>
+
+    <div class="container">
+        <button onclick="downloadAll()" style="font-size: 16px; padding: 15px 30px;">📥 모두 다운로드</button>
+        <div id="profilesContainer" class="image-grid"></div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // 프로필 데이터 (이름, 원본 이미지, 크롭 좌표)
+        const profiles = [
+            // 첫 번째 이미지 그룹
+            { name: 'youngwoong', displayName: '김영웅', img: 'members_group1.jpg', x: 10, y: 10, w: 200, h: 240 },
+            { name: 'hyomin', displayName: '김효민', img: 'members_group1.jpg', x: 220, y: 10, w: 230, h: 260 },
+            { name: 'jaeyeop', displayName: '정재엽', img: 'members_group1.jpg', x: 410, y: 110, w: 210, h: 280 },
+            { name: 'jihoon', displayName: '홍지훈', img: 'members_group1.jpg', x: 620, y: 10, w: 190, h: 240 },
+            { name: 'doyoon', displayName: '김도윤', img: 'members_group1.jpg', x: 820, y: 10, w: 200, h: 240 },
+
+            { name: 'manjong', displayName: '유만종', img: 'members_group1.jpg', x: 10, y: 280, w: 240, h: 240 },
+            { name: 'sungtae', displayName: '김성태', img: 'members_group1.jpg', x: 270, y: 410, w: 230, h: 240 },
+            { name: 'yeonseong', displayName: '신연성', img: 'members_group1.jpg', x: 525, y: 410, w: 230, h: 240 },
+            { name: 'jaeho', displayName: '최재호', img: 'members_group1.jpg', x: 775, y: 280, w: 245, h: 240 },
+
+            { name: 'sungjin2', displayName: '김성진', img: 'members_group1.jpg', x: 10, y: 540, w: 250, h: 240 },
+            { name: 'changwoon', displayName: '양창운', img: 'members_group1.jpg', x: 770, y: 540, w: 250, h: 240 },
+
+            // 두 번째 이미지 그룹
+            { name: 'kyungjun', displayName: '김경준', img: 'members_group2.jpg', x: 15, y: 30, w: 250, h: 250 },
+            { name: 'junyoung', displayName: '김준영', img: 'members_group2.jpg', x: 280, y: 30, w: 250, h: 250 },
+            { name: 'jangpyo', displayName: '홍장표', img: 'members_group2.jpg', x: 190, y: 295, w: 250, h: 250 },
+        ];
+
+        const images = {};
+        let loadedCount = 0;
+
+        // 이미지 로드
+        function loadImages() {
+            const imagesToLoad = ['members_group1.jpg', 'members_group2.jpg'];
+
+            imagesToLoad.forEach(imgSrc => {
+                const img = new Image();
+                img.onload = function () {
+                    images[imgSrc] = img;
+                    loadedCount++;
+                    if (loadedCount === imagesToLoad.length) {
+                        renderProfiles();
+                    }
+                };
+                img.onerror = function () {
+                    console.error(`이미지 로드 실패: ${imgSrc}`);
+                    alert(`이미지를 찾을 수 없습니다: ${imgSrc}\\n\\npublic/images/ 폴더에 이미지가 있는지 확인하세요.`);
+                };
+                img.src = `/images/${imgSrc}`;
+            });
+        }
+
+        // 프로필 렌더링
+        function renderProfiles() {
+            const container = document.getElementById('profilesContainer');
+            container.innerHTML = '';
+
+            profiles.forEach(profile => {
+                const croppedDataUrl = cropImage(profile);
+
+                const div = document.createElement('div');
+                div.className = 'profile-item';
+                div.innerHTML = `
+                    <img src="${croppedDataUrl}" alt="${profile.displayName}">
+                    <h3>${profile.displayName}</h3>
+                    <p>${profile.name}.jpg</p>
+                    <button class="download-btn" onclick="downloadImage('${profile.name}', '${croppedDataUrl}')">
+                        다운로드
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // 이미지 크롭
+        function cropImage(profile) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = images[profile.img];
+
+            canvas.width = profile.w;
+            canvas.height = profile.h;
+
+            ctx.drawImage(img, profile.x, profile.y, profile.w, profile.h, 0, 0, profile.w, profile.h);
+
+            return canvas.toDataURL('image/jpeg', 0.95);
+        }
+
+        // 개별 다운로드
+        function downloadImage(name, dataUrl) {
+            const link = document.createElement('a');
+            link.download = `${name}.jpg`;
+            link.href = dataUrl;
+            link.click();
+        }
+
+        // 모두 다운로드
+        function downloadAll() {
+            let delay = 0;
+            profiles.forEach(profile => {
+                setTimeout(() => {
+                    const croppedDataUrl = cropImage(profile);
+                    downloadImage(profile.name, croppedDataUrl);
+                }, delay);
+                delay += 300; // 300ms 간격으로 다운로드
+            });
+            alert(`${profiles.length}개의 프로필 이미지 다운로드를 시작합니다!\\n\\n다운로드된 파일들을 public/images/profiles/ 폴더에 저장하세요.`);
+        }
+
+        // 페이지 로드 시 이미지 로드
+        window.onload = loadImages;
+    </script>
+</body>
+
+</html>
