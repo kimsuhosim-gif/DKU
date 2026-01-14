@@ -68,11 +68,11 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
             <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-sage-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
 
             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 relative z-10">
-              <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-xl sm:rounded-3xl bg-sage-50 flex items-center justify-center overflow-hidden shrink-0 shadow-inner border border-champagne-50">
+              <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-xl sm:rounded-3xl bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-sm border border-champagne-100 group-hover:scale-105 transition-transform duration-500">
                 <img
-                  src={member.img || `https://picsum.photos/seed/member${idx}/100/100`}
+                  src={member.img}
                   alt={member.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                  className="w-full h-full object-cover transition-all duration-700"
                 />
               </div>
               <div className="flex-grow">

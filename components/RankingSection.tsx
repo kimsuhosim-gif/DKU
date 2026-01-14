@@ -45,7 +45,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             <Medal size={10} className="text-sage-200 sm:size-20" />
           </div>
           <div className="w-10 h-10 sm:w-24 sm:h-24 rounded-full border-2 sm:border-4 border-white overflow-hidden shadow-lg mb-2 sm:mb-6">
-            <img src={podium[1].img} alt={podium[1].name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+            <img src={podium[1].img} alt={podium[1].name} className="w-full h-full object-cover transition-all duration-700" />
           </div>
           <span className="text-[6px] sm:text-[10px] uppercase font-bold text-sage-300 tracking-wider sm:tracking-[0.3em]">Runner Up</span>
           <h3 className="text-sm sm:text-2xl font-sans font-bold text-sage-600 mt-0.5 sm:mt-2">{podium[1].name}</h3>
@@ -85,7 +85,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             <Medal size={8} className="text-amber-800/30 sm:size-16" />
           </div>
           <div className="w-9 h-9 sm:w-20 sm:h-20 rounded-full border-2 sm:border-4 border-white overflow-hidden shadow-lg mb-1.5 sm:mb-4">
-            <img src={podium[2].img} alt={podium[2].name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+            <img src={podium[2].img} alt={podium[2].name} className="w-full h-full object-cover transition-all duration-700" />
           </div>
           <span className="text-[6px] sm:text-[10px] uppercase font-bold text-sage-300 tracking-tight sm:tracking-[0.2em]">Third</span>
           <h3 className="text-xs sm:text-xl font-sans font-bold text-sage-600 mt-0.5 sm:mt-2">{podium[2].name}</h3>
@@ -124,8 +124,8 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
                 </div>
 
                 <div className="col-span-6 md:col-span-3 flex items-center space-x-3 md:space-x-4">
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-champagne-50 border border-white overflow-hidden shrink-0">
-                    <img src={member.img} alt={member.name} className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border border-champagne-100 overflow-hidden shrink-0 shadow-sm">
+                    <img src={member.img} alt={member.name} className="w-full h-full object-cover transition-all" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm font-bold text-sage-600">{member.name}</span>
