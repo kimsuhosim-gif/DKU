@@ -70,13 +70,13 @@ const App: React.FC = () => {
                   <Hero />
                 </section>
 
-                <section id="content" className="max-w-7xl mx-auto px-6 py-20">
+                <section id="content" className="max-w-7xl mx-auto px-6 py-12">
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="mb-12"
+                    className="mb-6"
                   >
                     <span className="text-sage-400 font-medium tracking-widest uppercase text-xs">Members Only</span>
                     <h2 className="text-4xl md:text-5xl font-serif mt-2 italic text-sage-600">Club Dashboard</h2>

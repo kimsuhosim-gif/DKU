@@ -40,11 +40,10 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
 
-  const quickActions: { icon: React.ReactNode; label: string; color: string; view: ViewState }[] = [
-    { icon: <Users size={18} />, label: "Member", color: "bg-sage-100", view: "members" },
-    { icon: <Trophy size={18} />, label: "Records", color: "bg-champagne-100", view: "records" },
-    { icon: <MapIcon size={18} />, label: "Urban Map", color: "bg-sage-50", view: "map" },
-    { icon: <CloudSun size={18} />, label: "Weather", color: "bg-white", view: "weather" },
+  const quickActions: { icon: React.ReactNode; label: string; padding: string; view: ViewState }[] = [
+    { icon: <Users size={18} />, label: "Member", padding: "bg-sage-100", view: "members" },
+    { icon: <Trophy size={18} />, label: "Records", padding: "bg-champagne-100", view: "records" },
+    { icon: <MapIcon size={18} />, label: "Urban Map", padding: "bg-sage-50", view: "map" },
   ];
 
   const rankingData = getProcessRankings().slice(0, 3).map((p, i) => ({
@@ -59,7 +58,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[700px]"
+      className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 h-auto md:h-[700px]"
     >
       {/* 1. Quick Menu (2x1) - Now including the Assets Dashboard */}
       <motion.div
@@ -97,12 +96,12 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
           {quickActions.map((btn, idx) => (
             <button
               key={idx}
               onClick={() => onNavigate(btn.view)}
-              className={`flex flex-col items-center justify-center space-y-2 py-4 px-2 rounded-2xl ${btn.color} text-sage-600 hover:scale-[1.05] active:scale-95 transition-all duration-300 font-medium text-[10px] uppercase tracking-tighter border border-transparent hover:border-sage-200/50 group/btn`}
+              className={`flex flex-col items-center justify-center space-y-2 py-5 px-1 rounded-2xl ${btn.padding} text-sage-600 hover:scale-[1.05] active:scale-95 transition-all duration-300 font-medium text-[9px] sm:text-[10px] uppercase tracking-tighter border border-transparent hover:border-sage-200/50 group/btn`}
             >
               <span className="p-2 bg-white/50 rounded-lg group-hover/btn:bg-white transition-colors">{btn.icon}</span>
               <span className="whitespace-nowrap">{btn.label}</span>
@@ -114,7 +113,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
       {/* 2. Next Project (Small 1x1) */}
       <motion.div
         variants={itemVariants}
-        className="md:col-span-1 md:row-span-1 bento-card rounded-[2.5rem] p-8 flex flex-col justify-between bg-white border-2 border-transparent hover:border-sage-100 cursor-pointer group"
+        className="md:col-span-1 md:row-span-1 bento-card rounded-[2.5rem] p-8 flex flex-col justify-between bg-white border-2 border-transparent hover:border-sage-100 cursor-pointer group -mt-1 md:mt-0"
         onClick={() => { }}
       >
         <div className="flex justify-between items-start">
@@ -136,7 +135,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
       {/* 3. Weather (Small 1x1) */}
       <motion.div
         variants={itemVariants}
-        className="md:col-span-1 md:row-span-1 bento-card rounded-[2.5rem] p-8 flex flex-col justify-between bg-sage-50 cursor-pointer group"
+        className="md:col-span-1 md:row-span-1 bento-card rounded-[2.5rem] p-8 flex flex-col justify-between bg-sage-50 cursor-pointer group -mt-1 md:mt-0"
         onClick={() => onNavigate('weather')}
       >
         <WeatherCardContent />
