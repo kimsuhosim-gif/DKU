@@ -63,16 +63,16 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                 initial={{ opacity: 0, scale: 0.98, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full max-w-md bg-white/10 backdrop-blur-3xl p-10 rounded-[3.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20 relative z-10 text-center"
+                className="w-[88%] max-w-md bg-black/20 backdrop-blur-3xl p-8 md:p-12 rounded-[3.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.5)] border border-white/10 relative z-10 text-center"
             >
-                <div className="mb-10 flex flex-col items-center">
-                    <div className="w-20 h-20 bg-sage-50 rounded-3xl flex items-center justify-center mb-6 shadow-inner border border-champagne-100">
-                        <Lock className="text-sage-400" size={32} strokeWidth={1.5} />
+                <div className="mb-8 md:mb-12 flex flex-col items-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-6 shadow-inner border border-white/10">
+                        <Lock className="text-champagne-200" size={28} strokeWidth={1.5} />
                     </div>
-                    <span className="text-[10px] uppercase tracking-[0.4em] text-sage-400 font-bold mb-3">Privilege Access Only</span>
-                    <h2 className="text-4xl font-serif text-sage-600 italic">DKU-RE09 CLUB</h2>
-                    <p className="mt-4 text-xs text-sage-400 leading-relaxed italic max-w-xs">
-                        "09학번 전공자들만이 공유하는 그린 위의 기록.<br />회원 인증 후 입장이 가능합니다."
+                    <span className="text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-3">Privilege Access Only</span>
+                    <h2 className="text-3xl md:text-4xl font-serif text-white italic">DKU-RE09 CLUB</h2>
+                    <p className="mt-4 text-[11px] md:text-xs text-white/60 leading-relaxed italic max-w-xs px-4">
+                        "09학번 전공자들만이 공유하는 그린 위의 기록.<br className="hidden md:block" /> 회원 인증 후 입장이 가능합니다."
                     </p>
                 </div>
 
@@ -86,7 +86,7 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                                 setPassword(e.target.value);
                                 setError(false);
                             }}
-                            className={`w-full py-5 px-8 bg-sage-50/50 border rounded-2xl outline-none transition-all duration-500 text-center tracking-[0.5em] font-bold text-sage-600 placeholder:tracking-normal placeholder:font-medium placeholder:text-sage-300 ${error ? 'border-rose-300 ring-4 ring-rose-50' : 'border-champagne-100 focus:border-sage-300 focus:bg-white focus:ring-4 focus:ring-sage-50'
+                            className={`w-full py-5 px-8 bg-white/5 border rounded-2xl outline-none transition-all duration-500 text-center tracking-[0.5em] font-bold text-white placeholder:tracking-normal placeholder:font-medium placeholder:text-white/30 ${error ? 'border-rose-400/50 ring-4 ring-rose-500/10' : 'border-white/10 focus:border-white/30 focus:bg-white/10 focus:ring-4 focus:ring-white/5'
                                 }`}
                             autoFocus
                         />
@@ -106,22 +106,22 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
 
                     <button
                         type="submit"
-                        className="w-full py-5 bg-sage-400 hover:bg-sage-600 text-white rounded-2xl font-bold uppercase tracking-[0.2em] text-xs transition-all duration-500 flex items-center justify-center group shadow-lg shadow-sage-200"
+                        className="w-full py-5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs transition-all duration-500 flex items-center justify-center group shadow-xl"
                     >
                         <span>Confirm Identity</span>
                         <ChevronRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </form>
 
-                <div className="mt-12 flex items-center justify-center space-x-2 text-sage-200">
+                <div className="mt-10 md:mt-12 flex items-center justify-center space-x-2 text-white/30">
                     <ShieldCheck size={14} />
                     <span className="text-[9px] uppercase tracking-widest font-bold">Secure Class-Only Environment</span>
                 </div>
             </motion.div>
 
             {/* Footer Branding */}
-            <div className="absolute bottom-10 left-0 w-full text-center">
-                <p className="text-[10px] uppercase tracking-[0.5em] text-sage-300 font-bold opacity-40">
+            <div className="absolute bottom-8 left-0 w-full text-center px-6">
+                <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] text-white/40 font-bold">
                     Dankook Urban Planning & Real Estate 09
                 </p>
             </div>
