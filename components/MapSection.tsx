@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, MapPin, Camera, Star, Ruler, Info, ExternalLink } from 'lucide-react';
-import { Container as MapDiv, NaverMap, Marker, NavermapsProvider } from 'react-naver-maps';
+import { ArrowLeft, MapPin, Star, Ruler, Info, ExternalLink } from 'lucide-react';
 import { records, COURSE_LOCATIONS } from '../utils/golfData';
 
 declare global {
@@ -14,7 +13,6 @@ interface MapSectionProps {
   onBack: () => void;
 }
 
-// Transform records into map projects
 interface MapProject {
   id: string;
   name: string;
@@ -26,8 +24,6 @@ interface MapProject {
   score: number;
 }
 
-const NAVER_CLIENT_ID = "02j9jku1mt";
-
 const defaultCenter = {
   lat: 37.227445,
   lng: 127.618625
@@ -35,15 +31,10 @@ const defaultCenter = {
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
-  const [isLoaded, setIsLoaded] = React.useState(false);
-
-  React.useEffect(() => {
-    // Debug: Check if script is already there
-    if (window.naver && window.naver.maps) {
-      setIsLoaded(true);
-      return;
-    }
-  }, []);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const naverMapRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
 
   const projects: MapProject[] = useMemo(() => {
     return records.map((r, idx) => {
@@ -61,6 +52,68 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
       };
     }).filter(p => p !== null) as MapProject[];
   }, []);
+
+  useEffect(() => {
+    const initMap = () => {
+      if (!mapRef.current || !window.naver || !window.naver.maps) return;
+
+      const mapOptions = {
+        center: new window.naver.maps.LatLng(defaultCenter.lat, defaultCenter.lng),
+        zoom: 11,
+        minZoom: 8,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: window.naver.maps.MapTypeControlStyle.BUTTON,
+          position: window.naver.maps.Position.TOP_RIGHT
+        }
+      };
+
+      const map = new window.naver.maps.Map(mapRef.current, mapOptions);
+      naverMapRef.current = map;
+
+      // Add markers
+      projects.forEach((p) => {
+        const marker = new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(p.location.lat, p.location.lng),
+          map: map,
+          title: p.name,
+          animation: window.naver.maps.Animation.DROP
+        });
+
+        window.naver.maps.Event.addListener(marker, 'click', () => {
+          setSelectedProject(p);
+          map.panTo(new window.naver.maps.LatLng(p.location.lat, p.location.lng));
+          if (map.getZoom() < 14) map.setZoom(14);
+        });
+
+        markersRef.current.push(marker);
+      });
+
+      setIsLoaded(true);
+    };
+
+    // Check if script is loaded, if not wait a bit or use callback
+    if (window.naver && window.naver.maps) {
+      initMap();
+    } else {
+      const timer = setInterval(() => {
+        if (window.naver && window.naver.maps) {
+          initMap();
+          clearInterval(timer);
+        }
+      }, 500);
+      return () => clearInterval(timer);
+    }
+  }, [projects]);
+
+  // Handle fly-to when list item is clicked
+  useEffect(() => {
+    if (selectedProject && naverMapRef.current) {
+      const latlng = new window.naver.maps.LatLng(selectedProject.location.lat, selectedProject.location.lng);
+      naverMapRef.current.panTo(latlng);
+      if (naverMapRef.current.getZoom() < 14) naverMapRef.current.setZoom(14);
+    }
+  }, [selectedProject]);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 bg-white min-h-screen">
@@ -102,50 +155,19 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                 <h4 className="text-lg font-serif mt-2 italic">{p.name}</h4>
               </button>
             ))}
-            {projects.length === 0 && (
-              <div className="text-sage-400 text-sm italic">No course locations found. Please update golfData.ts.</div>
-            )}
-            {!NAVER_CLIENT_ID && (
-              <div className="mt-8 p-4 bg-amber-50 rounded-2xl border border-amber-100 text-[10px] text-amber-600 leading-relaxed">
-                ⚠️ <strong>설정 필요:</strong> 네이버 지도 Client ID가 입력되지 않았습니다.<br />
-                MapSection.tsx 파일 상단의 <code>NAVER_CLIENT_ID</code> 변수에 발급받은 키를 입력해주세요.
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Right: Naver Map */}
+        {/* Right: Map Container */}
         <div className="lg:col-span-8 bg-sage-50 rounded-[4rem] relative overflow-hidden border border-sage-100 min-h-[600px] shadow-inner z-0">
-          <NavermapsProvider
-            ncpClientId={NAVER_CLIENT_ID}
-          >
-            <MapDiv
-              style={{ width: '100%', height: '100%', borderRadius: '4rem' }}
-            >
-              <NaverMap
-                defaultCenter={selectedProject?.location || defaultCenter}
-                defaultZoom={11}
-                center={selectedProject?.location || defaultCenter}
-                zoom={selectedProject ? 14 : 11}
-                onInit={() => setIsLoaded(true)}
-              >
-                {projects.map(p => (
-                  <Marker
-                    key={p.id}
-                    position={p.location}
-                    onClick={() => setSelectedProject(p)}
-                    title={p.name}
-                  />
-                ))}
-              </NaverMap>
-            </MapDiv>
-          </NavermapsProvider>
+          <div ref={mapRef} className="w-full h-full" style={{ borderRadius: '4rem' }} />
 
           {!isLoaded && (
             <div className="absolute inset-0 flex items-center justify-center bg-sage-50/50 backdrop-blur-sm z-10">
-              <div className="flex flex-col items-center space-y-4">
+              <div className="flex flex-col items-center space-y-4 px-12 text-center">
                 <div className="w-8 h-8 border-2 border-sage-200 border-t-sage-400 rounded-full animate-spin"></div>
                 <span className="text-[10px] uppercase tracking-widest text-sage-400 font-bold">Loading Master Map...</span>
+                <p className="text-[9px] text-sage-300 mt-2 leading-relaxed">지도가 나타나지 않는다면 네이버 콘솔에서 '서비스 URL'에<br />현재 주소가 등록되어 있는지 확인해주세요.</p>
               </div>
             </div>
           )}
@@ -157,7 +179,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 50 }}
-                className="absolute top-8 right-8 bottom-8 w-80 bg-white/90 backdrop-blur-xl rounded-[3rem] shadow-2xl border border-white z-30 p-8 flex flex-col pointer-events-auto"
+                className="absolute top-8 right-8 bottom-8 w-80 bg-white/90 backdrop-blur-xl rounded-[3rem] shadow-2xl border border-white z-30 p-8 flex flex-col pointer-events-auto hidden md:flex"
               >
                 <div className="flex justify-between items-start mb-6">
                   <div>
