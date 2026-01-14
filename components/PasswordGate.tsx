@@ -63,15 +63,15 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                 initial={{ opacity: 0, scale: 0.98, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                className="w-[88%] max-w-md bg-black/20 backdrop-blur-3xl p-8 md:p-12 rounded-[3.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.5)] border border-white/10 relative z-10 text-center"
+                className="w-[82%] max-w-sm bg-black/25 backdrop-blur-3xl p-7 md:p-12 rounded-[3.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.5)] border border-white/10 relative z-10 text-center"
             >
-                <div className="mb-8 md:mb-12 flex flex-col items-center">
-                    <div className="w-16 h-16 md:w-20 md:h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-6 shadow-inner border border-white/10">
-                        <Lock className="text-champagne-200" size={28} strokeWidth={1.5} />
+                <div className="mb-6 md:mb-12 flex flex-col items-center">
+                    <div className="w-14 h-14 md:w-20 md:h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-5 shadow-inner border border-white/10">
+                        <Lock className="text-champagne-200" size={24} strokeWidth={1.5} />
                     </div>
-                    <span className="text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-3">Privilege Access Only</span>
-                    <h2 className="text-3xl md:text-4xl font-serif text-white italic">DKU-RE09 CLUB</h2>
-                    <p className="mt-4 text-[11px] md:text-xs text-white/60 leading-relaxed italic max-w-xs px-4">
+                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-2 md:mb-3">Privilege Access Only</span>
+                    <h2 className="text-2xl md:text-4xl font-serif text-white italic">DKU-RE09 CLUB</h2>
+                    <p className="mt-3 md:mt-4 text-[10px] md:text-xs text-white/60 leading-relaxed italic max-w-xs px-2">
                         "09학번 전공자들만이 공유하는 그린 위의 기록.<br className="hidden md:block" /> 회원 인증 후 입장이 가능합니다."
                     </p>
                 </div>
