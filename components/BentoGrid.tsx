@@ -58,7 +58,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 h-auto md:h-[700px]"
+      className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 md:gap-4 h-auto md:h-[700px]"
     >
       {/* 1. Quick Menu (2x1) - Now including the Assets Dashboard */}
       <motion.div
@@ -74,7 +74,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         <motion.div
           onClick={() => onNavigate('ledger')}
           whileHover={{ y: -2 }}
-          className="bg-sage-400 text-white p-5 rounded-[2rem] flex items-center justify-between mb-6 cursor-pointer hover:bg-sage-500 transition-all shadow-lg shadow-sage-400/10 group"
+          className="bg-sage-400 text-white p-5 rounded-[2rem] flex items-center justify-between mb-4 cursor-pointer hover:bg-sage-500 transition-all shadow-lg shadow-sage-400/10 group"
         >
           <div className="flex items-center space-x-4">
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center border border-white/20">
