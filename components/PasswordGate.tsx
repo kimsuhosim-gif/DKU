@@ -45,11 +45,11 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
 
     return (
         <div className="fixed inset-0 z-[9999] bg-sage-950 flex items-center justify-center p-6 overflow-hidden">
-            {/* Ultra-High Resolution Cinematic Background (4K) */}
+            {/* User-Uploaded High-Resolution Scene (.jpg) */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
                 style={{
-                    backgroundImage: 'url("https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&q=100&w=3840")',
+                    backgroundImage: 'url("/images/luxury_golf_bg.jpg")',
                     imageRendering: 'auto'
                 }}
             >
