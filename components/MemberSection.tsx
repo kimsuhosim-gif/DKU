@@ -67,8 +67,8 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
             {/* Background Decorative Element */}
             <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-sage-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
 
-            <div className="flex flex-row items-center space-x-4 sm:space-x-8 relative z-10">
-              <div className="w-20 h-20 sm:w-32 sm:h-32 rounded-2xl sm:rounded-4xl bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-md border border-champagne-100 group-hover:scale-105 transition-transform duration-500">
+            <div className="flex flex-row items-center space-x-3 sm:space-x-8 relative z-10">
+              <div className="w-16 h-16 sm:w-32 sm:h-32 rounded-xl sm:rounded-4xl bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-md border border-champagne-100 group-hover:scale-105 transition-transform duration-500">
                 <img
                   src={member.img}
                   alt={member.name}
@@ -76,40 +76,42 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 />
               </div>
               <div className="flex-grow min-w-0">
-                <div className="flex flex-col mb-1 sm:mb-2 text-left">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="text-lg sm:text-3xl font-sans font-extrabold text-sage-600 truncate leading-tight">{member.name}</h4>
+                <div className="flex flex-col mb-1 text-left">
+                  <div className="flex items-center space-x-1 sm:space-x-2 mb-0.5 sm:mb-1">
+                    <h4 className="text-sm sm:text-3xl font-sans font-extrabold text-sage-600 leading-tight">
+                      {member.name}
+                    </h4>
                     {/* Badge Rendering */}
-                    <div className="flex space-x-1 shrink-0">
+                    <div className="flex space-x-0.5 sm:space-x-1 shrink-0">
                       {member.role === '회장' && (
-                        <div className="p-1 sm:p-1.5 bg-amber-100 text-amber-600 rounded-lg shadow-sm" title="회장">
-                          <Crown size={12} />
+                        <div className="p-0.5 sm:p-1.5 bg-amber-100 text-amber-600 rounded-md sm:rounded-lg shadow-sm" title="회장">
+                          <Crown size={8} className="sm:w-[12px] sm:h-[12px]" />
                         </div>
                       )}
                       {member.role === '총무' && (
-                        <div className="p-1 sm:p-1.5 bg-blue-100 text-blue-600 rounded-lg shadow-sm" title="총무">
-                          <Medal size={12} />
+                        <div className="p-0.5 sm:p-1.5 bg-blue-100 text-blue-600 rounded-md sm:rounded-lg shadow-sm" title="총무">
+                          <Medal size={8} className="sm:w-[12px] sm:h-[12px]" />
                         </div>
                       )}
                       {member.wins > 0 && (
-                        <div className="p-1 sm:p-1.5 bg-rose-100 text-rose-600 rounded-lg shadow-sm flex items-center space-x-1" title={`${member.wins}회 우승`}>
-                          <Award size={14} />
-                          <span className="text-[10px] font-bold">{member.wins}</span>
+                        <div className="p-0.5 sm:p-1.5 bg-rose-100 text-rose-600 rounded-md sm:rounded-lg shadow-sm flex items-center space-x-0.5" title={`${member.wins}회 우승`}>
+                          <Award size={10} className="sm:w-[14px] sm:h-[14px]" />
+                          <span className="text-[7px] sm:text-[10px] font-bold">{member.wins}</span>
                         </div>
                       )}
                     </div>
                   </div>
-                  <p className="text-[10px] sm:text-xs text-sage-400 uppercase tracking-[0.2em] font-black">{member.role}</p>
+                  <p className="text-[8px] sm:text-xs text-sage-400 font-bold uppercase tracking-widest">{member.role}</p>
                 </div>
 
                 <div className="flex items-center">
                   {member.phone && (
                     <a
                       href={`tel:${member.phone}`}
-                      className="p-1.5 sm:p-2.5 rounded-lg sm:rounded-2xl bg-sage-50 text-sage-400 hover:bg-sage-600 hover:text-white transition-all duration-300 shadow-sm flex items-center space-x-2"
+                      className="p-1 sm:p-2.5 rounded-lg sm:rounded-2xl bg-sage-50 text-sage-400 hover:bg-sage-600 hover:text-white transition-all duration-300 shadow-sm flex items-center space-x-1 sm:space-x-2"
                     >
-                      <Phone size={10} />
-                      <span className="text-[10px] sm:text-xs font-bold hidden sm:inline">연락하기</span>
+                      <Phone size={8} className="sm:w-[10px] sm:h-[10px]" />
+                      <span className="text-[8px] sm:text-xs font-bold sm:inline">연락처</span>
                     </a>
                   )}
                 </div>
