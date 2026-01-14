@@ -62,12 +62,12 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="group p-3.5 sm:p-8 rounded-2xl sm:rounded-[3rem] border border-champagne-100 bg-white hover:bg-champagne-50/50 transition-all duration-500 flex flex-col relative overflow-hidden"
+            className="group p-3 sm:p-8 rounded-2xl sm:rounded-[3rem] border border-champagne-100 bg-white hover:bg-champagne-50/50 transition-all duration-500 flex flex-col relative overflow-hidden"
           >
             {/* Background Decorative Element */}
             <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-sage-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-6 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 relative z-10">
               <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-xl sm:rounded-3xl bg-sage-50 flex items-center justify-center overflow-hidden shrink-0 shadow-inner border border-champagne-50">
                 <img
                   src={member.img || `https://picsum.photos/seed/member${idx}/100/100`}
@@ -115,7 +115,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mt-4 sm:mt-8 relative z-10">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mt-3 sm:mt-8 relative z-10">
               <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
                 <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">HC</span>
                 <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.handicap}</span>
@@ -130,7 +130,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="mt-4 sm:mt-6 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="hidden sm:flex mt-6 items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
               <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-sage-300 font-bold">Class of 2009</span>
               <div className="flex space-x-1">
                 <div className="w-1 h-1 rounded-full bg-sage-200"></div>
