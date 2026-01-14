@@ -19,19 +19,19 @@ export const members: MemberData[] = [
         name: '정재엽', role: '정회원', prevHandicap: 18.0,
         scoreHistory: [90],
         holeScores: [[4, 6, 4, 3, 6, 4, 5, 6, 6, 5, 5, 6, 5, 5, 4, 6, 4, 5]],
-        img: '/images/profiles/members_정재엽.jpeg', since: '2023.01', phone: '01026219101'
+        img: '/images/profiles/members_정재엽.jpg', since: '2023.01', phone: '01026219101'
     },
     {
         name: '모성진', role: '정회원', prevHandicap: 21.0,
         scoreHistory: [93],
         holeScores: [[6, 5, 6, 3, 6, 4, 3, 5, 7, 5, 6, 5, 6, 7, 4, 7, 4, 4]],
-        img: '/images/profiles/members_모성진.jpeg', since: '2023.01', phone: '01047682858'
+        img: '/images/profiles/members_모성진.jpg', since: '2023.01', phone: '01047682858'
     },
     {
         name: '유만종', role: '회장', prevHandicap: 19.5,
         scoreHistory: [94],
         holeScores: [[6, 8, 7, 3, 4, 5, 3, 6, 5, 6, 7, 5, 6, 6, 4, 5, 3, 5]],
-        img: '/images/profiles/members_유만종.jpeg', since: '2023.01', phone: '01031999922'
+        img: '/images/profiles/members_유만종.jpg', since: '2023.01', phone: '01031999922'
     },
     {
         name: '김영웅', role: '정회원', prevHandicap: 22.0,
@@ -43,49 +43,49 @@ export const members: MemberData[] = [
         name: '신연성', role: '정회원', prevHandicap: 23.5,
         scoreHistory: [97],
         holeScores: [[7, 6, 6, 3, 5, 5, 4, 5, 5, 4, 6, 6, 7, 7, 5, 7, 3, 6]],
-        img: '/images/profiles/members_신연성.jpeg', since: '2023.01', phone: '01026966518'
+        img: '/images/profiles/members_신연성.jpg', since: '2023.01', phone: '01026966518'
     },
     {
         name: '양창운', role: '총무', prevHandicap: 18.5,
         scoreHistory: [101],
         holeScores: [[5, 8, 6, 4, 4, 7, 3, 7, 7, 5, 5, 7, 5, 6, 4, 8, 5, 5]],
-        img: '/images/profiles/members_양창운.jpeg', since: '2023.01', phone: '01085426586'
+        img: '/images/profiles/members_양창운.jpg', since: '2023.01', phone: '01085426586'
     },
     {
         name: '김효민', role: '정회원', prevHandicap: 24.0,
         scoreHistory: [102],
         holeScores: [[4, 6, 8, 4, 7, 5, 4, 5, 6, 4, 7, 7, 8, 7, 4, 8, 3, 5]],
-        img: '/images/profiles/members_김효민.jpeg', since: '2023.01', phone: '01093014798'
+        img: '/images/profiles/members_김효민.jpg', since: '2023.01', phone: '01093014798'
     },
     {
         name: '최재호', role: '정회원', prevHandicap: 28.5,
         scoreHistory: [112],
         holeScores: [[7, 8, 7, 3, 4, 7, 5, 8, 5, 7, 6, 7, 6, 8, 6, 8, 3, 7]],
-        img: '/images/profiles/members_최재호.jpeg', since: '2023.01', phone: '01022698528'
+        img: '/images/profiles/members_최재호.jpg', since: '2023.01', phone: '01022698528'
     },
     {
         name: '홍지훈', role: '정회원', prevHandicap: 32.0,
         scoreHistory: [124],
         holeScores: [[7, 9, 7, 6, 6, 6, 5, 10, 7, 6, 7, 8, 6, 8, 5, 10, 4, 7]],
-        img: '/images/profiles/members_홍지훈.jpeg', since: '2023.01', phone: '01041520738'
+        img: '/images/profiles/members_홍지훈.jpg', since: '2023.01', phone: '01041520738'
     },
     {
         name: '김성태', role: '정회원', prevHandicap: 31.5,
         scoreHistory: [126],
         holeScores: [[6, 10, 6, 6, 7, 7, 5, 6, 8, 7, 8, 8, 8, 7, 6, 9, 5, 7]],
-        img: '/images/profiles/members_김성태.jpeg', since: '2023.01', phone: '01049029220'
+        img: '/images/profiles/members_김성태.jpg', since: '2023.01', phone: '01049029220'
     },
     {
         name: '김성진', role: '정회원', prevHandicap: 33.0,
         scoreHistory: [127],
         holeScores: [[7, 8, 8, 6, 8, 8, 4, 9, 7, 7, 8, 8, 8, 8, 5, 7, 4, 7]],
-        img: '/images/profiles/members_김성진.jpeg', since: '2023.01', phone: '01020840638'
+        img: '/images/profiles/members_김성진.jpg', since: '2023.01', phone: '01020840638'
     },
     {
         name: '김도윤', role: '정회원', prevHandicap: 37.0,
         scoreHistory: [132],
         holeScores: [[8, 9, 8, 6, 8, 7, 5, 8, 8, 7, 8, 8, 8, 6, 6, 9, 5, 8]],
-        img: '/images/profiles/members_김도윤.jpeg', since: '2023.01', phone: '01089463040'
+        img: '/images/profiles/members_김도윤.jpg', since: '2023.01', phone: '01089463040'
     },
     {
         name: '김경준', role: '정회원', prevHandicap: 18.0,

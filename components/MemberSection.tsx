@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, ArrowLeft, Crown, Award, Medal, Target, Phone } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, ArrowLeft, Crown, Award, Medal, Target, Phone, X } from 'lucide-react';
 import { getProcessRankings, records } from '../utils/golfData';
 
 interface MemberSectionProps {
@@ -8,6 +8,7 @@ interface MemberSectionProps {
 }
 
 const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const rankingData = getProcessRankings();
 
   const members = rankingData.map(m => {
@@ -68,7 +69,10 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
             <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-sage-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
 
             <div className="flex flex-row items-center space-x-3 sm:space-x-8 relative z-10">
-              <div className="w-16 h-16 sm:w-32 sm:h-32 rounded-xl sm:rounded-4xl bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-md border border-champagne-100 group-hover:scale-105 transition-transform duration-500">
+              <div
+                className="w-16 h-16 sm:w-32 sm:h-32 rounded-xl sm:rounded-4xl bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-md border border-champagne-100 group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                onClick={() => setSelectedImage(member.img)}
+              >
                 <img
                   src={member.img}
                   alt={member.name}
@@ -144,9 +148,44 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
           </motion.div>
         ))}
       </div>
+
+      {/* Image Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-8"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center overflow-hidden rounded-3xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-sm"
+              >
+                <X size={24} />
+              </button>
+              <img
+                src={selectedImage}
+                alt="Member Profile Full"
+                className="max-w-full max-h-[90vh] object-contain shadow-2xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 export default MemberSection;
+
 
