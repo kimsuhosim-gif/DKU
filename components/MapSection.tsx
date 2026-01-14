@@ -25,13 +25,19 @@ interface MapProject {
 }
 
 const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
-const MAP_ID = "naver-map-container";
+const MAP_ID = "map"; // Documentation uses 'map'
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const naverMapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+
+  // Expose error state for authFailure
+  useEffect(() => {
+    (window as any).setNaverMapError = () => setMapStatus('error');
+    return () => { (window as any).setNaverMapError = null; };
+  }, []);
 
   const projects: MapProject[] = useMemo(() => {
     return records.map((r, idx) => {
@@ -55,11 +61,11 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
     const maxRetries = 20;
 
     const initMap = () => {
-      // 1. Check if naver global is available
+      // 1. Check if naver global is available (Per screenshot: var map = new naver.maps.Map(...))
       if (!window.naver || !window.naver.maps) {
         if (retryCount < maxRetries) {
           retryCount++;
-          setTimeout(initMap, 300);
+          setTimeout(initMap, 200);
         } else {
           setMapStatus('error');
         }
