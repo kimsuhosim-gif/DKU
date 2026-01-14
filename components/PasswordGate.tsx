@@ -45,21 +45,27 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
 
     return (
         <div className="fixed inset-0 z-[9999] bg-sage-950 flex items-center justify-center p-6 overflow-hidden">
-            {/* Immersive Scenic Background */}
+            {/* Immersive Scenic Background with Quality Optimization */}
             <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-                style={{ backgroundImage: 'url("/images/luxury_golf_bg.png")' }}
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700"
+                style={{
+                    backgroundImage: 'url("/images/luxury_golf_bg.png")',
+                    imageRendering: 'auto'
+                }}
             >
-                {/* Subtle Overlay to enhance focus on content */}
-                <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-sage-950/80 via-transparent to-sage-950/20" />
+                {/* Advanced Noise/Grain overlay to mask pixelation and add cinematic feel */}
+                <div className="absolute inset-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
+
+                {/* Multi-layered overlays for depth and quality enhancement */}
+                <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-sage-950/90 via-sage-950/10 to-sage-950/30" />
             </div>
 
             <motion.div
-                initial={{ opacity: 0, scale: 0.98, y: 10 }}
+                initial={{ opacity: 0, scale: 0.98, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full max-w-md bg-white/10 backdrop-blur-3xl p-10 rounded-[3.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] border border-white/20 relative z-10 text-center"
+                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full max-w-md bg-white/10 backdrop-blur-3xl p-10 rounded-[3.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20 relative z-10 text-center"
             >
                 <div className="mb-10 flex flex-col items-center">
                     <div className="w-20 h-20 bg-sage-50 rounded-3xl flex items-center justify-center mb-6 shadow-inner border border-champagne-100">
