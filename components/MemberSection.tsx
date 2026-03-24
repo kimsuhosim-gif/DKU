@@ -10,12 +10,6 @@ interface MemberSectionProps {
 const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const rankingData = getProcessRankings();
-  const roleLabel: Record<string, string> = {
-    captain: 'Captain',
-    secretary: 'Secretary',
-    member: 'Member',
-  };
-
   const members = rankingData
     .map((m) => {
       const avg =
@@ -84,19 +78,17 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 <div className="mb-1 flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <h4 className="truncate text-lg font-bold leading-tight text-sage-600 sm:text-2xl">{member.name}</h4>
-                    <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-sage-400">
-                      {roleLabel[member.role] || member.role}
-                    </p>
+                    <p className="mt-1 text-[10px] font-bold tracking-[0.22em] text-sage-400">{member.role}</p>
                   </div>
 
                   <div className="flex shrink-0 items-center gap-1">
-                    {member.role === 'captain' && (
-                      <div className="rounded-lg bg-amber-100 p-1 text-amber-600 shadow-sm sm:rounded-xl sm:p-1.5" title="Captain">
+                    {member.role === '회장' && (
+                      <div className="rounded-lg bg-amber-100 p-1 text-amber-600 shadow-sm sm:rounded-xl sm:p-1.5" title="회장">
                         <Crown size={12} />
                       </div>
                     )}
-                    {member.role === 'secretary' && (
-                      <div className="rounded-lg bg-blue-100 p-1 text-blue-600 shadow-sm sm:rounded-xl sm:p-1.5" title="Secretary">
+                    {member.role === '총무' && (
+                      <div className="rounded-lg bg-blue-100 p-1 text-blue-600 shadow-sm sm:rounded-xl sm:p-1.5" title="총무">
                         <Medal size={12} />
                       </div>
                     )}
