@@ -12,11 +12,9 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // Correct password
     const CORRECT_PASSWORD = '0909';
 
     useEffect(() => {
-        // Check if user was already authenticated
         const authStatus = localStorage.getItem('dku_re09_auth');
         if (authStatus === 'true') {
             setIsAuthenticated(true);
@@ -33,7 +31,6 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
         } else {
             setError(true);
             setPassword('');
-            // Shake effect or feedback
         }
     };
 
@@ -45,7 +42,6 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
 
     return (
         <div className="fixed inset-0 z-[9999] bg-sage-950 flex items-center justify-center p-6 overflow-hidden">
-            {/* User-Uploaded High-Resolution Scene (.jpg) */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
                 style={{
@@ -53,7 +49,6 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                     imageRendering: 'auto'
                 }}
             >
-                {/* Visual texture & Depth enhancements */}
                 <div className="absolute inset-0 opacity-[0.2] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
                 <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-sage-950/90 via-transparent to-sage-950/30" />
@@ -72,7 +67,7 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                     <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-2 md:mb-3">Privilege Access Only</span>
                     <h2 className="text-2xl md:text-4xl font-serif text-white italic">DKU-RE09 CLUB</h2>
                     <p className="mt-3 md:mt-4 text-[10px] md:text-xs text-white/60 leading-relaxed italic max-w-xs px-2">
-                        "09학번 전공자들만이 공유하는 그린 위의 기록.<br className="hidden md:block" /> 회원 인증 후 입장이 가능합니다."
+                        &quot;A private archive for the class of 2009.<br className="hidden md:block" /> Access is limited to verified members.&quot;
                     </p>
                 </div>
 
@@ -119,7 +114,6 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                 </div>
             </motion.div>
 
-            {/* Footer Branding */}
             <div className="absolute bottom-8 left-0 w-full text-center px-6">
                 <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] text-white/40 font-bold">
                     Dankook Urban Planning & Real Estate 09

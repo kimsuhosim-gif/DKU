@@ -1,11 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import HomeShowcase from './components/HomeShowcase';
 import BentoGrid from './components/BentoGrid';
+import MobileDock from './components/MobileDock';
 import Footer from './components/Footer';
 import MemberSection from './components/MemberSection';
 import RecordsSection from './components/RecordsSection';
@@ -30,7 +30,6 @@ const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll to top when view changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentView]);
@@ -47,15 +46,15 @@ const App: React.FC = () => {
 
   const pageTransition = {
     duration: 0.5,
-    ease: [0.43, 0.13, 0.23, 0.96]
+    ease: [0.43, 0.13, 0.23, 0.96],
   };
 
   return (
     <PasswordGate>
-      <div className="min-h-screen font-sans selection:bg-sage-200 selection:text-sage-600 bg-champagne-50">
+      <div className="min-h-screen bg-champagne-50 font-sans selection:bg-sage-200 selection:text-sage-600">
         <Navbar isScrolled={isScrolled} setView={navigateTo} currentView={currentView} />
 
-        <main className="pt-20">
+        <main className="pb-28 pt-16 sm:pb-0 sm:pt-20">
           <AnimatePresence mode="wait">
             {currentView === 'home' && (
               <motion.div
@@ -67,22 +66,36 @@ const App: React.FC = () => {
                 transition={pageTransition}
               >
                 <section id="hero">
-                  <Hero />
+                  <Hero onNavigate={navigateTo} />
                 </section>
 
-                <section id="content" className="max-w-7xl mx-auto px-6 py-4">
-                  <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="mb-6"
-                  >
-                    <span className="text-sage-400 font-medium tracking-widest uppercase text-xs">Members Only</span>
-                    <h2 className="text-4xl md:text-5xl font-serif mt-1 italic text-sage-600">Club Dashboard</h2>
-                  </motion.div>
+                <section id="showcase">
+                  <HomeShowcase onNavigate={navigateTo} />
+                </section>
 
-                  <BentoGrid onNavigate={navigateTo} />
+                <section id="content" className="bg-[#f3ede3] px-4 py-14 sm:px-6 sm:py-24">
+                  <div className="mx-auto max-w-7xl">
+                    <motion.div
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, ease: 'easeOut' }}
+                      className="mb-8 max-w-3xl sm:mb-10"
+                    >
+                      <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-sage-400">
+                        Members utility
+                      </span>
+                      <h2 className="mt-3 font-serif text-3xl italic text-sage-600 md:text-5xl">
+                        Dashboard, but quieter.
+                      </h2>
+                      <p className="mt-3 text-[13px] leading-6 text-slate-500 md:mt-4 md:text-base md:leading-7">
+                        The home screen stays focused on atmosphere first. Detailed records, rankings, and field tools are
+                        pushed into calmer utility views that work better on mobile.
+                      </p>
+                    </motion.div>
+
+                    <BentoGrid onNavigate={navigateTo} />
+                  </div>
                 </section>
               </motion.div>
             )}
@@ -188,6 +201,7 @@ const App: React.FC = () => {
         </main>
 
         <Footer />
+        <MobileDock currentView={currentView} onNavigate={navigateTo} />
       </div>
     </PasswordGate>
   );

@@ -9,9 +9,9 @@ interface ScheduleSectionProps {
 
 const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
   const plans = [
-    { month: 'MAY', day: '25', title: 'Monthly Regular Rounding', loc: 'South Springs CC', status: 'D-12' },
-    { month: 'JUN', day: '15', title: 'DKU-RE Early Summer Special', loc: 'Rexfield CC', status: 'D-33' },
-    { month: 'JUL', day: '20', title: 'Mid-Season Championship', loc: 'Trinity Club', status: 'Upcoming' },
+    { month: 'APR', day: '19', title: 'Spring Opening Round', loc: 'South Springs CC', status: 'Planning' },
+    { month: 'JUN', day: '15', title: 'Early Summer Match', loc: 'Rexfield CC', status: 'Upcoming' },
+    { month: 'SEP', day: '21', title: 'Autumn Championship', loc: 'Trinity Club', status: 'Save the date' },
   ];
 
   return (
@@ -65,7 +65,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
                     </div>
                  </div>
                  <p className="mt-4 text-sm text-sage-400 max-w-2xl leading-relaxed">
-                   Details for this session will be shared via our official communication channel 7 days prior. 
+                   Final tee times, pairings, and fee details will be shared through the members channel one week before the round.
                  </p>
               </div>
             </motion.div>

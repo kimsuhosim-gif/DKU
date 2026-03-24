@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, ArrowLeft, Crown, Award, Medal, Target, Phone, X } from 'lucide-react';
+import { ArrowLeft, Crown, Award, Medal, Phone, X } from 'lucide-react';
 import { getProcessRankings, records } from '../utils/golfData';
 
 interface MemberSectionProps {
@@ -10,146 +10,138 @@ interface MemberSectionProps {
 const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const rankingData = getProcessRankings();
+  const roleLabel: Record<string, string> = {
+    captain: 'Captain',
+    secretary: 'Secretary',
+    member: 'Member',
+  };
 
-  const members = rankingData.map(m => {
-    const avg = m.scoreHistory.length > 0
-      ? Math.round(m.scoreHistory.reduce((a, b) => a + b, 0) / m.scoreHistory.length)
-      : '-';
+  const members = rankingData
+    .map((m) => {
+      const avg =
+        m.scoreHistory.length > 0
+          ? Math.round(m.scoreHistory.reduce((a, b) => a + b, 0) / m.scoreHistory.length)
+          : '-';
 
-    // Calculate number of wins and rounds played from records
-    const wins = records.filter(r => r.winner === m.name).length;
-    const rounds = records.filter(r => r.attendees.some(a => a.name === m.name)).length;
+      const wins = records.filter((r) => r.winner === m.name).length;
+      const rounds = records.filter((r) => r.attendees.some((a) => a.name === m.name)).length;
 
-    return {
-      name: m.name,
-      role: m.role,
-      handicap: m.scoreHistory.length > 0 ? m.handicap.toFixed(1) : 'New',
-      averageScore: avg,
-      since: m.since,
-      phone: m.phone,
-      wins: wins,
-      rounds: rounds,
-      img: m.img
-    };
-  });
-
-  // Sort by Name (Korean alphabetical order)
-  members.sort((a, b) => a.name.localeCompare(b.name));
+      return {
+        name: m.name,
+        role: m.role,
+        handicap: m.scoreHistory.length > 0 ? m.handicap.toFixed(1) : 'New',
+        averageScore: avg,
+        phone: m.phone,
+        wins,
+        rounds,
+        img: m.img,
+      };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
       <button
         onClick={onBack}
-        className="flex items-center space-x-2 text-sage-400 hover:text-sage-600 transition-colors text-xs uppercase tracking-widest font-medium mb-12 group"
+        className="group mb-8 flex items-center space-x-2 text-[11px] font-medium uppercase tracking-[0.22em] text-sage-400 transition-colors hover:text-sage-600 sm:mb-12"
       >
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+        <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
         <span>Back to Dashboard</span>
       </button>
 
-      <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+      <div className="mb-10 flex flex-col gap-4 sm:mb-16 md:flex-row md:items-end md:justify-between">
         <div>
-          <span className="text-sage-400 font-medium tracking-widest uppercase text-xs">Brotherhood</span>
-          <h2 className="text-5xl font-sans font-bold mt-4 text-sage-600">Club Members</h2>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">
+            Brotherhood
+          </span>
+          <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">Club Members</h2>
         </div>
-        <p className="text-sage-400 max-w-sm text-sm italic">
-          "Dankook Urban Planning & Real Estate Class of '09. 우리의 인연은 그린 위에서도 계속됩니다."
+        <p className="max-w-sm text-sm italic text-sage-400">
+          Class of 2009, still meeting through rounds, records, and the occasional dinner after play.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {members.map((member, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="group p-3 sm:p-8 rounded-2xl sm:rounded-[3rem] border border-champagne-100 bg-white hover:bg-champagne-50/50 transition-all duration-500 flex flex-col relative overflow-hidden"
+            className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-4 transition-all duration-500 hover:bg-champagne-50/50 sm:rounded-[3rem] sm:p-7"
           >
-            {/* Background Decorative Element */}
-            <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-sage-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-sage-50 opacity-50 transition-transform duration-700 group-hover:scale-150 sm:-right-10 sm:-top-10 sm:h-32 sm:w-32" />
 
-            <div className="flex flex-row items-center space-x-3 sm:space-x-8 relative z-10">
+            <div className="relative z-10 flex items-center gap-4">
               <div
-                className="w-16 h-16 sm:w-32 sm:h-32 rounded-xl sm:rounded-4xl bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-md border border-champagne-100 group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                className="h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-champagne-100 bg-white shadow-md transition-transform duration-500 group-hover:scale-105 sm:h-28 sm:w-28 sm:rounded-[2rem]"
                 onClick={() => setSelectedImage(member.img)}
               >
-                <img
-                  src={member.img}
-                  alt={member.name}
-                  className="w-full h-full object-cover transition-all duration-700"
-                />
+                <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
               </div>
-              <div className="flex-grow min-w-0">
-                <div className="flex flex-col mb-1 text-left">
-                  <div className="flex items-center space-x-1 sm:space-x-2 mb-0.5 sm:mb-1">
-                    <h4 className="text-sm sm:text-3xl font-sans font-extrabold text-sage-600 leading-tight">
-                      {member.name}
-                    </h4>
-                    {/* Badge Rendering */}
-                    <div className="flex space-x-0.5 sm:space-x-1 shrink-0">
-                      {member.role === '회장' && (
-                        <div className="p-0.5 sm:p-1.5 bg-amber-100 text-amber-600 rounded-md sm:rounded-lg shadow-sm" title="회장">
-                          <Crown size={8} className="sm:w-[12px] sm:h-[12px]" />
-                        </div>
-                      )}
-                      {member.role === '총무' && (
-                        <div className="p-0.5 sm:p-1.5 bg-blue-100 text-blue-600 rounded-md sm:rounded-lg shadow-sm" title="총무">
-                          <Medal size={8} className="sm:w-[12px] sm:h-[12px]" />
-                        </div>
-                      )}
-                      {member.wins > 0 && (
-                        <div className="p-0.5 sm:p-1.5 bg-rose-100 text-rose-600 rounded-md sm:rounded-lg shadow-sm flex items-center space-x-0.5" title={`${member.wins}회 우승`}>
-                          <Award size={10} className="sm:w-[14px] sm:h-[14px]" />
-                          <span className="text-[7px] sm:text-[10px] font-bold">{member.wins}</span>
-                        </div>
-                      )}
-                    </div>
+
+              <div className="min-w-0 flex-grow">
+                <div className="mb-1 flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <h4 className="truncate text-lg font-bold leading-tight text-sage-600 sm:text-2xl">{member.name}</h4>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-sage-400">
+                      {roleLabel[member.role] || member.role}
+                    </p>
                   </div>
-                  <p className="text-[8px] sm:text-xs text-sage-400 font-bold uppercase tracking-widest">{member.role}</p>
+
+                  <div className="flex shrink-0 items-center gap-1">
+                    {member.role === 'captain' && (
+                      <div className="rounded-lg bg-amber-100 p-1 text-amber-600 shadow-sm sm:rounded-xl sm:p-1.5" title="Captain">
+                        <Crown size={12} />
+                      </div>
+                    )}
+                    {member.role === 'secretary' && (
+                      <div className="rounded-lg bg-blue-100 p-1 text-blue-600 shadow-sm sm:rounded-xl sm:p-1.5" title="Secretary">
+                        <Medal size={12} />
+                      </div>
+                    )}
+                    {member.wins > 0 && (
+                      <div
+                        className="flex items-center gap-1 rounded-lg bg-rose-100 px-1.5 py-1 text-rose-600 shadow-sm sm:rounded-xl sm:px-2 sm:py-1.5"
+                        title={`${member.wins} wins`}
+                      >
+                        <Award size={12} />
+                        <span className="text-[10px] font-bold">{member.wins}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div className="flex items-center">
-                  {member.phone && (
-                    <a
-                      href={`tel:${member.phone}`}
-                      className="p-1 sm:p-2.5 rounded-lg sm:rounded-2xl bg-sage-50 text-sage-400 hover:bg-sage-600 hover:text-white transition-all duration-300 shadow-sm flex items-center space-x-1 sm:space-x-2"
-                    >
-                      <Phone size={8} className="sm:w-[10px] sm:h-[10px]" />
-                      <span className="text-[8px] sm:text-xs font-bold sm:inline">연락처</span>
-                    </a>
-                  )}
-                </div>
+                {member.phone && (
+                  <a
+                    href={`tel:${member.phone}`}
+                    className="mt-3 inline-flex items-center gap-2 rounded-xl bg-sage-50 px-3 py-2 text-xs font-bold text-sage-500 transition-all duration-300 hover:bg-sage-600 hover:text-white sm:rounded-2xl"
+                  >
+                    <Phone size={12} />
+                    <span>Call</span>
+                  </a>
+                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mt-3 sm:mt-8 relative z-10">
-              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
-                <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">HC</span>
-                <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.handicap}</span>
+            <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
+              <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">HC</span>
+                <span className="text-sm font-bold text-sage-600">{member.handicap}</span>
               </div>
-              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
-                <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">Avg</span>
-                <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.averageScore}</span>
+              <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">Avg</span>
+                <span className="text-sm font-bold text-sage-600">{member.averageScore}</span>
               </div>
-              <div className="flex flex-col bg-white/60 backdrop-blur-sm px-1.5 sm:px-3 py-1.5 sm:py-3 rounded-lg sm:rounded-2xl border border-champagne-50 group-hover:border-sage-200 transition-colors">
-                <span className="text-[5px] sm:text-[7px] uppercase tracking-widest text-sage-300 font-extrabold mb-0.5 sm:mb-1">Rnd</span>
-                <span className="text-[9px] sm:text-xs font-sans font-bold text-sage-600">{member.rounds}</span>
-              </div>
-            </div>
-
-            <div className="hidden sm:flex mt-6 items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-sage-300 font-bold">Class of 2009</span>
-              <div className="flex space-x-1">
-                <div className="w-1 h-1 rounded-full bg-sage-200"></div>
-                <div className="w-1 h-1 rounded-full bg-sage-200"></div>
-                <div className="w-1 h-1 rounded-full bg-sage-400"></div>
+              <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">Rnd</span>
+                <span className="text-sm font-bold text-sage-600">{member.rounds}</span>
               </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Image Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
@@ -157,27 +149,23 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-8"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md sm:p-8"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center overflow-hidden rounded-3xl"
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative flex max-h-[90vh] w-full max-w-4xl items-center justify-center overflow-hidden rounded-3xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-sm"
+                className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
               >
                 <X size={24} />
               </button>
-              <img
-                src={selectedImage}
-                alt="Member Profile Full"
-                className="max-w-full max-h-[90vh] object-contain shadow-2xl"
-              />
+              <img src={selectedImage} alt="Member Profile Full" className="max-h-[90vh] max-w-full object-contain shadow-2xl" />
             </motion.div>
           </motion.div>
         )}
@@ -187,5 +175,3 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
 };
 
 export default MemberSection;
-
-
