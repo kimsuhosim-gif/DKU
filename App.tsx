@@ -14,12 +14,14 @@ import MapSection from './components/MapSection';
 import RankingSection from './components/RankingSection';
 import GallerySection from './components/GallerySection';
 import PasswordGate from './components/PasswordGate';
+import NewArchiveSite from './components/NewArchiveSite';
 
 export type ViewState = 'home' | 'members' | 'records' | 'ledger' | 'weather' | 'map' | 'ranking' | 'gallery';
 
 const App: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentView, setCurrentView] = useState<ViewState>('home');
+  const [hashRoute, setHashRoute] = useState(() => window.location.hash);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +29,12 @@ const App: React.FC = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleHashChange = () => setHashRoute(window.location.hash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   useEffect(() => {
@@ -50,6 +58,9 @@ const App: React.FC = () => {
 
   return (
     <PasswordGate>
+      {hashRoute === '#/new-archive' ? (
+        <NewArchiveSite />
+      ) : (
       <div className="min-h-screen bg-champagne-50 font-sans selection:bg-sage-200 selection:text-sage-600">
         <Navbar isScrolled={isScrolled} setView={navigateTo} currentView={currentView} />
 
@@ -179,6 +190,7 @@ const App: React.FC = () => {
         <Footer />
         <MobileDock currentView={currentView} onNavigate={navigateTo} />
       </div>
+      )}
     </PasswordGate>
   );
 };
