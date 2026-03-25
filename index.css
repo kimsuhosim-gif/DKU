@@ -10,6 +10,7 @@
   --accent: #50604a;
   --accent-soft: #e8efe3;
   --gold: #c9a66b;
+  --font-a2z: "A2Z", "에이투지체", "Outfit", sans-serif;
 }
 
 * {
@@ -37,7 +38,23 @@ button,
 input,
 textarea,
 select {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-a2z);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-a2z);
+  letter-spacing: -0.02em;
+}
+
+.font-serif,
+.font-sans,
+.font-script {
+  font-family: var(--font-a2z) !important;
 }
 
 img {
