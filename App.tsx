@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import HomeShowcase from './components/HomeShowcase';
 import BentoGrid from './components/BentoGrid';
 import MobileDock from './components/MobileDock';
 import Footer from './components/Footer';
@@ -69,31 +68,8 @@ const App: React.FC = () => {
                   <Hero onNavigate={navigateTo} />
                 </section>
 
-                <section id="showcase">
-                  <HomeShowcase onNavigate={navigateTo} />
-                </section>
-
-                <section id="content" className="bg-[#f3ede3] px-4 py-14 sm:px-6 sm:py-24">
+                <section id="content" className="bg-[#f3ede3] px-4 py-10 sm:px-6 sm:py-16">
                   <div className="mx-auto max-w-7xl">
-                    <motion.div
-                      initial={{ opacity: 0, y: 40 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, ease: 'easeOut' }}
-                      className="mb-8 max-w-3xl sm:mb-10"
-                    >
-                      <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-sage-400">
-                        Members utility
-                      </span>
-                      <h2 className="mt-3 font-serif text-3xl italic text-sage-600 md:text-5xl">
-                        Dashboard, but quieter.
-                      </h2>
-                      <p className="mt-3 text-[13px] leading-6 text-slate-500 md:mt-4 md:text-base md:leading-7">
-                        The home screen stays focused on atmosphere first. Detailed records, rankings, and field tools are
-                        pushed into calmer utility views that work better on mobile.
-                      </p>
-                    </motion.div>
-
                     <BentoGrid onNavigate={navigateTo} />
                   </div>
                 </section>
