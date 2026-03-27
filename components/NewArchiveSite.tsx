@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
-  Camera,
   Crown,
   MapPin,
   Medal,
@@ -25,28 +24,27 @@ const ledgerTransactions = [
   { date: '2025.11.29', desc: 'Prize packaging', amount: -27500 },
 ];
 
-const formatCurrency = (value: number) => `₩${Math.abs(value).toLocaleString()}`;
-
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
+const fadeInUp = {
+  initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-80px' },
-  transition: { duration: 0.75, ease: 'easeOut' as const },
+  viewport: { once: true, margin: '-100px' },
+  transition: { duration: 0.8, ease: 'easeOut' as const },
 };
+
+const formatCurrency = (value: number) => `₩${Math.abs(value).toLocaleString()}`;
 
 const NewArchiveSite: React.FC = () => {
   const latestRecord = records[0];
   const ranking = getProcessRankings();
-  const leaderboard = ranking.slice(0, 5);
-  const featuredMembers = ranking.slice(0, 8);
-  const latestCourse = latestRecord ? COURSE_LOCATIONS[latestRecord.location] : null;
+  const topMembers = ranking.slice(0, 6);
+  const featuredGallery = galleryPhotos[0];
+  const courseMeta = latestRecord ? COURSE_LOCATIONS[latestRecord.location] : null;
   const participantCount = latestRecord?.attendees.length || 0;
-  const balance = ledgerTransactions.reduce((acc, item) => acc + item.amount, 0);
   const averageScore =
-    latestRecord && latestRecord.attendees.length > 0
-      ? Math.round(latestRecord.attendees.reduce((sum, item) => sum + item.score, 0) / latestRecord.attendees.length)
+    latestRecord && latestRecord.attendees.length
+      ? Math.round(latestRecord.attendees.reduce((sum, player) => sum + player.score, 0) / latestRecord.attendees.length)
       : 0;
-
+  const balance = ledgerTransactions.reduce((acc, entry) => acc + entry.amount, 0);
   const roleCounts = members.reduce(
     (acc, member) => {
       if (member.role === '회장') acc.captain += 1;
@@ -58,40 +56,37 @@ const NewArchiveSite: React.FC = () => {
   );
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const target = document.getElementById(id);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
-    <div className="min-h-screen bg-[#f4ecdf] text-[#1e261c]">
+    <div className="min-h-screen bg-[#0d100d] text-[#f5ecda]">
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-[-8rem] top-[-6rem] h-[28rem] w-[28rem] rounded-full bg-[#fb6a3c]/18 blur-3xl" />
-        <div className="absolute right-[-10rem] top-[10rem] h-[32rem] w-[32rem] rounded-full bg-[#274233]/18 blur-3xl" />
-        <div className="absolute bottom-[-10rem] left-[18%] h-[30rem] w-[30rem] rounded-full bg-[#d9d44f]/14 blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.22),transparent_24%),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:100%_100%,40px_40px,40px_40px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,166,107,0.18),transparent_26%),radial-gradient(circle_at_80%_20%,rgba(63,91,66,0.18),transparent_24%),linear-gradient(180deg,#0d100d_0%,#121713_35%,#171d18_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:44px_44px]" />
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-black/8 bg-[#f4ecdf]/78 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#0d100d]/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <button
-            onClick={() => scrollToSection('hero')}
-            className="text-left"
-          >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#6f7665]">Alternative concept</p>
-            <h1 className="mt-1 font-serif text-xl uppercase tracking-[0.08em] text-[#223022] sm:text-2xl">Round Index 09</h1>
+          <button onClick={() => scrollToSection('hero')} className="text-left">
+            <p className="text-[10px] uppercase tracking-[0.34em] text-[#b59a6a]">Private member archive</p>
+            <h1 className="mt-1 font-serif text-xl uppercase tracking-[0.16em] text-[#f6ecd8] sm:text-2xl">
+              DKU-RE09 Reserve
+            </h1>
           </button>
 
-          <div className="hidden items-center gap-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#344132] lg:flex">
-            <button onClick={() => scrollToSection('pulse')}>Pulse</button>
+          <nav className="hidden items-center gap-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#d5c3a2] lg:flex">
+            <button onClick={() => scrollToSection('hero')}>Overview</button>
+            <button onClick={() => scrollToSection('leaderboard')}>Ranking</button>
             <button onClick={() => scrollToSection('round')}>Round</button>
             <button onClick={() => scrollToSection('members')}>Members</button>
-            <button onClick={() => scrollToSection('systems')}>Systems</button>
-            <button onClick={() => scrollToSection('memory')}>Memory</button>
-          </div>
+            <button onClick={() => scrollToSection('archive')}>Archive</button>
+          </nav>
 
           <a
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#223022] transition hover:bg-white"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f1e6cf] transition hover:bg-white/10"
           >
             <ArrowLeft size={14} />
             Existing site
@@ -102,91 +97,83 @@ const NewArchiveSite: React.FC = () => {
       <main className="pb-24">
         <section id="hero" className="px-4 pb-10 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
           <div className="mx-auto max-w-7xl">
-            <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, ease: 'easeOut' }}
-                className="relative overflow-hidden rounded-[2.25rem] bg-[#223022] px-6 pb-7 pt-6 text-white sm:px-8 sm:pb-10 sm:pt-8 lg:min-h-[42rem]"
+                className="relative overflow-hidden rounded-[2.4rem] border border-white/8 bg-[#171b17] p-6 shadow-[0_50px_140px_-70px_rgba(0,0,0,0.9)] sm:p-8 lg:min-h-[42rem]"
               >
-                <div className="absolute right-4 top-2 font-serif text-[8rem] leading-none text-white/6 sm:right-6 sm:text-[11rem]">
-                  09
-                </div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,166,107,0.18),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.06),transparent_35%)]" />
                 <div className="relative z-10 max-w-3xl">
-                  <div className="inline-flex items-center rounded-full border border-white/12 bg-white/6 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
-                    Data-built experimental home
+                  <div className="inline-flex items-center rounded-full border border-[#c9a66b]/20 bg-[#c9a66b]/8 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#d7bd8e]">
+                    Members only season file
                   </div>
-                  <h2 className="mt-6 max-w-4xl font-serif text-[3.2rem] leading-[0.9] sm:text-[4.6rem] lg:text-[6rem]">
-                    A club archive
-                    <span className="block text-[#d9d44f]">that feels like a season poster.</span>
+                  <h2 className="mt-8 font-serif text-[3.4rem] leading-[0.9] text-[#f7efdf] sm:text-[4.7rem] lg:text-[6.4rem]">
+                    Luxury,
+                    <span className="block text-[#c9a66b]">without noise.</span>
                   </h2>
-                  <p className="mt-6 max-w-2xl text-[15px] leading-7 text-white/72 sm:text-base">
-                    This version is not polite, minimal, or tied to the old homepage. It treats your member list,
-                    leaderboard, finance, and round record as material for a bold editorial sports archive.
+                  <p className="mt-6 max-w-2xl text-[15px] leading-7 text-[#c7c1b4] sm:text-base">
+                    This concept treats the club like a private reserve. One recorded round becomes a seasonal dossier,
+                    with members, scores, course memory, and finance presented as premium editorial inventory.
                   </p>
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                     <button
                       onClick={() => scrollToSection('round')}
-                      className="inline-flex items-center justify-center gap-3 rounded-full bg-[#fb6a3c] px-6 py-4 text-[12px] font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-[#ee5e2e]"
+                      className="inline-flex items-center justify-center gap-3 rounded-full bg-[#c9a66b] px-6 py-4 text-[12px] font-semibold uppercase tracking-[0.24em] text-[#11130f] transition hover:bg-[#d8b67e]"
                     >
-                      Open round capsule
+                      Open round dossier
                       <ArrowRight size={16} />
                     </button>
                     <button
                       onClick={() => scrollToSection('members')}
-                      className="inline-flex items-center justify-center gap-3 rounded-full border border-white/14 bg-white/8 px-6 py-4 text-[12px] font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-white/12"
+                      className="inline-flex items-center justify-center gap-3 rounded-full border border-white/12 bg-white/6 px-6 py-4 text-[12px] font-semibold uppercase tracking-[0.24em] text-[#f6ecd8] transition hover:bg-white/10"
                     >
-                      Browse members
+                      Browse roster
                     </button>
                   </div>
                 </div>
 
                 <div className="relative z-10 mt-10 grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-[1.5rem] border border-white/10 bg-white/6 p-4">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Latest round</p>
-                    <p className="mt-3 font-serif text-2xl">{latestRecord?.score}</p>
-                    <p className="mt-2 text-sm text-white/65">{latestRecord?.winner}</p>
+                  <div className="rounded-[1.45rem] border border-white/8 bg-white/5 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#8e8779]">Latest winner</p>
+                    <p className="mt-3 font-serif text-2xl text-[#f7efdf]">{latestRecord?.winner}</p>
+                    <p className="mt-2 text-sm text-[#bfb7a9]">gross {latestRecord?.score}</p>
                   </div>
-                  <div className="rounded-[1.5rem] border border-white/10 bg-white/6 p-4">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Attendance</p>
-                    <p className="mt-3 font-serif text-2xl">{participantCount}</p>
-                    <p className="mt-2 text-sm text-white/65">full scorecards</p>
+                  <div className="rounded-[1.45rem] border border-white/8 bg-white/5 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#8e8779]">Players</p>
+                    <p className="mt-3 font-serif text-2xl text-[#f7efdf]">{participantCount}</p>
+                    <p className="mt-2 text-sm text-[#bfb7a9]">full scorecards</p>
                   </div>
-                  <div className="rounded-[1.5rem] border border-white/10 bg-[#d9d44f] p-4 text-[#243023]">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#47513e]/80">Balance</p>
-                    <p className="mt-3 font-serif text-2xl">{formatCurrency(balance)}</p>
-                    <p className="mt-2 text-sm text-[#495245]">club fund</p>
+                  <div className="rounded-[1.45rem] border border-[#c9a66b]/20 bg-[#c9a66b]/10 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#b59a6a]">Fund</p>
+                    <p className="mt-3 font-serif text-2xl text-[#f5ebd6]">{formatCurrency(balance)}</p>
+                    <p className="mt-2 text-sm text-[#d4c4a3]">trust account</p>
                   </div>
                 </div>
               </motion.div>
 
-              <div className="grid gap-5">
+              <div className="grid gap-6">
                 <motion.div
                   initial={{ opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 0.08, ease: 'easeOut' }}
-                  className="overflow-hidden rounded-[2rem] border border-black/8 bg-[#fbf6ee] shadow-[0_35px_100px_-60px_rgba(33,40,29,0.55)]"
+                  className="overflow-hidden rounded-[2.2rem] border border-white/8 bg-[#141814] shadow-[0_50px_140px_-80px_rgba(0,0,0,0.9)]"
                 >
-                  <div className="grid gap-4 p-4 sm:p-5">
-                    <div className="overflow-hidden rounded-[1.5rem]">
-                      <img
-                        src={galleryPhotos[0]?.src || '/images/round1_group.jpg'}
-                        alt="Round memory"
-                        className="h-72 w-full object-cover sm:h-[22rem]"
-                      />
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-[1.2fr_0.8fr]">
-                      <div className="rounded-[1.4rem] bg-[#fb6a3c] p-5 text-white">
-                        <p className="text-[10px] uppercase tracking-[0.22em] text-white/65">Latest venue</p>
-                        <h3 className="mt-3 font-serif text-2xl leading-tight">{latestRecord?.location}</h3>
-                        <p className="mt-4 text-sm text-white/80">{latestRecord?.date}</p>
-                      </div>
-                      <div className="rounded-[1.4rem] bg-[#efe5d5] p-5 text-[#223022]">
-                        <p className="text-[10px] uppercase tracking-[0.22em] text-[#67735f]">Average</p>
-                        <p className="mt-3 font-serif text-4xl">{averageScore}</p>
-                        <p className="mt-2 text-sm text-[#5d6758]">round gross</p>
-                      </div>
+                  <div className="relative">
+                    <img
+                      src={featuredGallery?.src || '/images/round1_group.jpg'}
+                      alt="Featured round"
+                      className="h-[20rem] w-full object-cover sm:h-[24rem]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#11140f] via-[#11140f]/20 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                      <p className="text-[10px] uppercase tracking-[0.24em] text-[#d0c3a8]">Season memory</p>
+                      <h3 className="mt-3 max-w-md font-serif text-3xl text-[#f8f0df] sm:text-4xl">
+                        {latestRecord?.location}
+                      </h3>
+                      <p className="mt-3 text-sm text-[#d1c5ab]">{latestRecord?.date}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -197,14 +184,15 @@ const NewArchiveSite: React.FC = () => {
                   transition={{ duration: 0.9, delay: 0.16, ease: 'easeOut' }}
                   className="grid gap-4 sm:grid-cols-2"
                 >
-                  <div className="rounded-[2rem] bg-[#d9d44f] p-5 text-[#223022]">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#58624b]">Top net</p>
-                    <p className="mt-3 font-serif text-3xl">{leaderboard[0]?.name}</p>
-                    <p className="mt-2 text-sm text-[#4b5542]">{leaderboard[0]?.netScoreDisplay}</p>
+                  <div className="rounded-[2rem] border border-white/8 bg-[#c9a66b] p-5 text-[#11130f]">
+                    <p className="text-[10px] uppercase tracking-[0.24em] text-[#4f4330]">Average gross</p>
+                    <p className="mt-3 font-serif text-4xl">{averageScore}</p>
+                    <p className="mt-2 text-sm text-[#493f2f]">field average</p>
                   </div>
-                  <div className="rounded-[2rem] bg-[#2f4535] p-5 text-white">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-white/50">Structure</p>
-                    <p className="mt-3 text-lg">1 captain · {roleCounts.secretary} secretary · {roleCounts.member} members</p>
+                  <div className="rounded-[2rem] border border-white/8 bg-[#1d251f] p-5 text-[#f7efdf]">
+                    <p className="text-[10px] uppercase tracking-[0.24em] text-[#968f81]">Club structure</p>
+                    <p className="mt-3 text-lg">{roleCounts.captain} captain · {roleCounts.secretary} secretary</p>
+                    <p className="mt-2 text-sm text-[#c3bbad]">{roleCounts.member} regular members</p>
                   </div>
                 </motion.div>
               </div>
@@ -212,75 +200,106 @@ const NewArchiveSite: React.FC = () => {
           </div>
         </section>
 
-        <section id="pulse" className="px-4 py-6 sm:px-6 sm:py-10">
-          <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              { label: 'Champion', value: latestRecord?.winner, tone: 'bg-white' },
-              { label: 'Participants', value: `${participantCount}`, tone: 'bg-[#efe5d5]' },
-              { label: 'Best Score', value: `${latestRecord?.score}`, tone: 'bg-[#d9d44f]' },
-              { label: 'Current Fund', value: formatCurrency(balance), tone: 'bg-[#223022] text-white' },
-            ].map((item) => (
-              <motion.div
-                key={item.label}
-                {...fadeUp}
-                className={`rounded-[1.8rem] border border-black/8 p-5 shadow-[0_24px_70px_-55px_rgba(33,40,29,0.4)] ${item.tone}`}
-              >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-current opacity-55">{item.label}</p>
-                <p className="mt-4 font-serif text-3xl">{item.value}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section id="round" className="px-4 py-10 sm:px-6 sm:py-14">
+        <section id="leaderboard" className="px-4 py-8 sm:px-6 sm:py-12">
           <div className="mx-auto max-w-7xl">
-            <motion.div {...fadeUp} className="mb-8 max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#7a7567]">Round capsule</p>
-              <h3 className="mt-3 font-serif text-4xl text-[#223022] sm:text-5xl">
-                Scoreboard, split scores, and the winner of the day.
+            <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#b59a6a]">Leaderboard</p>
+              <h3 className="mt-3 font-serif text-4xl text-[#f5ebd6] sm:text-5xl">
+                The hierarchy should feel expensive before it feels digital.
               </h3>
             </motion.div>
 
             <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
-              <motion.div {...fadeUp} className="rounded-[2rem] bg-[#223022] p-6 text-white">
+              <motion.div {...fadeInUp} className="rounded-[2.2rem] border border-white/8 bg-[#151915] p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-white/50">Round card</p>
-                  <CalendarDays size={18} className="text-white/45" />
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#998f7d]">Champion panel</p>
+                  <Crown size={18} className="text-[#c9a66b]" />
                 </div>
-                <h4 className="mt-5 font-serif text-4xl leading-tight">{latestRecord?.location}</h4>
-                <p className="mt-4 text-sm text-white/68">{latestRecord?.date}</p>
-
-                <div className="mt-8 rounded-[1.5rem] bg-white/7 p-5">
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Winner</p>
-                  <div className="mt-3 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fb6a3c]">
-                      <Trophy size={20} />
-                    </div>
-                    <div>
-                      <p className="font-serif text-2xl">{latestRecord?.winner}</p>
-                      <p className="mt-1 text-sm text-white/65">Best gross {latestRecord?.score}</p>
-                    </div>
-                  </div>
+                <div className="mt-6">
+                  <p className="font-serif text-6xl leading-none text-[#f7efdf] sm:text-7xl">{ranking[0]?.name}</p>
+                  <p className="mt-4 text-sm text-[#c6bdaf]">Best current net score in the processed rankings.</p>
                 </div>
-
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-[1.4rem] bg-[#d9d44f] p-4 text-[#223022]">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#59624d]">Attendance</p>
-                    <p className="mt-2 font-serif text-3xl">{participantCount}</p>
+                <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-[1.4rem] bg-white/5 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#998f7d]">Net</p>
+                    <p className="mt-2 font-serif text-3xl text-[#f7efdf]">{ranking[0]?.netScoreDisplay}</p>
                   </div>
-                  <div className="rounded-[1.4rem] bg-white/7 p-4">
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Mean score</p>
-                    <p className="mt-2 font-serif text-3xl">{averageScore}</p>
+                  <div className="rounded-[1.4rem] bg-white/5 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#998f7d]">Gross</p>
+                    <p className="mt-2 font-serif text-3xl text-[#f7efdf]">{ranking[0]?.latestScore}</p>
                   </div>
                 </div>
               </motion.div>
 
-              <motion.div {...fadeUp} className="rounded-[2rem] border border-black/8 bg-[#fbf6ee] p-4 sm:p-6">
+              <motion.div {...fadeInUp} className="rounded-[2.2rem] border border-white/8 bg-[#f6eedf] p-4 sm:p-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#74706a]">Live table</p>
-                  <span className="rounded-full bg-[#223022] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white">
-                    {leaderboard.length} ranked
+                  <p className="text-[11px] uppercase tracking-[0.26em] text-[#7f7461]">Top five</p>
+                  <span className="rounded-full bg-[#1b211b] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-[#f7efdf]">
+                    Net ranking
                   </span>
+                </div>
+                <div className="space-y-3">
+                  {ranking.slice(0, 5).map((member, index) => (
+                    <div
+                      key={member.name}
+                      className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-[1.45rem] border px-4 py-3 ${
+                        index === 0 ? 'border-[#c9a66b]/40 bg-[#c9a66b]/10' : 'border-black/6 bg-white'
+                      }`}
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#eee3cf] text-sm font-semibold text-[#1b211b]">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <p className="text-base text-[#1b211b]">{member.name}</p>
+                        <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-[#7e7462]">{member.role}</p>
+                      </div>
+                      <div className="rounded-full bg-[#1b211b] px-3 py-1.5 text-sm font-semibold text-[#f7efdf]">
+                        {member.netScoreDisplay}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        <section id="round" className="border-y border-white/8 bg-[#121612] px-4 py-10 sm:px-6 sm:py-14">
+          <div className="mx-auto max-w-7xl">
+            <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#b59a6a]">Round dossier</p>
+              <h3 className="mt-3 font-serif text-4xl text-[#f5ebd6] sm:text-5xl">
+                One round, rendered like a member-only event file.
+              </h3>
+            </motion.div>
+
+            <div className="grid gap-5 lg:grid-cols-[0.82fr_1.18fr]">
+              <motion.div {...fadeInUp} className="rounded-[2.2rem] border border-white/8 bg-[#1a201a] p-6 text-[#f5ebd6]">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#918a7c]">Venue capsule</p>
+                  <MapPin size={18} className="text-[#c9a66b]" />
+                </div>
+                <h4 className="mt-6 font-serif text-4xl leading-tight">{latestRecord?.location}</h4>
+                <div className="mt-6 overflow-hidden rounded-[1.6rem]">
+                  <img src={courseMeta?.img} alt={latestRecord?.location} className="h-64 w-full object-cover" />
+                </div>
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-[1.35rem] bg-white/5 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#918a7c]">Date</p>
+                    <p className="mt-2 text-lg">{latestRecord?.date}</p>
+                  </div>
+                  <div className="rounded-[1.35rem] bg-[#c9a66b] p-4 text-[#161811]">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#4e4333]">Winner</p>
+                    <p className="mt-2 text-lg">{latestRecord?.winner}</p>
+                  </div>
+                </div>
+                <p className="mt-5 text-sm leading-7 text-[#c6bdaf]">{courseMeta?.address}</p>
+              </motion.div>
+
+              <motion.div {...fadeInUp} className="rounded-[2.2rem] border border-white/8 bg-[#f7efdf] p-4 sm:p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-[11px] uppercase tracking-[0.26em] text-[#7f7461]">Score ledger</p>
+                  <CalendarDays size={18} className="text-[#7f7461]" />
                 </div>
                 <div className="space-y-3">
                   {latestRecord?.attendees
@@ -290,19 +309,19 @@ const NewArchiveSite: React.FC = () => {
                       <div
                         key={`${attendee.name}-${index}`}
                         className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-[1.45rem] border px-4 py-3 ${
-                          index === 0 ? 'border-[#fb6a3c]/25 bg-[#fb6a3c]/7' : 'border-black/6 bg-white'
+                          index === 0 ? 'border-[#c9a66b]/40 bg-[#c9a66b]/10' : 'border-black/6 bg-white'
                         }`}
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#efe5d5] text-sm font-semibold text-[#223022]">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#eee3cf] text-sm font-semibold text-[#1b211b]">
                           {index + 1}
                         </div>
                         <div>
-                          <p className="text-base text-[#223022]">{attendee.name}</p>
-                          <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-[#7b776f]">
+                          <p className="text-base text-[#1b211b]">{attendee.name}</p>
+                          <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-[#7e7462]">
                             Front {attendee.front} / Back {attendee.back}
                           </p>
                         </div>
-                        <div className="rounded-full bg-[#223022] px-3 py-1.5 text-sm font-semibold text-white">
+                        <div className="rounded-full bg-[#1b211b] px-3 py-1.5 text-sm font-semibold text-[#f7efdf]">
                           {attendee.score}
                         </div>
                       </div>
@@ -313,40 +332,38 @@ const NewArchiveSite: React.FC = () => {
           </div>
         </section>
 
-        <section id="members" className="border-y border-black/8 bg-[#efe5d5] px-4 py-10 sm:px-6 sm:py-14">
+        <section id="members" className="px-4 py-10 sm:px-6 sm:py-14">
           <div className="mx-auto max-w-7xl">
-            <motion.div {...fadeUp} className="mb-8 max-w-3xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#7a7567]">Member cast</p>
-              <h3 className="mt-3 font-serif text-4xl text-[#223022] sm:text-5xl">
-                The club reads like a roster, not a contact list.
+            <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#b59a6a]">Member roster</p>
+              <h3 className="mt-3 font-serif text-4xl text-[#f5ebd6] sm:text-5xl">
+                The roster should feel closer to a private club ledger than a social profile grid.
               </h3>
             </motion.div>
 
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {featuredMembers.map((member, index) => (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {topMembers.map((member, index) => (
                 <motion.div
                   key={member.name}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: index * 0.04 }}
-                  className={`overflow-hidden rounded-[2rem] border border-black/8 ${
-                    index % 4 === 0
-                      ? 'bg-[#223022] text-white'
-                      : index % 4 === 1
-                        ? 'bg-white'
-                        : index % 4 === 2
-                          ? 'bg-[#fb6a3c] text-white'
-                          : 'bg-[#d9d44f] text-[#223022]'
+                  {...fadeInUp}
+                  transition={{ ...fadeInUp.transition, delay: index * 0.04 }}
+                  className={`overflow-hidden rounded-[2.1rem] border border-white/8 ${
+                    index % 3 === 0
+                      ? 'bg-[#171d17] text-[#f5ebd6]'
+                      : index % 3 === 1
+                        ? 'bg-[#f7efdf] text-[#191f18]'
+                        : 'bg-[#c9a66b] text-[#161811]'
                   }`}
                 >
                   <div className="p-5">
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start justify-between gap-4">
                       <img src={member.img} alt={member.name} className="h-20 w-20 rounded-[1.4rem] object-cover" />
                       <div className="flex items-center gap-2">
                         {member.role === '회장' && <Crown size={16} className="shrink-0" />}
                         {member.role === '총무' && <Medal size={16} className="shrink-0" />}
                       </div>
                     </div>
-                    <h4 className="mt-5 font-serif text-3xl leading-none">{member.name}</h4>
+                    <h4 className="mt-5 font-serif text-3xl">{member.name}</h4>
                     <p className="mt-2 text-[11px] uppercase tracking-[0.2em] opacity-65">{member.role}</p>
 
                     <div className="mt-5 grid grid-cols-3 gap-2">
@@ -377,105 +394,74 @@ const NewArchiveSite: React.FC = () => {
           </div>
         </section>
 
-        <section id="systems" className="px-4 py-10 sm:px-6 sm:py-14">
-          <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[0.88fr_1.12fr]">
-            <motion.div {...fadeUp} className="rounded-[2rem] bg-[#fb6a3c] p-6 text-white">
-              <div className="flex items-center justify-between">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/65">Course memory</p>
-                <MapPin size={18} className="text-white/70" />
-              </div>
-              <h3 className="mt-4 font-serif text-4xl leading-tight">{latestRecord?.location}</h3>
-              <div className="mt-5 overflow-hidden rounded-[1.6rem]">
-                <img src={latestCourse?.img} alt={latestRecord?.location} className="h-72 w-full object-cover" />
-              </div>
-              <p className="mt-5 text-sm leading-7 text-white/82">{latestCourse?.address}</p>
-            </motion.div>
-
-            <motion.div {...fadeUp} className="rounded-[2rem] bg-[#223022] p-6 text-white">
-              <div className="flex items-center justify-between">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55">Finance block</p>
-                <Wallet size={18} className="text-white/55" />
-              </div>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[1.5rem] bg-white/6 p-5">
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Current balance</p>
-                  <p className="mt-3 font-serif text-4xl">{formatCurrency(balance)}</p>
-                  <p className="mt-3 text-sm text-white/68">Trust account after the latest recorded settlement.</p>
-                </div>
-                <div className="rounded-[1.5rem] bg-[#d9d44f] p-5 text-[#223022]">
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#5a634d]">Account</p>
-                  <p className="mt-3 text-lg">KakaoBank 3333-16-4428815</p>
-                  <p className="mt-3 text-sm text-[#495246]">Shared club fund managed by the secretary.</p>
-                </div>
-              </div>
-              <div className="mt-5 space-y-3">
-                {ledgerTransactions.slice(0, 5).map((item) => (
-                  <div key={`${item.date}-${item.desc}`} className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-white/5 px-4 py-3">
-                    <div>
-                      <p className="text-sm">{item.desc}</p>
-                      <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/45">{item.date}</p>
-                    </div>
-                    <p className={`text-sm font-semibold ${item.amount > 0 ? 'text-[#d5f0c0]' : 'text-[#ffcebd]'}`}>
-                      {item.amount > 0 ? '+' : '-'} {formatCurrency(item.amount)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section id="memory" className="border-t border-black/8 bg-[#fbf6ee] px-4 py-10 sm:px-6 sm:py-14">
+        <section id="archive" className="border-t border-white/8 bg-[#f3ead8] px-4 py-10 text-[#171b15] sm:px-6 sm:py-14">
           <div className="mx-auto max-w-7xl">
-            <motion.div {...fadeUp} className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
               <div className="max-w-3xl">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#7a7567]">Memory lane</p>
-                <h3 className="mt-3 font-serif text-4xl text-[#223022] sm:text-5xl">
-                  Images are treated like evidence, not decoration.
+                <p className="text-[11px] uppercase tracking-[0.3em] text-[#8e7350]">Reserve archive</p>
+                <h3 className="mt-3 font-serif text-4xl sm:text-5xl">
+                  Course memory, club fund, and visual evidence in one wing.
                 </h3>
               </div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#223022] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
-                <Camera size={14} />
-                Gallery linked to round data
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#171b15] px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-[#f7efdf]">
+                <Users size={14} />
+                Members only
               </div>
             </motion.div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              {galleryPhotos.map((photo, index) => (
-                <motion.div
-                  key={photo.id}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                  className={`overflow-hidden rounded-[2rem] border border-black/8 ${
-                    index === 0 ? 'md:col-span-2' : ''
-                  } bg-white shadow-[0_24px_70px_-55px_rgba(33,40,29,0.35)]`}
-                >
-                  <div className={`grid ${index === 0 ? 'md:grid-cols-[1.1fr_0.9fr]' : ''}`}>
-                    <img
-                      src={photo.src}
-                      alt={photo.location}
-                      className={`${index === 0 ? 'h-full min-h-[20rem] w-full object-cover' : 'h-72 w-full object-cover'}`}
-                    />
-                    <div className="p-5 sm:p-6">
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-[#7a7567]">{photo.date}</p>
-                      <h4 className="mt-4 font-serif text-3xl text-[#223022]">{photo.location}</h4>
-                      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                        <div className="rounded-[1.1rem] bg-[#efe5d5] p-4">
-                          <p className="text-[9px] uppercase tracking-[0.16em] text-[#7a7567]">Best score</p>
-                          <p className="mt-2 text-xl text-[#223022]">{photo.bestScore}</p>
-                        </div>
-                        <div className="rounded-[1.1rem] bg-[#d9d44f] p-4 text-[#223022]">
-                          <p className="text-[9px] uppercase tracking-[0.16em] text-[#59624d]">Participants</p>
-                          <p className="mt-2 text-xl">{photo.participants}</p>
-                        </div>
+            <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+              <motion.div {...fadeInUp} className="overflow-hidden rounded-[2.2rem] border border-black/8 bg-white shadow-[0_35px_110px_-70px_rgba(16,18,14,0.4)]">
+                <div className="relative">
+                  <img src={featuredGallery?.src || '/images/round1_group.jpg'} alt="Gallery feature" className="h-[24rem] w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <p className="text-[10px] uppercase tracking-[0.24em] text-white/65">Featured still</p>
+                    <h4 className="mt-3 font-serif text-4xl">{featuredGallery?.location}</h4>
+                  </div>
+                </div>
+                <div className="grid gap-3 p-5 sm:grid-cols-2">
+                  <div className="rounded-[1.3rem] bg-[#f2e7d5] p-4">
+                    <p className="text-[9px] uppercase tracking-[0.18em] text-[#856e4f]">Best score</p>
+                    <p className="mt-2 text-2xl">{featuredGallery?.bestScore}</p>
+                  </div>
+                  <div className="rounded-[1.3rem] bg-[#c9a66b] p-4 text-[#161811]">
+                    <p className="text-[9px] uppercase tracking-[0.18em] text-[#4f4330]">Participants</p>
+                    <p className="mt-2 text-2xl">{featuredGallery?.participants}</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div {...fadeInUp} className="rounded-[2.2rem] bg-[#171d17] p-6 text-[#f5ebd6] shadow-[0_45px_120px_-75px_rgba(0,0,0,0.9)]">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-[#958d80]">Financial brief</p>
+                  <Wallet size={18} className="text-[#c9a66b]" />
+                </div>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-[1.4rem] bg-white/5 p-5">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#958d80]">Balance</p>
+                    <p className="mt-3 font-serif text-4xl">{formatCurrency(balance)}</p>
+                    <p className="mt-3 text-sm text-[#c2b9aa]">Trust balance after recent club spending.</p>
+                  </div>
+                  <div className="rounded-[1.4rem] bg-[#c9a66b] p-5 text-[#161811]">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#4f4330]">Account</p>
+                    <p className="mt-3 text-lg">KakaoBank 3333-16-4428815</p>
+                    <p className="mt-3 text-sm text-[#4a4030]">Managed by the club secretary.</p>
+                  </div>
+                </div>
+                <div className="mt-5 space-y-3">
+                  {ledgerTransactions.slice(0, 4).map((entry) => (
+                    <div key={`${entry.date}-${entry.desc}`} className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-white/5 px-4 py-3">
+                      <div>
+                        <p className="text-sm">{entry.desc}</p>
+                        <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-[#958d80]">{entry.date}</p>
                       </div>
-                      <p className="mt-6 text-sm leading-7 text-[#596556]">
-                        This gallery is not separate from the data model. It is attached to the recorded round and read as part of the same archive.
+                      <p className={`text-sm font-semibold ${entry.amount > 0 ? 'text-[#e7e2a9]' : 'text-[#f4c0a8]'}`}>
+                        {entry.amount > 0 ? '+' : '-'} {formatCurrency(entry.amount)}
                       </p>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
