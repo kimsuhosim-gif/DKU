@@ -98,12 +98,12 @@ const NewArchiveSite: React.FC = () => {
       <main className="pb-24">
         <section id="hero" className="px-4 pb-10 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
           <div className="mx-auto max-w-7xl">
-            <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="grid gap-6 lg:grid-cols-[1.04fr_0.96fr]">
               <motion.div
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, ease: 'easeOut' }}
-                className="relative overflow-hidden rounded-[2.6rem] border border-[#8f867b]/12 bg-[linear-gradient(145deg,#141b24_0%,#0d141c_48%,#131b24_100%)] p-6 shadow-[0_55px_180px_-70px_rgba(0,0,0,0.95)] sm:p-8 lg:min-h-[42rem]"
+                className="relative overflow-hidden rounded-[2.8rem] border border-[#8f867b]/12 bg-[linear-gradient(145deg,#141b24_0%,#0d141c_48%,#131b24_100%)] p-6 shadow-[0_55px_180px_-70px_rgba(0,0,0,0.95)] sm:p-8 lg:min-h-[43rem]"
               >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(132,121,104,0.14),transparent_28%),radial-gradient(circle_at_80%_18%,rgba(95,108,130,0.08),transparent_20%),linear-gradient(135deg,rgba(255,255,255,0.05),transparent_30%)]" />
                 <div className="absolute inset-[1px] rounded-[2.5rem] border border-white/6" />
@@ -139,25 +139,25 @@ const NewArchiveSite: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="relative z-10 mt-12 grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-[1.45rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-4 backdrop-blur-sm">
+                <div className="relative z-10 mt-14 grid gap-3 sm:grid-cols-[1.15fr_0.9fr_1.1fr]">
+                  <div className="rounded-[1.8rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-5 backdrop-blur-sm">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#8e8779]">최근 우승자</p>
                     <p className="mt-4 font-serif text-[2rem] leading-none text-[#e4ddd4]">{latestRecord?.winner}</p>
                     <p className="mt-3 text-[13px] tracking-[0.03em] text-[#bfb7a9]">총타수 {latestRecord?.score}</p>
                   </div>
-                  <div className="rounded-[1.45rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-4 backdrop-blur-sm">
+                  <div className="rounded-[1.8rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-5 backdrop-blur-sm">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#8e8779]">참가 인원</p>
                     <p className="mt-4 font-serif text-[2rem] leading-none text-[#e4ddd4]">{participantCount}</p>
                     <p className="mt-3 text-[13px] tracking-[0.03em] text-[#bfb7a9]">전체 스코어카드 기준</p>
                   </div>
-                  <div className="rounded-[1.45rem] border border-[#8f867b]/24 bg-[linear-gradient(180deg,rgba(143,134,123,0.14),rgba(143,134,123,0.06))] p-4">
+                  <div className="rounded-[1.8rem] border border-[#8f867b]/24 bg-[linear-gradient(180deg,rgba(143,134,123,0.14),rgba(143,134,123,0.06))] p-5">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#908475]">클럽 자산</p>
                     <p className="mt-4 font-serif text-[2rem] leading-none text-[#ddd6cd]">{formatCurrency(balance)}</p>
                     <p className="mt-3 text-[13px] tracking-[0.03em] text-[#c2b8ad]">회비 계좌 기준</p>
                   </div>
                 </div>
 
-                <div className="relative z-10 mt-6 rounded-[1.6rem] border border-[#8f867b]/14 bg-[linear-gradient(90deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] px-4 py-4 sm:max-w-xl">
+                <div className="relative z-10 mt-6 rounded-[1.8rem] border border-[#8f867b]/14 bg-[linear-gradient(90deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] px-5 py-5 sm:max-w-2xl">
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#908475]">리저브 노트</p>
                   <p className="mt-3 max-w-[30rem] text-[14px] leading-7 text-[#cfc5b2]">
                     라운드를 소비하지 않고 보관하는 방식으로, 이름과 숫자와 장소의 인상을 한 시즌의 기록으로 남깁니다.
@@ -165,12 +165,12 @@ const NewArchiveSite: React.FC = () => {
                 </div>
               </motion.div>
 
-              <div className="grid gap-6">
+              <div className="grid gap-6 lg:grid-rows-[1.3fr_0.7fr]">
                 <motion.div
                   initial={{ opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 0.08, ease: 'easeOut' }}
-                  className="overflow-hidden rounded-[2.3rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#141d28_0%,#0e1620_100%)] shadow-[0_55px_150px_-82px_rgba(0,0,0,0.95)]"
+                  className="overflow-hidden rounded-[2.8rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#141d28_0%,#0e1620_100%)] shadow-[0_55px_150px_-82px_rgba(0,0,0,0.95)]"
                 >
                   <div className="relative">
                     <img
@@ -180,8 +180,8 @@ const NewArchiveSite: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,22,31,0.08)_0%,rgba(31,34,38,0.24)_30%,rgba(14,22,31,0.5)_62%,rgba(11,16,22,0.9)_100%)]" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(132,121,104,0.14),transparent_46%),linear-gradient(90deg,rgba(38,53,74,0.18),rgba(38,53,74,0.04))]" />
-                    <div className="absolute inset-[14px] rounded-[1.7rem] border border-white/8" />
-                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                    <div className="absolute inset-[16px] rounded-[2.2rem] border border-white/8" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-7">
                       <p className="text-[10px] uppercase tracking-[0.32em] text-[#c0b6ab]">시즌 하이라이트</p>
                       <h3 className="mt-3 max-w-md font-serif text-[2.1rem] leading-[0.95] tracking-[-0.02em] text-[#e4ddd4] sm:text-[2.8rem]">
                         {latestRecord?.location}
@@ -195,14 +195,14 @@ const NewArchiveSite: React.FC = () => {
                   initial={{ opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 0.16, ease: 'easeOut' }}
-                  className="grid gap-4 sm:grid-cols-2"
+                  className="grid gap-4 sm:grid-cols-[0.92fr_1.08fr]"
                 >
-                  <div className="rounded-[2rem] border border-[#8f867b]/24 bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] p-5 text-[#11130f] shadow-[0_18px_45px_-26px_rgba(124,117,107,0.55)]">
+                  <div className="rounded-[2.2rem] border border-[#8f867b]/24 bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] p-6 text-[#11130f] shadow-[0_18px_45px_-26px_rgba(124,117,107,0.55)]">
                     <p className="text-[10px] uppercase tracking-[0.3em] text-[#2f2a25]">평균 타수</p>
                     <p className="mt-4 font-serif text-[3.3rem] leading-none tracking-[-0.03em]">{averageScore}</p>
                     <p className="mt-3 text-[13px] tracking-[0.04em] text-[#493f2f]">이번 라운드 전체 평균</p>
                   </div>
-                  <div className="rounded-[2rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#1b2633_0%,#111a24_100%)] p-5 text-[#e4ddd4]">
+                  <div className="rounded-[2.2rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#1b2633_0%,#111a24_100%)] p-6 text-[#e4ddd4]">
                     <p className="text-[10px] uppercase tracking-[0.3em] text-[#968f81]">클럽 구성</p>
                     <p className="mt-4 text-[1.15rem] leading-snug tracking-[0.01em]">회장 {roleCounts.captain}명 · 총무 {roleCounts.secretary}명</p>
                     <p className="mt-3 text-[13px] tracking-[0.04em] text-[#c3bbad]">정회원 {roleCounts.member}명</p>
@@ -225,7 +225,7 @@ const NewArchiveSite: React.FC = () => {
             </motion.div>
 
             <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
-              <motion.div {...fadeInUp} className="rounded-[2.25rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#141d28_0%,#0e1620_100%)] p-6 shadow-[0_40px_110px_-78px_rgba(0,0,0,0.95)]">
+              <motion.div {...fadeInUp} className="rounded-[2.7rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#141d28_0%,#0e1620_100%)] p-7 shadow-[0_40px_110px_-78px_rgba(0,0,0,0.95)]">
                 <div className="flex items-center justify-between">
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#998f7d]">챔피언 패널</p>
                   <Crown size={18} className="text-[#8f867b]" />
@@ -246,7 +246,7 @@ const NewArchiveSite: React.FC = () => {
                 </div>
               </motion.div>
 
-              <motion.div {...fadeInUp} className="rounded-[2.25rem] border border-[#8f867b]/14 bg-[linear-gradient(180deg,#e4ddd4_0%,#d8d0c7_100%)] p-4 shadow-[0_35px_90px_-72px_rgba(0,0,0,0.6)] sm:p-6">
+              <motion.div {...fadeInUp} className="rounded-[2.7rem] border border-[#8f867b]/14 bg-[linear-gradient(180deg,#e4ddd4_0%,#d8d0c7_100%)] p-5 shadow-[0_35px_90px_-72px_rgba(0,0,0,0.6)] sm:p-7">
                 <div className="mb-4 flex items-center justify-between">
                   <p className="text-[11px] uppercase tracking-[0.32em] text-[#7f7461]">상위 5인</p>
                   <span className="rounded-full bg-[#1b2633] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-[#e4ddd4]">
@@ -257,7 +257,7 @@ const NewArchiveSite: React.FC = () => {
                   {ranking.slice(0, 5).map((member, index) => (
                     <div
                       key={member.name}
-                      className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-[1.45rem] border px-4 py-3 ${
+                      className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-[1.8rem] border px-5 py-4 ${
                         index === 0 ? 'border-[#8f867b]/35 bg-[#8f867b]/10' : 'border-black/6 bg-[#f3f0eb]'
                       }`}
                     >
@@ -291,7 +291,7 @@ const NewArchiveSite: React.FC = () => {
             </motion.div>
 
             <div className="grid gap-5 lg:grid-cols-[0.82fr_1.18fr]">
-              <motion.div {...fadeInUp} className="rounded-[2.25rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#141d28_0%,#0e1620_100%)] p-6 text-[#ddd6cd] shadow-[0_42px_110px_-76px_rgba(0,0,0,0.95)]">
+              <motion.div {...fadeInUp} className="rounded-[2.7rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#141d28_0%,#0e1620_100%)] p-7 text-[#ddd6cd] shadow-[0_42px_110px_-76px_rgba(0,0,0,0.95)]">
                 <div className="flex items-center justify-between">
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#918a7c]">코스 브리프</p>
                   <MapPin size={18} className="text-[#8f867b]" />
@@ -317,7 +317,7 @@ const NewArchiveSite: React.FC = () => {
                 <p className="mt-6 max-w-[28rem] text-[14px] leading-7 text-[#c6bdaf]">{courseMeta?.address}</p>
               </motion.div>
 
-              <motion.div {...fadeInUp} className="rounded-[2.25rem] border border-[#8f867b]/14 bg-[linear-gradient(180deg,#e4ddd4_0%,#d8d0c7_100%)] p-4 shadow-[0_35px_90px_-72px_rgba(0,0,0,0.6)] sm:p-6">
+              <motion.div {...fadeInUp} className="rounded-[2.7rem] border border-[#8f867b]/14 bg-[linear-gradient(180deg,#e4ddd4_0%,#d8d0c7_100%)] p-5 shadow-[0_35px_90px_-72px_rgba(0,0,0,0.6)] sm:p-7">
                 <div className="mb-4 flex items-center justify-between">
                   <p className="text-[11px] uppercase tracking-[0.32em] text-[#7f7461]">스코어 기록</p>
                   <CalendarDays size={18} className="text-[#7f7461]" />
@@ -329,7 +329,7 @@ const NewArchiveSite: React.FC = () => {
                     .map((attendee, index) => (
                       <div
                         key={`${attendee.name}-${index}`}
-                        className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-[1.45rem] border px-4 py-3 ${
+                        className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-[1.8rem] border px-5 py-4 ${
                           index === 0 ? 'border-[#8f867b]/35 bg-[#8f867b]/10' : 'border-black/6 bg-[#f3f0eb]'
                         }`}
                       >
@@ -370,7 +370,7 @@ const NewArchiveSite: React.FC = () => {
                   key={member.name}
                   {...fadeInUp}
                   transition={{ ...fadeInUp.transition, delay: index * 0.04 }}
-                  className={`overflow-hidden rounded-[2.1rem] border shadow-[0_28px_80px_-58px_rgba(0,0,0,0.75)] ${
+                  className={`overflow-hidden rounded-[2.5rem] border shadow-[0_28px_80px_-58px_rgba(0,0,0,0.75)] ${
                     index % 3 === 0
                       ? 'border-[#8f867b]/10 bg-[linear-gradient(180deg,#1b2633_0%,#111a24_100%)] text-[#ddd6cd]'
                       : index % 3 === 1
@@ -378,7 +378,7 @@ const NewArchiveSite: React.FC = () => {
                         : 'border-[#8f867b]/24 bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] text-[#161811]'
                   }`}
                 >
-                  <div className="p-5">
+                  <div className="p-6">
                     <div className="flex items-start justify-between gap-4">
                       <img
                         src={member.img}
@@ -439,7 +439,7 @@ const NewArchiveSite: React.FC = () => {
             </motion.div>
 
             <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-              <motion.div {...fadeInUp} className="overflow-hidden rounded-[2.25rem] border border-[#8f867b]/16 bg-[linear-gradient(180deg,#f1efeb_0%,#e2ddd6_100%)] shadow-[0_40px_120px_-76px_rgba(16,18,14,0.45)]">
+              <motion.div {...fadeInUp} className="overflow-hidden rounded-[2.7rem] border border-[#8f867b]/16 bg-[linear-gradient(180deg,#f1efeb_0%,#e2ddd6_100%)] shadow-[0_40px_120px_-76px_rgba(16,18,14,0.45)]">
                 <div className="relative">
                   <img
                     src={featuredGallery?.src || '/images/round1_group.jpg'}
@@ -448,8 +448,8 @@ const NewArchiveSite: React.FC = () => {
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,20,27,0.02)_0%,rgba(28,31,35,0.18)_32%,rgba(11,16,22,0.72)_100%)]" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(132,121,104,0.12),transparent_40%),linear-gradient(90deg,rgba(38,53,74,0.16),rgba(38,53,74,0.04))]" />
-                  <div className="absolute inset-[14px] rounded-[1.8rem] border border-white/12" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="absolute inset-[16px] rounded-[2.2rem] border border-white/12" />
+                  <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
                     <p className="text-[10px] uppercase tracking-[0.32em] text-white/65">대표 장면</p>
                     <h4 className="mt-3 font-serif text-[2.8rem] leading-[0.96] tracking-[-0.025em]">{featuredGallery?.location}</h4>
                   </div>
@@ -466,7 +466,7 @@ const NewArchiveSite: React.FC = () => {
                 </div>
               </motion.div>
 
-              <motion.div {...fadeInUp} className="rounded-[2.25rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#1b2633_0%,#111a24_100%)] p-6 text-[#ddd6cd] shadow-[0_50px_130px_-76px_rgba(0,0,0,0.95)]">
+              <motion.div {...fadeInUp} className="rounded-[2.7rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#1b2633_0%,#111a24_100%)] p-7 text-[#ddd6cd] shadow-[0_50px_130px_-76px_rgba(0,0,0,0.95)]">
                 <div className="flex items-center justify-between">
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#958d80]">자산 브리프</p>
                   <Wallet size={18} className="text-[#8f867b]" />
@@ -485,7 +485,7 @@ const NewArchiveSite: React.FC = () => {
                 </div>
                 <div className="mt-5 space-y-3">
                   {ledgerTransactions.slice(0, 4).map((entry) => (
-                    <div key={`${entry.date}-${entry.desc}`} className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] px-4 py-3">
+                    <div key={`${entry.date}-${entry.desc}`} className="flex items-center justify-between rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] px-5 py-4">
                       <div>
                         <p className="text-[15px] tracking-[0.01em]">{entry.desc}</p>
                         <p className="mt-2 text-[10px] uppercase tracking-[0.24em] text-[#958d80]">{entry.date}</p>
