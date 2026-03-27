@@ -176,9 +176,10 @@ const NewArchiveSite: React.FC = () => {
                     <img
                       src={featuredGallery?.src || '/images/round1_group.jpg'}
                       alt="Featured round"
-                      className="h-[20rem] w-full object-cover sm:h-[24rem]"
+                      className="h-[20rem] w-full object-cover brightness-[0.72] contrast-[1.04] saturate-[0.62] sepia-[0.12] sm:h-[24rem]"
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_10%,rgba(17,20,15,0.08)_46%,rgba(12,14,10,0.88)_100%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,16,0.08)_0%,rgba(33,30,24,0.24)_30%,rgba(18,21,16,0.48)_62%,rgba(11,13,11,0.9)_100%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(173,142,101,0.18),transparent_46%),linear-gradient(90deg,rgba(34,40,31,0.18),rgba(34,40,31,0.04))]" />
                     <div className="absolute inset-[14px] rounded-[1.7rem] border border-white/8" />
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
                       <p className="text-[10px] uppercase tracking-[0.24em] text-[#c8b79d]">시즌 하이라이트</p>
@@ -297,7 +298,11 @@ const NewArchiveSite: React.FC = () => {
                 </div>
                 <h4 className="mt-6 font-serif text-4xl leading-tight">{latestRecord?.location}</h4>
                 <div className="mt-6 overflow-hidden rounded-[1.6rem]">
-                  <img src={courseMeta?.img} alt={latestRecord?.location} className="h-64 w-full object-cover saturate-[0.88] contrast-[1.06]" />
+                  <img
+                    src={courseMeta?.img}
+                    alt={latestRecord?.location}
+                    className="h-64 w-full object-cover brightness-[0.78] contrast-[1.04] saturate-[0.58] sepia-[0.14]"
+                  />
                 </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-[1.35rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-4">
@@ -375,7 +380,11 @@ const NewArchiveSite: React.FC = () => {
                 >
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-4">
-                      <img src={member.img} alt={member.name} className="h-20 w-20 rounded-[1.4rem] border border-white/15 object-cover shadow-[0_18px_42px_-24px_rgba(0,0,0,0.7)]" />
+                      <img
+                        src={member.img}
+                        alt={member.name}
+                        className="h-20 w-20 rounded-[1.4rem] border border-white/15 object-cover brightness-[0.9] contrast-[1.03] saturate-[0.74] sepia-[0.08] shadow-[0_18px_42px_-24px_rgba(0,0,0,0.7)]"
+                      />
                       <div className="flex items-center gap-2">
                         {member.role === '회장' && <Crown size={16} className="shrink-0" />}
                         {member.role === '총무' && <Medal size={16} className="shrink-0" />}
@@ -432,8 +441,13 @@ const NewArchiveSite: React.FC = () => {
             <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
               <motion.div {...fadeInUp} className="overflow-hidden rounded-[2.25rem] border border-[#a88a63]/16 bg-[linear-gradient(180deg,#f7f1e8_0%,#ece1d1_100%)] shadow-[0_40px_120px_-76px_rgba(16,18,14,0.45)]">
                 <div className="relative">
-                  <img src={featuredGallery?.src || '/images/round1_group.jpg'} alt="Gallery feature" className="h-[24rem] w-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <img
+                    src={featuredGallery?.src || '/images/round1_group.jpg'}
+                    alt="Gallery feature"
+                    className="h-[24rem] w-full object-cover brightness-[0.74] contrast-[1.04] saturate-[0.64] sepia-[0.12]"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,24,18,0.02)_0%,rgba(35,32,26,0.2)_32%,rgba(14,16,12,0.72)_100%)]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(173,142,101,0.16),transparent_40%),linear-gradient(90deg,rgba(35,42,33,0.18),rgba(35,42,33,0.04))]" />
                   <div className="absolute inset-[14px] rounded-[1.8rem] border border-white/12" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <p className="text-[10px] uppercase tracking-[0.24em] text-white/65">대표 장면</p>
