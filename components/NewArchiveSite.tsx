@@ -97,17 +97,15 @@ const NewArchiveSite: React.FC = () => {
                     <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] uppercase tracking-[0.32em] text-[#c7b7a4]">
                       Reserve archive
                     </div>
-                    <div className="mt-8 grid gap-6 lg:grid-cols-[1.18fr_0.82fr]">
-                      <div>
-                        <h2 className="max-w-[8ch] break-keep font-serif text-[2.85rem] leading-[0.9] tracking-[-0.05em] text-[#f4efe8] sm:max-w-none sm:text-[4.4rem] lg:text-[5.6rem]">
-                          클럽의 기록을
-                          <br />
-                          더 깊고
-                          <br />
-                          정제된 방식으로
-                        </h2>
-                      </div>
-                      <div className="flex flex-col justify-end">
+                    <div className="mt-8">
+                      <h2 className="max-w-[10ch] break-keep font-sans text-[2.9rem] font-semibold leading-[0.96] tracking-[-0.06em] text-[#f4efe8] sm:text-[4rem] lg:max-w-[11ch] lg:text-[5rem]">
+                        클럽의 기록을
+                        <br />
+                        더 깊고 정제된
+                        <br />
+                        방식으로
+                      </h2>
+                      <div className="mt-8 max-w-[30rem]">
                         <p className="break-keep text-[15px] leading-8 text-[#c9c1b7] sm:text-[16px]">
                           최신 라운드 결과, 멤버 흐름, 코스 기록, 회비 브리프를 한 화면 안에서 차분하게 읽히도록 다시
                           구성한 별도 아카이브 버전입니다.
