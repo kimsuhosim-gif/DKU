@@ -72,7 +72,7 @@ const NewArchiveSite: React.FC = () => {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <button onClick={() => scrollToSection('hero')} className="text-left">
             <p className="text-[10px] uppercase tracking-[0.38em] text-[#908475]">멤버 전용 아카이브</p>
-            <h1 className="mt-1 font-serif text-xl uppercase tracking-[0.2em] text-[#e4ddd4] sm:text-2xl">
+            <h1 className="mt-1 font-serif text-[1rem] uppercase tracking-[0.16em] text-[#e4ddd4] sm:text-xl lg:text-2xl">
               DKU-RE09 Reserve
             </h1>
           </button>
@@ -113,7 +113,7 @@ const NewArchiveSite: React.FC = () => {
                   <div className="inline-flex items-center rounded-full border border-[#8f867b]/24 bg-[#8f867b]/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.36em] text-[#c7beb4] shadow-[0_12px_40px_-25px_rgba(143,134,123,0.4)]">
                     시즌 아카이브 브리프
                   </div>
-                  <h2 className="mt-9 max-w-[11ch] font-serif text-[3.2rem] leading-[0.88] tracking-[-0.03em] text-[#e4ddd4] sm:text-[4.8rem] lg:text-[6.6rem]">
+                  <h2 className="mt-9 max-w-[11ch] font-serif text-[2.55rem] leading-[0.9] tracking-[-0.03em] text-[#e4ddd4] sm:text-[4.1rem] lg:text-[6.1rem]">
                     조용하게,
                     <span className="block text-[#8f867b]">그러나 품위 있게.</span>
                   </h2>
@@ -142,17 +142,17 @@ const NewArchiveSite: React.FC = () => {
                 <div className="relative z-10 mt-14 grid gap-3 sm:grid-cols-[1.15fr_0.9fr_1.1fr]">
                   <div className="rounded-[1.8rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-5 backdrop-blur-sm">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#8e8779]">최근 우승자</p>
-                    <p className="mt-4 font-serif text-[2rem] leading-none text-[#e4ddd4]">{latestRecord?.winner}</p>
+                    <p className="mt-4 break-words font-serif text-[1.7rem] leading-none text-[#e4ddd4] sm:text-[2rem]">{latestRecord?.winner}</p>
                     <p className="mt-3 text-[13px] tracking-[0.03em] text-[#bfb7a9]">총타수 {latestRecord?.score}</p>
                   </div>
                   <div className="rounded-[1.8rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-5 backdrop-blur-sm">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#8e8779]">참가 인원</p>
-                    <p className="mt-4 font-serif text-[2rem] leading-none text-[#e4ddd4]">{participantCount}</p>
+                    <p className="mt-4 font-serif text-[1.7rem] leading-none text-[#e4ddd4] sm:text-[2rem]">{participantCount}</p>
                     <p className="mt-3 text-[13px] tracking-[0.03em] text-[#bfb7a9]">전체 스코어카드 기준</p>
                   </div>
                   <div className="rounded-[1.8rem] border border-[#8f867b]/24 bg-[linear-gradient(180deg,rgba(143,134,123,0.14),rgba(143,134,123,0.06))] p-5">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#908475]">클럽 자산</p>
-                    <p className="mt-4 font-serif text-[2rem] leading-none text-[#ddd6cd]">{formatCurrency(balance)}</p>
+                    <p className="mt-4 break-words font-serif text-[1.7rem] leading-none text-[#ddd6cd] sm:text-[2rem]">{formatCurrency(balance)}</p>
                     <p className="mt-3 text-[13px] tracking-[0.03em] text-[#c2b8ad]">회비 계좌 기준</p>
                   </div>
                 </div>
@@ -183,7 +183,7 @@ const NewArchiveSite: React.FC = () => {
                     <div className="absolute inset-[16px] rounded-[2.2rem] border border-white/8" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-7">
                       <p className="text-[10px] uppercase tracking-[0.32em] text-[#c0b6ab]">시즌 하이라이트</p>
-                      <h3 className="mt-3 max-w-md font-serif text-[2.1rem] leading-[0.95] tracking-[-0.02em] text-[#e4ddd4] sm:text-[2.8rem]">
+                      <h3 className="mt-3 max-w-md break-words font-serif text-[1.75rem] leading-[0.98] tracking-[-0.02em] text-[#e4ddd4] sm:text-[2.45rem] lg:text-[2.8rem]">
                         {latestRecord?.location}
                       </h3>
                       <p className="mt-4 text-[13px] tracking-[0.05em] text-[#d1c5ab]">{latestRecord?.date}</p>
@@ -199,7 +199,7 @@ const NewArchiveSite: React.FC = () => {
                 >
                   <div className="rounded-[2.2rem] border border-[#8f867b]/24 bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] p-6 text-[#11130f] shadow-[0_18px_45px_-26px_rgba(124,117,107,0.55)]">
                     <p className="text-[10px] uppercase tracking-[0.3em] text-[#2f2a25]">평균 타수</p>
-                    <p className="mt-4 font-serif text-[3.3rem] leading-none tracking-[-0.03em]">{averageScore}</p>
+                    <p className="mt-4 font-serif text-[2.55rem] leading-none tracking-[-0.03em] sm:text-[3.3rem]">{averageScore}</p>
                     <p className="mt-3 text-[13px] tracking-[0.04em] text-[#493f2f]">이번 라운드 전체 평균</p>
                   </div>
                   <div className="rounded-[2.2rem] border border-[#8f867b]/10 bg-[linear-gradient(180deg,#1b2633_0%,#111a24_100%)] p-6 text-[#e4ddd4]">
@@ -217,7 +217,7 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
               <p className="text-[11px] uppercase tracking-[0.36em] text-[#908475]">랭킹 보드</p>
-              <h3 className="mt-4 max-w-[12ch] font-serif text-[2.7rem] leading-[0.96] tracking-[-0.025em] text-[#ddd6cd] sm:text-[4rem]">
+              <h3 className="mt-4 max-w-[12ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:text-[3.2rem] lg:text-[4rem]">
                 숫자보다 먼저 위계가 읽히고,
                 <br className="hidden sm:block" />
                 화면보다 먼저 품격이 느껴져야 합니다.
@@ -231,17 +231,17 @@ const NewArchiveSite: React.FC = () => {
                   <Crown size={18} className="text-[#8f867b]" />
                 </div>
                 <div className="mt-6">
-                  <p className="font-serif text-[3.6rem] leading-[0.9] tracking-[-0.03em] text-[#e4ddd4] sm:text-[5.1rem]">{ranking[0]?.name}</p>
+                  <p className="break-words font-serif text-[2.7rem] leading-[0.92] tracking-[-0.03em] text-[#e4ddd4] sm:text-[4rem] lg:text-[5.1rem]">{ranking[0]?.name}</p>
                   <p className="mt-5 max-w-[18rem] text-[14px] leading-7 text-[#c6bdaf]">현재 기준 넷 스코어 선두 멤버입니다.</p>
                 </div>
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-4">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#998f7d]">넷</p>
-                    <p className="mt-3 font-serif text-[2.4rem] leading-none tracking-[-0.03em] text-[#e4ddd4]">{ranking[0]?.netScoreDisplay}</p>
+                    <p className="mt-3 font-serif text-[1.9rem] leading-none tracking-[-0.03em] text-[#e4ddd4] sm:text-[2.4rem]">{ranking[0]?.netScoreDisplay}</p>
                   </div>
                   <div className="rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-4">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#998f7d]">그로스</p>
-                    <p className="mt-3 font-serif text-[2.4rem] leading-none tracking-[-0.03em] text-[#e4ddd4]">{ranking[0]?.latestScore}</p>
+                    <p className="mt-3 font-serif text-[1.9rem] leading-none tracking-[-0.03em] text-[#e4ddd4] sm:text-[2.4rem]">{ranking[0]?.latestScore}</p>
                   </div>
                 </div>
               </motion.div>
@@ -265,7 +265,7 @@ const NewArchiveSite: React.FC = () => {
                         {index + 1}
                       </div>
                       <div>
-                        <p className="text-[1.05rem] tracking-[0.01em] text-[#1b211b]">{member.name}</p>
+                        <p className="break-words text-[0.98rem] tracking-[0.01em] text-[#1b211b] sm:text-[1.05rem]">{member.name}</p>
                         <p className="mt-1 text-[10px] uppercase tracking-[0.26em] text-[#7e7462]">{member.role}</p>
                       </div>
                       <div className="rounded-full bg-[#1b2633] px-3 py-1.5 text-sm font-semibold text-[#e4ddd4]">
@@ -283,7 +283,7 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
               <p className="text-[11px] uppercase tracking-[0.36em] text-[#908475]">라운드 도식</p>
-              <h3 className="mt-4 max-w-[12ch] font-serif text-[2.7rem] leading-[0.96] tracking-[-0.025em] text-[#ddd6cd] sm:text-[4rem]">
+              <h3 className="mt-4 max-w-[12ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:text-[3.2rem] lg:text-[4rem]">
                 한 번의 라운드를
                 <br className="hidden sm:block" />
                 멤버 전용 기록 파일처럼 정리했습니다.
@@ -296,7 +296,7 @@ const NewArchiveSite: React.FC = () => {
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#918a7c]">코스 브리프</p>
                   <MapPin size={18} className="text-[#8f867b]" />
                 </div>
-                <h4 className="mt-6 max-w-[12ch] font-serif text-[2.8rem] leading-[0.96] tracking-[-0.025em]">{latestRecord?.location}</h4>
+                <h4 className="mt-6 max-w-[12ch] break-words font-serif text-[2rem] leading-[0.98] tracking-[-0.025em] sm:text-[2.35rem] lg:text-[2.8rem]">{latestRecord?.location}</h4>
                 <div className="mt-6 overflow-hidden rounded-[1.6rem]">
                   <img
                     src={courseMeta?.img}
@@ -311,7 +311,7 @@ const NewArchiveSite: React.FC = () => {
                   </div>
                   <div className="rounded-[1.35rem] bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] p-4 text-[#161811]">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#2f2a25]">우승자</p>
-                    <p className="mt-3 text-[1.05rem]">{latestRecord?.winner}</p>
+                    <p className="mt-3 break-words text-[1rem] sm:text-[1.05rem]">{latestRecord?.winner}</p>
                   </div>
                 </div>
                 <p className="mt-6 max-w-[28rem] text-[14px] leading-7 text-[#c6bdaf]">{courseMeta?.address}</p>
@@ -337,7 +337,7 @@ const NewArchiveSite: React.FC = () => {
                           {index + 1}
                         </div>
                         <div>
-                          <p className="text-[1.05rem] tracking-[0.01em] text-[#1b211b]">{attendee.name}</p>
+                          <p className="break-words text-[0.98rem] tracking-[0.01em] text-[#1b211b] sm:text-[1.05rem]">{attendee.name}</p>
                           <p className="mt-1 text-[10px] uppercase tracking-[0.24em] text-[#7e7462]">
                             전반 {attendee.front} / 후반 {attendee.back}
                           </p>
@@ -357,7 +357,7 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
               <p className="text-[11px] uppercase tracking-[0.36em] text-[#908475]">멤버 로스터</p>
-              <h3 className="mt-4 max-w-[13ch] font-serif text-[2.7rem] leading-[0.96] tracking-[-0.025em] text-[#ddd6cd] sm:text-[4rem]">
+              <h3 className="mt-4 max-w-[13ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:text-[3.2rem] lg:text-[4rem]">
                 가벼운 프로필 카드보다
                 <br className="hidden sm:block" />
                 단정한 클럽 명부에 가깝게 정리했습니다.
@@ -390,7 +390,7 @@ const NewArchiveSite: React.FC = () => {
                         {member.role === '총무' && <Medal size={16} className="shrink-0" />}
                       </div>
                     </div>
-                    <h4 className="mt-5 font-serif text-[2.2rem] leading-none tracking-[-0.02em]">{member.name}</h4>
+                    <h4 className="mt-5 break-words font-serif text-[1.8rem] leading-none tracking-[-0.02em] sm:text-[2.2rem]">{member.name}</h4>
                     <p className="mt-3 text-[10px] uppercase tracking-[0.28em] opacity-65">{member.role}</p>
 
                     <div className="mt-5 grid grid-cols-3 gap-2">
@@ -426,7 +426,7 @@ const NewArchiveSite: React.FC = () => {
             <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
               <div className="max-w-3xl">
                 <p className="text-[11px] uppercase tracking-[0.36em] text-[#867d72]">리저브 아카이브</p>
-                <h3 className="mt-4 max-w-[14ch] font-serif text-[2.7rem] leading-[0.96] tracking-[-0.025em] sm:text-[4rem]">
+                <h3 className="mt-4 max-w-[14ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] sm:text-[3.2rem] lg:text-[4rem]">
                   코스의 기억과 클럽 자산,
                   <br className="hidden sm:block" />
                   그리고 현장의 장면을 한 축에 정리했습니다.
@@ -451,17 +451,17 @@ const NewArchiveSite: React.FC = () => {
                   <div className="absolute inset-[16px] rounded-[2.2rem] border border-white/12" />
                   <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
                     <p className="text-[10px] uppercase tracking-[0.32em] text-white/65">대표 장면</p>
-                    <h4 className="mt-3 font-serif text-[2.8rem] leading-[0.96] tracking-[-0.025em]">{featuredGallery?.location}</h4>
+                    <h4 className="mt-3 break-words font-serif text-[2rem] leading-[0.98] tracking-[-0.025em] sm:text-[2.3rem] lg:text-[2.8rem]">{featuredGallery?.location}</h4>
                   </div>
                 </div>
                 <div className="grid gap-3 p-5 sm:grid-cols-2">
                   <div className="rounded-[1.3rem] bg-[linear-gradient(180deg,#dcd8d1_0%,#cdc6bc_100%)] p-4">
                     <p className="text-[9px] uppercase tracking-[0.24em] text-[#856e4f]">베스트 스코어</p>
-                    <p className="mt-3 text-[1.8rem] leading-none tracking-[-0.02em]">{featuredGallery?.bestScore}</p>
+                    <p className="mt-3 text-[1.45rem] leading-none tracking-[-0.02em] sm:text-[1.8rem]">{featuredGallery?.bestScore}</p>
                   </div>
                   <div className="rounded-[1.3rem] bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] p-4 text-[#161811]">
                     <p className="text-[9px] uppercase tracking-[0.24em] text-[#2f2a25]">참가 인원</p>
-                    <p className="mt-3 text-[1.8rem] leading-none tracking-[-0.02em]">{featuredGallery?.participants}</p>
+                    <p className="mt-3 text-[1.45rem] leading-none tracking-[-0.02em] sm:text-[1.8rem]">{featuredGallery?.participants}</p>
                   </div>
                 </div>
               </motion.div>
@@ -474,12 +474,12 @@ const NewArchiveSite: React.FC = () => {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   <div className="rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-5">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#958d80]">현재 잔액</p>
-                    <p className="mt-4 font-serif text-[3rem] leading-none tracking-[-0.03em]">{formatCurrency(balance)}</p>
+                    <p className="mt-4 break-words font-serif text-[2.2rem] leading-none tracking-[-0.03em] sm:text-[3rem]">{formatCurrency(balance)}</p>
                     <p className="mt-4 max-w-[15rem] text-[14px] leading-7 text-[#c2b9aa]">최근 클럽 지출 반영 후 기준 잔액입니다.</p>
                   </div>
                   <div className="rounded-[1.4rem] bg-[linear-gradient(180deg,#a19a8f_0%,#7c756b_100%)] p-5 text-[#161811] shadow-[0_20px_44px_-28px_rgba(124,117,107,0.55)]">
                     <p className="text-[10px] uppercase tracking-[0.28em] text-[#2f2a25]">회비 계좌</p>
-                    <p className="mt-4 text-[1.12rem] leading-snug tracking-[0.01em]">KakaoBank 3333-16-4428815</p>
+                    <p className="mt-4 break-all text-[0.98rem] leading-relaxed tracking-[0.01em] sm:text-[1.12rem]">KakaoBank 3333-16-4428815</p>
                     <p className="mt-4 text-[14px] leading-7 text-[#4a4030]">총무 관리 계좌입니다.</p>
                   </div>
                 </div>
