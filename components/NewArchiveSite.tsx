@@ -113,7 +113,7 @@ const NewArchiveSite: React.FC = () => {
                   <div className="inline-flex items-center rounded-full border border-[#8f867b]/24 bg-[#8f867b]/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.36em] text-[#c7beb4] shadow-[0_12px_40px_-25px_rgba(143,134,123,0.4)]">
                     시즌 아카이브 브리프
                   </div>
-                  <h2 className="mt-9 max-w-[11ch] font-serif text-[2.55rem] leading-[0.9] tracking-[-0.03em] text-[#e4ddd4] sm:text-[4.1rem] lg:text-[6.1rem]">
+                  <h2 className="mt-9 max-w-[12ch] break-keep font-serif text-[2.55rem] leading-[0.9] tracking-[-0.03em] text-[#e4ddd4] sm:max-w-[11ch] sm:text-[4.1rem] lg:text-[6.1rem]">
                     조용하게,
                     <span className="block text-[#8f867b]">그러나 품위 있게.</span>
                   </h2>
@@ -217,7 +217,7 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
               <p className="text-[11px] uppercase tracking-[0.36em] text-[#908475]">랭킹 보드</p>
-              <h3 className="mt-4 max-w-[12ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:text-[3.2rem] lg:text-[4rem]">
+              <h3 className="mt-4 max-w-[16ch] break-keep font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:max-w-[13ch] sm:text-[3.2rem] lg:max-w-[12ch] lg:text-[4rem]">
                 숫자보다 먼저 위계가 읽히고,
                 <br className="hidden sm:block" />
                 화면보다 먼저 품격이 느껴져야 합니다.
@@ -283,7 +283,7 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
               <p className="text-[11px] uppercase tracking-[0.36em] text-[#908475]">라운드 도식</p>
-              <h3 className="mt-4 max-w-[12ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:text-[3.2rem] lg:text-[4rem]">
+              <h3 className="mt-4 max-w-[16ch] break-keep font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:max-w-[13ch] sm:text-[3.2rem] lg:max-w-[12ch] lg:text-[4rem]">
                 한 번의 라운드를
                 <br className="hidden sm:block" />
                 멤버 전용 기록 파일처럼 정리했습니다.
@@ -296,7 +296,7 @@ const NewArchiveSite: React.FC = () => {
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#918a7c]">코스 브리프</p>
                   <MapPin size={18} className="text-[#8f867b]" />
                 </div>
-                <h4 className="mt-6 max-w-[12ch] break-words font-serif text-[2rem] leading-[0.98] tracking-[-0.025em] sm:text-[2.35rem] lg:text-[2.8rem]">{latestRecord?.location}</h4>
+                <h4 className="mt-6 max-w-[14ch] break-keep font-serif text-[2rem] leading-[0.98] tracking-[-0.025em] sm:max-w-[12ch] sm:text-[2.35rem] lg:text-[2.8rem]">{latestRecord?.location}</h4>
                 <div className="mt-6 overflow-hidden rounded-[1.6rem]">
                   <img
                     src={courseMeta?.img}
@@ -357,7 +357,7 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 max-w-3xl">
               <p className="text-[11px] uppercase tracking-[0.36em] text-[#908475]">멤버 로스터</p>
-              <h3 className="mt-4 max-w-[13ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:text-[3.2rem] lg:text-[4rem]">
+              <h3 className="mt-4 max-w-[16ch] break-keep font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] text-[#ddd6cd] sm:max-w-[14ch] sm:text-[3.2rem] lg:max-w-[13ch] lg:text-[4rem]">
                 가벼운 프로필 카드보다
                 <br className="hidden sm:block" />
                 단정한 클럽 명부에 가깝게 정리했습니다.
@@ -426,7 +426,7 @@ const NewArchiveSite: React.FC = () => {
             <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
               <div className="max-w-3xl">
                 <p className="text-[11px] uppercase tracking-[0.36em] text-[#867d72]">리저브 아카이브</p>
-                <h3 className="mt-4 max-w-[14ch] font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] sm:text-[3.2rem] lg:text-[4rem]">
+                <h3 className="mt-4 max-w-[18ch] break-keep font-serif text-[2.1rem] leading-[0.98] tracking-[-0.025em] sm:max-w-[16ch] sm:text-[3.2rem] lg:max-w-[14ch] lg:text-[4rem]">
                   코스의 기억과 클럽 자산,
                   <br className="hidden sm:block" />
                   그리고 현장의 장면을 한 축에 정리했습니다.
