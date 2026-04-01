@@ -57,13 +57,13 @@ const NewArchiveSite: React.FC = () => {
       <header className="sticky top-0 z-40 border-b border-[#17202a]/8 bg-[#f5f1ea]/88 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <button onClick={() => scrollToSection('hero')} className="text-left">
-            <p className="text-[10px] uppercase tracking-[0.34em] text-[#7b8591]">private archive edition</p>
-            <h1 className="mt-1 font-serif text-[1.05rem] uppercase tracking-[0.14em] text-[#17202a] sm:text-[1.2rem]">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[#7b8591]">private archive edition</p>
+            <h1 className="mt-1 font-serif text-[1.05rem] uppercase tracking-[0.1em] text-[#17202a] sm:text-[1.2rem]">
               DKU-RE09 Reserve
             </h1>
           </button>
 
-          <nav className="hidden items-center gap-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#596572] lg:flex">
+          <nav className="hidden items-center gap-6 text-[11px] font-medium uppercase tracking-[0.12em] text-[#596572] lg:flex">
             <button onClick={() => scrollToSection('hero')}>개요</button>
             <button onClick={() => scrollToSection('round')}>라운드</button>
             <button onClick={() => scrollToSection('leaderboard')}>랭킹</button>
@@ -83,7 +83,7 @@ const NewArchiveSite: React.FC = () => {
 
       <main className="pb-24">
         <section id="hero" className="px-4 pb-10 pt-6 sm:px-6 sm:pb-16 sm:pt-10">
-          <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
@@ -94,11 +94,11 @@ const NewArchiveSite: React.FC = () => {
                 <div className="relative p-6 sm:p-8 lg:p-10">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(228,214,196,0.12),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(104,118,133,0.14),transparent_28%)]" />
                   <div className="relative z-10">
-                    <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] uppercase tracking-[0.32em] text-[#c7b7a4]">
+                    <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] uppercase tracking-[0.24em] text-[#c7b7a4]">
                       Reserve archive
                     </div>
                     <div className="mt-8">
-                      <h2 className="max-w-[10ch] break-keep font-sans text-[2.9rem] font-semibold leading-[0.96] tracking-[-0.06em] text-[#f4efe8] sm:text-[4rem] lg:max-w-[11ch] lg:text-[5rem]">
+                      <h2 className="max-w-[10ch] break-keep font-sans text-[2.75rem] font-semibold leading-[1.01] tracking-[-0.05em] text-[#f4efe8] sm:text-[3.7rem] lg:max-w-[11ch] lg:text-[4.6rem]">
                         클럽의 기록을
                         <br />
                         더 깊고 정제된
@@ -130,20 +130,20 @@ const NewArchiveSite: React.FC = () => {
 
                     <div className="mt-10 grid gap-3 sm:grid-cols-3">
                       <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-4">
-                        <p className="text-[10px] uppercase tracking-[0.28em] text-[#a89987]">최신 우승</p>
-                        <p className="mt-3 break-words font-serif text-[1.55rem] leading-none text-[#f4efe8] sm:text-[1.8rem]">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#a89987]">최신 우승</p>
+                        <p className="mt-3 break-words font-sans text-[1.45rem] font-semibold leading-none text-[#f4efe8] sm:text-[1.65rem]">
                           {latestRecord?.winner}
                         </p>
                       </div>
                       <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-4">
-                        <p className="text-[10px] uppercase tracking-[0.28em] text-[#a89987]">참가 인원</p>
-                        <p className="mt-3 font-serif text-[1.55rem] leading-none text-[#f4efe8] sm:text-[1.8rem]">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#a89987]">참가 인원</p>
+                        <p className="mt-3 font-sans text-[1.45rem] font-semibold leading-none text-[#f4efe8] sm:text-[1.65rem]">
                           {participantCount}명
                         </p>
                       </div>
                       <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-4">
-                        <p className="text-[10px] uppercase tracking-[0.28em] text-[#a89987]">평균 타수</p>
-                        <p className="mt-3 font-serif text-[1.55rem] leading-none text-[#f4efe8] sm:text-[1.8rem]">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#a89987]">평균 타수</p>
+                        <p className="mt-3 font-sans text-[1.45rem] font-semibold leading-none text-[#f4efe8] sm:text-[1.65rem]">
                           {averageScore}
                         </p>
                       </div>
@@ -160,18 +160,18 @@ const NewArchiveSite: React.FC = () => {
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,34,0.08)_0%,rgba(16,24,34,0.22)_28%,rgba(16,24,34,0.86)_100%)]" />
                   <div className="absolute inset-[18px] rounded-[2rem] border border-white/10" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-[#c7b7a4]">Latest course</p>
-                    <h3 className="mt-3 max-w-[12ch] break-keep font-serif text-[2rem] leading-[0.96] tracking-[-0.035em] text-white sm:text-[2.8rem]">
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#c7b7a4]">Latest course</p>
+                    <h3 className="mt-3 max-w-[12ch] break-keep font-sans text-[1.95rem] font-semibold leading-[1.02] tracking-[-0.05em] text-white sm:text-[2.45rem]">
                       {latestRecord?.location}
                     </h3>
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                       <div className="rounded-[1.35rem] bg-white/8 p-4 backdrop-blur-sm">
-                        <p className="text-[10px] uppercase tracking-[0.26em] text-[#cfd6dc]">라운드 날짜</p>
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-[#cfd6dc]">라운드 날짜</p>
                         <p className="mt-3 text-[0.95rem] text-white">{latestRecord?.date}</p>
                       </div>
                       <div className="rounded-[1.35rem] bg-[#ece2d5] p-4 text-[#101822]">
-                        <p className="text-[10px] uppercase tracking-[0.26em] text-[#65717d]">베스트 스코어</p>
-                        <p className="mt-3 font-serif text-[1.8rem] leading-none">{latestRecord?.score}</p>
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-[#65717d]">베스트 스코어</p>
+                        <p className="mt-3 font-sans text-[1.7rem] font-semibold leading-none">{latestRecord?.score}</p>
                       </div>
                     </div>
                   </div>
@@ -185,8 +185,8 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[#7b8591]">Round report</p>
-                <h3 className="mt-4 break-keep font-serif text-[2.2rem] leading-[0.94] tracking-[-0.045em] text-[#17202a] sm:text-[3.5rem]">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#7b8591]">Round report</p>
+                <h3 className="mt-4 break-keep font-sans text-[2.1rem] font-semibold leading-[1.02] tracking-[-0.05em] text-[#17202a] sm:text-[3rem]">
                   최근 라운드를
                   <br />
                   하나의 리포트처럼
@@ -211,8 +211,8 @@ const NewArchiveSite: React.FC = () => {
                 <div className="p-6 sm:p-7">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-[#7b8591]">Course archive</p>
-                      <h4 className="mt-3 max-w-[13ch] break-keep font-serif text-[1.95rem] leading-[0.97] tracking-[-0.03em] text-[#17202a] sm:text-[2.5rem]">
+                      <p className="text-[10px] uppercase tracking-[0.22em] text-[#7b8591]">Course archive</p>
+                      <h4 className="mt-3 max-w-[13ch] break-keep font-sans text-[1.8rem] font-semibold leading-[1.03] tracking-[-0.05em] text-[#17202a] sm:text-[2.15rem]">
                         {latestRecord?.location}
                       </h4>
                     </div>
@@ -220,11 +220,11 @@ const NewArchiveSite: React.FC = () => {
                   </div>
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-[1.3rem] bg-[#f2eee8] p-4">
-                      <p className="text-[10px] uppercase tracking-[0.26em] text-[#7b8591]">날짜</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">날짜</p>
                       <p className="mt-3 text-[0.95rem] text-[#17202a]">{latestRecord?.date}</p>
                     </div>
                     <div className="rounded-[1.3rem] bg-[#e1e7ed] p-4">
-                      <p className="text-[10px] uppercase tracking-[0.26em] text-[#687582]">우승자</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-[#687582]">우승자</p>
                       <p className="mt-3 break-words text-[0.95rem] font-medium text-[#17202a]">{latestRecord?.winner}</p>
                     </div>
                   </div>
@@ -238,7 +238,7 @@ const NewArchiveSite: React.FC = () => {
               >
                 <div className="mb-5 flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.32em] text-[#c7b7a4]">Scoreboard</p>
+                    <p className="text-[10px] uppercase tracking-[0.24em] text-[#c7b7a4]">Scoreboard</p>
                     <p className="mt-2 text-[14px] text-[#bdb5ab]">전체 참가자 스코어</p>
                   </div>
                   <CalendarDays size={18} className="text-[#c7b7a4]" />
@@ -259,7 +259,7 @@ const NewArchiveSite: React.FC = () => {
                         {index + 1}
                       </div>
                       <div className="min-w-0">
-                        <p className="break-words text-[1rem] font-medium sm:text-[1.05rem]">{attendee.name}</p>
+                        <p className="break-words text-[1rem] font-medium tracking-[-0.01em] sm:text-[1.05rem]">{attendee.name}</p>
                         <p className={`mt-1 text-[12px] ${index === 0 ? 'text-[#576471]' : 'text-[#bdb5ab]'}`}>
                           전반 {attendee.front} / 후반 {attendee.back}
                         </p>
@@ -283,8 +283,8 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[0.96fr_1.04fr] lg:items-end">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[#7b8591]">Leaderboard</p>
-                <h3 className="mt-4 break-keep font-serif text-[2.2rem] leading-[0.94] tracking-[-0.045em] text-[#17202a] sm:text-[3.5rem]">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#7b8591]">Leaderboard</p>
+                <h3 className="mt-4 break-keep font-sans text-[2.1rem] font-semibold leading-[1.02] tracking-[-0.05em] text-[#17202a] sm:text-[3rem]">
                   현재 흐름이 가장
                   <br />
                   좋은 멤버들
@@ -292,16 +292,16 @@ const NewArchiveSite: React.FC = () => {
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-[1.5rem] bg-white p-4">
-                  <p className="text-[10px] uppercase tracking-[0.26em] text-[#7b8591]">현재 리더</p>
-                  <p className="mt-3 break-words font-serif text-[1.7rem] leading-none text-[#17202a]">{ranking[0]?.name}</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">현재 리더</p>
+                  <p className="mt-3 break-words font-sans text-[1.55rem] font-semibold leading-none tracking-[-0.03em] text-[#17202a]">{ranking[0]?.name}</p>
                 </div>
                 <div className="rounded-[1.5rem] bg-white p-4">
-                  <p className="text-[10px] uppercase tracking-[0.26em] text-[#7b8591]">NET</p>
-                  <p className="mt-3 font-serif text-[1.7rem] leading-none text-[#17202a]">{ranking[0]?.netScoreDisplay}</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">NET</p>
+                  <p className="mt-3 font-sans text-[1.55rem] font-semibold leading-none text-[#17202a]">{ranking[0]?.netScoreDisplay}</p>
                 </div>
                 <div className="rounded-[1.5rem] bg-white p-4">
-                  <p className="text-[10px] uppercase tracking-[0.26em] text-[#7b8591]">최근 스코어</p>
-                  <p className="mt-3 font-serif text-[1.7rem] leading-none text-[#17202a]">{ranking[0]?.latestScore}</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">최근 스코어</p>
+                  <p className="mt-3 font-sans text-[1.55rem] font-semibold leading-none text-[#17202a]">{ranking[0]?.latestScore}</p>
                 </div>
               </div>
             </motion.div>
@@ -322,7 +322,7 @@ const NewArchiveSite: React.FC = () => {
                       {index + 1}
                     </div>
                     <div className="min-w-0">
-                      <p className="break-words text-[1rem] font-medium text-[#17202a] sm:text-[1.05rem]">{member.name}</p>
+                      <p className="break-words text-[1rem] font-medium tracking-[-0.01em] text-[#17202a] sm:text-[1.05rem]">{member.name}</p>
                       <p className="mt-1 break-words text-[12px] text-[#6b7783]">{member.role}</p>
                     </div>
                     <div className="rounded-full bg-[#e1e7ed] px-3 py-2 text-[13px] font-semibold text-[#17202a]">
@@ -339,8 +339,8 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[#7b8591]">Members</p>
-                <h3 className="mt-4 break-keep font-serif text-[2.2rem] leading-[0.94] tracking-[-0.045em] text-[#17202a] sm:text-[3.5rem]">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#7b8591]">Members</p>
+                <h3 className="mt-4 break-keep font-sans text-[2.1rem] font-semibold leading-[1.02] tracking-[-0.05em] text-[#17202a] sm:text-[3rem]">
                   멤버를 카드보다
                   <br />
                   명부처럼 보이게
@@ -367,7 +367,7 @@ const NewArchiveSite: React.FC = () => {
                         className="h-20 w-20 rounded-[1.25rem] object-cover"
                       />
                       <div>
-                        <h4 className="break-words font-serif text-[1.7rem] leading-none tracking-[-0.03em] text-[#17202a]">
+                        <h4 className="break-words font-sans text-[1.55rem] font-semibold leading-none tracking-[-0.04em] text-[#17202a]">
                           {member.name}
                         </h4>
                         <p className="mt-3 break-words text-[12px] text-[#6b7783]">{member.role}</p>
@@ -382,17 +382,17 @@ const NewArchiveSite: React.FC = () => {
                   <div className="mt-6 grid grid-cols-3 gap-2">
                     <div className="rounded-[1.1rem] bg-[#f2eee8] p-3">
                       <p className="text-[9px] uppercase tracking-[0.22em] text-[#7b8591]">HC</p>
-                      <p className="mt-3 text-[1rem] font-medium text-[#17202a]">
-                        {member.scoreHistory.length > 0 ? member.handicap.toFixed(1) : '신규'}
-                      </p>
+                        <p className="mt-3 text-[0.98rem] font-medium text-[#17202a]">
+                          {member.scoreHistory.length > 0 ? member.handicap.toFixed(1) : '신규'}
+                        </p>
                     </div>
                     <div className="rounded-[1.1rem] bg-[#f2eee8] p-3">
                       <p className="text-[9px] uppercase tracking-[0.22em] text-[#7b8591]">최근</p>
-                      <p className="mt-3 text-[1rem] font-medium text-[#17202a]">{member.latestScore}</p>
+                        <p className="mt-3 text-[0.98rem] font-medium text-[#17202a]">{member.latestScore}</p>
                     </div>
                     <div className="rounded-[1.1rem] bg-[#e1e7ed] p-3">
                       <p className="text-[9px] uppercase tracking-[0.22em] text-[#6b7783]">NET</p>
-                      <p className="mt-3 text-[1rem] font-medium text-[#17202a]">{member.netScoreDisplay}</p>
+                        <p className="mt-3 text-[0.98rem] font-medium text-[#17202a]">{member.netScoreDisplay}</p>
                     </div>
                   </div>
 
@@ -415,8 +415,8 @@ const NewArchiveSite: React.FC = () => {
           <div className="mx-auto max-w-7xl">
             <motion.div {...fadeInUp} className="mb-8 grid gap-4 lg:grid-cols-[0.94fr_1.06fr] lg:items-end">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[#c7b7a4]">Club brief</p>
-                <h3 className="mt-4 break-keep font-serif text-[2.2rem] leading-[0.94] tracking-[-0.045em] text-[#f4efe8] sm:text-[3.5rem]">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#c7b7a4]">Club brief</p>
+                <h3 className="mt-4 break-keep font-sans text-[2.1rem] font-semibold leading-[1.02] tracking-[-0.05em] text-[#f4efe8] sm:text-[3rem]">
                   자산과 현장 사진까지
                   <br />
                   마지막에 정리하는 방식
@@ -434,7 +434,7 @@ const NewArchiveSite: React.FC = () => {
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-[#c7b7a4]">Financial brief</p>
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#c7b7a4]">Financial brief</p>
                     <p className="mt-2 text-[14px] text-[#c1b9ae]">최근 사용 내역과 현재 잔액</p>
                   </div>
                   <Wallet size={18} className="text-[#c7b7a4]" />
@@ -442,13 +442,13 @@ const NewArchiveSite: React.FC = () => {
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-[1.04fr_0.96fr]">
                   <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                    <p className="text-[10px] uppercase tracking-[0.26em] text-[#a89987]">현재 잔액</p>
-                    <p className="mt-4 break-words font-serif text-[2.3rem] leading-none tracking-[-0.04em] text-[#f4efe8] sm:text-[2.8rem]">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#a89987]">현재 잔액</p>
+                    <p className="mt-4 break-words font-sans text-[2.1rem] font-semibold leading-none tracking-[-0.04em] text-[#f4efe8] sm:text-[2.45rem]">
                       {formatCurrency(balance)}
                     </p>
                   </div>
                   <div className="rounded-[1.5rem] bg-[#ece2d5] p-5 text-[#101822]">
-                    <p className="text-[10px] uppercase tracking-[0.26em] text-[#6a7682]">회비 계좌</p>
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#6a7682]">회비 계좌</p>
                     <p className="mt-4 break-all text-[1rem] leading-8">KakaoBank 3333-16-4428815</p>
                   </div>
                 </div>
@@ -481,8 +481,8 @@ const NewArchiveSite: React.FC = () => {
                   className="h-72 w-full object-cover brightness-[0.72] contrast-[1.02] saturate-[0.74]"
                 />
                 <div className="border-t border-white/10 p-6 sm:p-7">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#c7b7a4]">Archive photograph</p>
-                  <h4 className="mt-4 break-keep font-serif text-[2rem] leading-[0.96] tracking-[-0.035em] text-[#f4efe8] sm:text-[2.8rem]">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#c7b7a4]">Archive photograph</p>
+                  <h4 className="mt-4 break-keep font-sans text-[1.95rem] font-semibold leading-[1.02] tracking-[-0.05em] text-[#f4efe8] sm:text-[2.45rem]">
                     코스의 기억과
                     <br />
                     라운드의 장면
