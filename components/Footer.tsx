@@ -12,19 +12,12 @@ const Footer: React.FC = () => {
             조용히 쌓아두는 아카이브.
           </h2>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div>
           <div className="rounded-[2rem] border border-white/70 bg-white/70 p-6 backdrop-blur">
             <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Established</p>
             <p className="mt-3 font-serif text-2xl italic text-[#2b382c]">Since 2009</p>
             <p className="mt-3 text-sm leading-7 text-slate-500">
               단국대학교 도시계획부동산학부 09학번 골프 클럽 멤버를 위한 기록 공간입니다.
-            </p>
-          </div>
-          <div className="rounded-[2rem] bg-[#2b382c] p-6 text-white">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-white/45">Signature</p>
-            <p className="mt-3 font-serif text-2xl italic">Quietly competitive</p>
-            <p className="mt-3 text-sm leading-7 text-white/65">
-              과한 장식보다 기록과 흐름이 먼저 보이도록, 멤버 중심의 홈 화면으로 정리한 버전입니다.
             </p>
           </div>
         </div>
