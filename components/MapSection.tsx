@@ -26,7 +26,7 @@ interface MapProject {
 
 const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
 const MAP_ID = 'map';
-const NAVER_MAP_CLIENT_ID = import.meta.env.VITE_NAVER_MAP_CLIENT_ID;
+const NAVER_MAP_CLIENT_ID = '02j9jku1mt';
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
