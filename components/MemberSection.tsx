@@ -91,9 +91,10 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.04 }}
-              className="group relative flex flex-col overflow-hidden rounded-[1.8rem] border border-champagne-100 bg-white p-3 transition-all duration-500 hover:bg-champagne-50/50 sm:rounded-[2.4rem] sm:p-6"
+              className="group relative flex flex-col overflow-hidden rounded-[1.8rem] border border-[#eadfce] bg-[linear-gradient(180deg,rgba(255,252,247,0.96)_0%,rgba(247,244,236,0.94)_100%)] p-3 shadow-[0_18px_40px_-30px_rgba(145,153,122,0.3)] transition-all duration-500 hover:bg-[linear-gradient(180deg,rgba(255,252,247,1)_0%,rgba(242,248,238,0.98)_100%)] sm:rounded-[2.4rem] sm:p-6"
             >
-              <div className="absolute -right-8 -top-8 h-16 w-16 rounded-full bg-sage-50 opacity-50 transition-transform duration-700 group-hover:scale-150 sm:-right-10 sm:-top-10 sm:h-28 sm:w-28" />
+              <div className="absolute -right-8 -top-8 h-16 w-16 rounded-full bg-[#f1f5e8] opacity-60 transition-transform duration-700 group-hover:scale-150 sm:-right-10 sm:-top-10 sm:h-28 sm:w-28" />
+              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-r from-[#f8f3dd]/35 via-white/0 to-[#edf6e7]/25 opacity-80" />
 
               <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <div
@@ -145,7 +146,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               </div>
 
               <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
-                <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                <div className="rounded-xl border border-[#efe6d7] bg-white/80 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(120,130,100,0.45)] sm:rounded-2xl sm:px-4 sm:py-3">
                   <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">
                     <span className="sm:hidden">핸디</span>
                     <span className="hidden sm:inline">핸디캡</span>
@@ -158,11 +159,11 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                     {member.handicap}
                   </span>
                 </div>
-                <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                <div className="rounded-xl border border-[#efe6d7] bg-white/80 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(120,130,100,0.45)] sm:rounded-2xl sm:px-4 sm:py-3">
                   <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
                   <span className="text-sm font-bold text-sage-600 sm:text-base">{member.averageScore}</span>
                 </div>
-                <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                <div className="rounded-xl border border-[#efe6d7] bg-white/80 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(120,130,100,0.45)] sm:rounded-2xl sm:px-4 sm:py-3">
                   <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">참가</span>
                   <span className="text-sm font-bold text-sage-600 sm:text-base">{member.rounds}</span>
                 </div>
