@@ -28,7 +28,7 @@ export const members: MemberData[] = [
     prevHandicap: 21.0,
     scoreHistory: [93],
     holeScores: [[6, 5, 6, 3, 6, 4, 3, 5, 7, 5, 6, 5, 6, 7, 4, 7, 4, 4]],
-    img: '/images/profiles/members_모성진.jpg',
+    img: '/images/profiles/members_모성진.png',
     since: '2023.01',
     phone: '01047682858',
   },
