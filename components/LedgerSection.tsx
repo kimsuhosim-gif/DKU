@@ -8,12 +8,12 @@ interface LedgerSectionProps {
 const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
   const transactions = [
     { date: '2025.11.29', desc: '분기 회비 수납', amount: 1600000, type: 'income' },
-    { date: '2025.11.29', desc: '골프용품 구매', amount: -300000, type: 'expense' },
-    { date: '2025.11.29', desc: '생수 및 간식', amount: -15000, type: 'expense' },
+    { date: '2025.11.29', desc: '골프존 상품권', amount: -300000, type: 'expense' },
+    { date: '2025.11.29', desc: '현수막 제작', amount: -15000, type: 'expense' },
     { date: '2025.11.29', desc: '네임 스티커 제작', amount: -33000, type: 'expense' },
-    { date: '2025.11.29', desc: '라운드 후 식사', amount: -580000, type: 'expense' },
-    { date: '2025.11.29', desc: '2차 주류 및 음료', amount: -134000, type: 'expense' },
-    { date: '2025.11.29', desc: '시상품 포장', amount: -27500, type: 'expense' },
+    { date: '2025.11.29', desc: '저녁 1차 (판교돈)', amount: -580000, type: 'expense' },
+    { date: '2025.11.29', desc: '저녁 2차 (본술)', amount: -134000, type: 'expense' },
+    { date: '2025.11.29', desc: '편의점', amount: -27500, type: 'expense' },
   ] as const;
 
   const currentBalance = transactions.reduce((acc, t) => acc + t.amount, 0);
@@ -41,7 +41,7 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
             <p className="text-sm text-sage-600">
               KakaoBank<span className="ml-2 font-bold">3333-16-4428815</span>
             </p>
-            <p className="mt-0.5 text-[11px] text-sage-400">예금주: 클럽 총무</p>
+            <p className="mt-0.5 text-[11px] text-sage-400">예금주: 양창운</p>
           </div>
 
           <div className="flex w-full gap-3 overflow-x-auto pb-1 md:w-auto md:pb-0">
