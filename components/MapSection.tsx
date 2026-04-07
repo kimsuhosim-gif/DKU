@@ -26,8 +26,7 @@ interface MapProject {
 
 const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
 const MAP_ID = 'map';
-const FALLBACK_NAVER_MAP_CLIENT_ID = '02j9jku1mt';
-const NAVER_MAP_CLIENT_ID = import.meta.env.VITE_NAVER_MAP_CLIENT_ID || FALLBACK_NAVER_MAP_CLIENT_ID;
+const NAVER_MAP_CLIENT_ID = '02j9jku1mt';
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
@@ -39,34 +38,6 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
     (window as any).setNaverMapError = () => setMapStatus('error');
     return () => {
       (window as any).setNaverMapError = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (window.naver?.maps) {
-      setMapStatus('loading');
-      return;
-    }
-
-    const existingScript = document.querySelector<HTMLScriptElement>('script[data-naver-map-sdk="true"]');
-    if (existingScript) {
-      existingScript.addEventListener('load', () => setMapStatus('loading'));
-      existingScript.addEventListener('error', () => setMapStatus('error'));
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`;
-    script.async = true;
-    script.defer = true;
-    script.dataset.naverMapSdk = 'true';
-    script.onload = () => setMapStatus('loading');
-    script.onerror = () => setMapStatus('error');
-    document.head.appendChild(script);
-
-    return () => {
-      script.onload = null;
-      script.onerror = null;
     };
   }, []);
 
