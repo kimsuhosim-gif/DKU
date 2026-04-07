@@ -146,15 +146,18 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
 
               <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
                 <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.2em] text-sage-300">핸디캡</span>
+                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">
+                    <span className="sm:hidden">핸디</span>
+                    <span className="hidden sm:inline">핸디캡</span>
+                  </span>
                   <span className="text-sm font-bold text-sage-600 sm:text-base">{member.handicap}</span>
                 </div>
                 <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.2em] text-sage-300">평균</span>
+                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
                   <span className="text-sm font-bold text-sage-600 sm:text-base">{member.averageScore}</span>
                 </div>
                 <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.2em] text-sage-300">참가</span>
+                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">참가</span>
                   <span className="text-sm font-bold text-sage-600 sm:text-base">{member.rounds}</span>
                 </div>
               </div>
