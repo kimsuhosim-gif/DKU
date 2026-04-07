@@ -150,7 +150,13 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                     <span className="sm:hidden">핸디</span>
                     <span className="hidden sm:inline">핸디캡</span>
                   </span>
-                  <span className="text-sm font-bold text-sage-600 sm:text-base">{member.handicap}</span>
+                  <span
+                    className={`text-sm font-bold tracking-[-0.03em] text-sage-600 sm:text-base ${
+                      member.handicap === '신규' ? 'text-[0.9rem] sm:text-base' : ''
+                    }`}
+                  >
+                    {member.handicap}
+                  </span>
                 </div>
                 <div className="rounded-xl border border-champagne-50 bg-white/70 px-2.5 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
                   <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
