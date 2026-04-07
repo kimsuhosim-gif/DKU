@@ -151,8 +151,8 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                     <span className="hidden sm:inline">핸디캡</span>
                   </span>
                   <span
-                    className={`text-sm font-bold tracking-[-0.03em] text-sage-600 sm:text-base ${
-                      member.handicap === '신규' ? 'text-[0.9rem] sm:text-base' : ''
+                    className={`whitespace-nowrap text-sm font-bold tracking-[-0.04em] text-sage-600 sm:text-base ${
+                      member.handicap === '신규' ? 'text-[0.82rem] sm:text-base' : ''
                     }`}
                   >
                     {member.handicap}
