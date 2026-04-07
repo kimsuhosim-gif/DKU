@@ -34,7 +34,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const getRoleMeta = (role: string) => {
-    if (role === '?뚯옣') {
+    if (role === '회장') {
       return {
         label: '회장',
         badgeClass: 'bg-amber-100 text-amber-700 border-amber-200',
@@ -42,7 +42,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         iconClass: 'bg-amber-100 text-amber-600',
       };
     }
-    if (role === '珥앸Т') {
+    if (role === '총무') {
       return {
         label: '총무',
         badgeClass: 'bg-blue-100 text-blue-700 border-blue-200',
