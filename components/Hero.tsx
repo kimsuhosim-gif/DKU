@@ -22,10 +22,10 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
       >
         <img
           src="https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?q=80&w=2200&auto=format&fit=crop"
-          alt="Luxury Golf Course"
+          alt="Private golf club"
           className="h-full w-full object-cover brightness-[0.9] contrast-[0.88] sepia-[0.08]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,28,20,0.72)_0%,rgba(18,28,20,0.56)_34%,rgba(18,28,20,0.16)_66%,rgba(247,241,232,0.12)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,28,20,0.76)_0%,rgba(18,28,20,0.62)_38%,rgba(18,28,20,0.22)_68%,rgba(247,241,232,0.12)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-champagne-50/10 via-transparent to-champagne-100/20" />
       </motion.div>
 
@@ -35,7 +35,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.25 }}
-            className="mb-6 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-white/80 backdrop-blur-md"
+            className="mb-5 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-white/80 backdrop-blur-md"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 text-xs font-semibold text-white">
               09
@@ -47,7 +47,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.35, ease: 'easeOut' }}
-            className="font-serif text-5xl leading-[0.92] tracking-[-0.04em] text-white drop-shadow-[0_18px_40px_rgba(0,0,0,0.2)] sm:text-7xl lg:text-[6.1rem]"
+            className="font-serif text-[2.9rem] leading-[0.95] tracking-[-0.05em] text-white drop-shadow-[0_18px_40px_rgba(0,0,0,0.2)] sm:text-7xl lg:text-[6.1rem]"
           >
             DKU-RE09
             <br />
@@ -58,11 +58,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-6 inline-block max-w-2xl rounded-2xl bg-black/28 px-4 py-3 backdrop-blur-md"
+            className="mt-5 inline-block max-w-2xl rounded-2xl bg-black/32 px-4 py-3 backdrop-blur-md"
           >
-            <p className="break-keep text-[15px] leading-8 text-white sm:text-[17px]">
-              동기들끼리 라운드와 저녁 자리를 이어가며, 기록과 분위기를 함께 쌓아두는 프라이빗 클럽 공간입니다.
-              스코어보다도 사람과 장면이 오래 남는 모임을 위한 기록 보관소입니다.
+            <p className="break-keep text-[14px] leading-7 text-white sm:text-[17px] sm:leading-8">
+              동기들끼리 라운드와 저녁 자리를 이어가며 쌓아온 기록을
+              <br className="hidden sm:block" /> 조용하고 단정한 분위기로 정리한 멤버 전용 공간입니다.
             </p>
           </motion.div>
 
@@ -70,7 +70,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.65 }}
-            className="mt-8 flex flex-col gap-3 sm:flex-row"
+            className="mt-7 flex flex-col gap-3 sm:flex-row"
           >
             <button
               onClick={() => onNavigate('records')}
@@ -91,19 +91,25 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-10 grid max-w-3xl gap-3 sm:grid-cols-3"
+            className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-3"
           >
-            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 p-4 backdrop-blur-md">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/55">최근 우승</p>
-              <p className="mt-3 break-words text-[1.35rem] font-semibold tracking-[-0.02em] text-white">{latestRecord?.winner}</p>
+            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-5 py-4 backdrop-blur-md sm:p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">최근 우승</p>
+              <p className="mt-2 break-words text-[1.1rem] font-semibold tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.35rem]">
+                {latestRecord?.winner}
+              </p>
             </div>
-            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 p-4 backdrop-blur-md">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/55">최근 코스</p>
-              <p className="mt-3 break-keep text-[1.15rem] font-semibold leading-[1.2] tracking-[-0.02em] text-white">{latestRecord?.location}</p>
+            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-5 py-4 backdrop-blur-md sm:p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">최근 코스</p>
+              <p className="mt-2 break-keep text-[1rem] font-semibold leading-[1.18] tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.15rem]">
+                {latestRecord?.location}
+              </p>
             </div>
-            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 p-4 backdrop-blur-md">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/55">현재 1위</p>
-              <p className="mt-3 break-words text-[1.35rem] font-semibold tracking-[-0.02em] text-white">{ranking[0]?.name}</p>
+            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-5 py-4 backdrop-blur-md sm:p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">현재 1위</p>
+              <p className="mt-2 break-words text-[1.1rem] font-semibold tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.35rem]">
+                {ranking[0]?.name}
+              </p>
             </div>
           </motion.div>
         </div>
