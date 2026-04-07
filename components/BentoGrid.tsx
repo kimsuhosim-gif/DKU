@@ -4,7 +4,6 @@ import { galleryPhotos, getProcessRankings, records } from '../utils/golfData';
 import {
   Users,
   Trophy,
-  CloudSun,
   ArrowUpRight,
   Clock,
   ArrowRight,
@@ -150,9 +149,21 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         <motion.div
           variants={itemVariants}
           className="group -mt-1 flex cursor-pointer flex-col justify-between rounded-[2rem] bg-sage-50 p-5 md:mt-0 md:col-span-1 md:row-span-1 md:p-8"
-          onClick={() => onNavigate('weather')}
+          onClick={() => onNavigate('records')}
         >
-          <WeatherCardContent />
+          <div className="flex items-start justify-between">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-sage-400 shadow-sm transition-colors group-hover:text-sage-500">
+              <Trophy size={24} />
+            </div>
+            <ArrowUpRight size={18} className="text-sage-200 transition-colors group-hover:text-sage-400" />
+          </div>
+          <div>
+            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드</h3>
+            <p className="mt-1 break-keep text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
+            <p className="mt-4 break-keep text-sm leading-6 text-sage-500">
+              {latestRecord?.location}
+            </p>
+          </div>
         </motion.div>
 
         <motion.div
@@ -231,47 +242,6 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         </motion.div>
       </motion.div>
     </div>
-  );
-};
-
-const WeatherCardContent: React.FC = () => {
-  const [weather, setWeather] = React.useState<{ temp: number; desc: string } | null>(null);
-  const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
-
-  React.useEffect(() => {
-    const fetchWeather = async () => {
-      if (!apiKey) return;
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=${apiKey}&units=metric&lang=kr`
-        );
-        const data = await response.json();
-        setWeather({
-          temp: Math.round(data.main.temp),
-          desc: data.weather[0].description,
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchWeather();
-  }, [apiKey]);
-
-  return (
-    <>
-      <div className="flex items-start justify-between">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-sage-400 shadow-sm transition-colors group-hover:text-amber-500">
-          <CloudSun size={24} />
-        </div>
-        <ArrowUpRight size={18} className="text-sage-200 transition-colors group-hover:text-sage-400" />
-      </div>
-      <div>
-        <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">
-          {weather ? `${weather.temp}° ${weather.desc}` : apiKey ? '날씨 불러오는 중' : '날씨 API 미설정'}
-        </h3>
-        <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.16em] text-sage-400 underline underline-offset-4">Seoul, KR</p>
-      </div>
-    </>
   );
 };
 
