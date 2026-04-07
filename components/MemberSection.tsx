@@ -33,10 +33,29 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const getRoleBadge = (role: string) => {
-    if (role === '?뚯옣') return { label: '회장', className: 'bg-amber-100 text-amber-700 border-amber-200' };
-    if (role === '珥앸Т') return { label: '총무', className: 'bg-blue-100 text-blue-700 border-blue-200' };
-    return { label: '정회원', className: 'bg-sage-50 text-sage-600 border-sage-100' };
+  const getRoleMeta = (role: string) => {
+    if (role === '?뚯옣') {
+      return {
+        label: '회장',
+        badgeClass: 'bg-amber-100 text-amber-700 border-amber-200',
+        icon: <Crown size={12} />,
+        iconClass: 'bg-amber-100 text-amber-600',
+      };
+    }
+    if (role === '珥앸Т') {
+      return {
+        label: '총무',
+        badgeClass: 'bg-blue-100 text-blue-700 border-blue-200',
+        icon: <Medal size={12} />,
+        iconClass: 'bg-blue-100 text-blue-600',
+      };
+    }
+    return {
+      label: '정회원',
+      badgeClass: 'bg-sage-50 text-sage-600 border-sage-100',
+      icon: null,
+      iconClass: '',
+    };
   };
 
   return (
@@ -61,7 +80,8 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {members.map((member, idx) => {
-          const badge = getRoleBadge(member.role);
+          const role = getRoleMeta(member.role);
+
           return (
             <motion.div
               key={idx}
@@ -84,43 +104,35 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h4 className="truncate text-lg font-bold leading-tight text-sage-600 sm:text-2xl">{member.name}</h4>
-                      <div className={`mt-2 inline-flex rounded-full border px-3 py-1 text-[10px] font-bold tracking-[0.16em] ${badge.className}`}>
-                        {badge.label}
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-bold tracking-[0.16em] ${role.badgeClass}`}>
+                          {role.label}
+                        </div>
+                        {role.icon ? (
+                          <div className={`rounded-full p-1.5 shadow-sm ${role.iconClass}`} title={role.label}>
+                            {role.icon}
+                          </div>
+                        ) : null}
+                        {member.wins > 0 ? (
+                          <div className="flex items-center gap-1 rounded-full bg-rose-100 px-2 py-1 text-rose-600 shadow-sm" title={`우승 ${member.wins}회`}>
+                            <Award size={12} />
+                            <span className="text-[10px] font-bold">{member.wins}</span>
+                          </div>
+                        ) : null}
                       </div>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-1">
-                      {member.role === '?뚯옣' && (
-                        <div className="rounded-lg bg-amber-100 p-1 text-amber-600 shadow-sm sm:rounded-xl sm:p-1.5" title="회장">
-                          <Crown size={12} />
-                        </div>
-                      )}
-                      {member.role === '珥앸Т' && (
-                        <div className="rounded-lg bg-blue-100 p-1 text-blue-600 shadow-sm sm:rounded-xl sm:p-1.5" title="총무">
-                          <Medal size={12} />
-                        </div>
-                      )}
-                      {member.wins > 0 && (
-                        <div
-                          className="flex items-center gap-1 rounded-lg bg-rose-100 px-1.5 py-1 text-rose-600 shadow-sm sm:rounded-xl sm:px-2 sm:py-1.5"
-                          title={`우승 ${member.wins}회`}
-                        >
-                          <Award size={12} />
-                          <span className="text-[10px] font-bold">{member.wins}</span>
-                        </div>
-                      )}
                     </div>
                   </div>
 
-                  {member.phone && (
+                  {member.phone ? (
                     <a
                       href={`tel:${member.phone}`}
-                      className="mt-3 inline-flex items-center gap-2 rounded-xl bg-sage-50 px-3 py-2 text-xs font-bold text-sage-500 transition-all duration-300 hover:bg-sage-600 hover:text-white sm:rounded-2xl"
+                      className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sage-50 text-sage-500 transition-all duration-300 hover:bg-sage-600 hover:text-white"
+                      title="전화 걸기"
+                      aria-label={`${member.name} 전화 걸기`}
                     >
-                      <Phone size={12} />
-                      <span>전화</span>
+                      <Phone size={16} />
                     </a>
-                  )}
+                  ) : null}
                 </div>
               </div>
 
