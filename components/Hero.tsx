@@ -25,7 +25,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           alt="Luxury Golf Course"
           className="h-full w-full object-cover brightness-[0.9] contrast-[0.88] sepia-[0.08]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,28,20,0.7)_0%,rgba(18,28,20,0.55)_34%,rgba(18,28,20,0.14)_66%,rgba(247,241,232,0.12)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,28,20,0.72)_0%,rgba(18,28,20,0.56)_34%,rgba(18,28,20,0.16)_66%,rgba(247,241,232,0.12)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-champagne-50/10 via-transparent to-champagne-100/20" />
       </motion.div>
 
@@ -40,7 +40,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 text-xs font-semibold text-white">
               09
             </span>
-            Private golf archive
+            Private golf club
           </motion.div>
 
           <motion.h1
@@ -51,17 +51,18 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           >
             DKU-RE09
             <br />
-            <span className="font-normal italic text-white/90">Golf Club Archive</span>
+            <span className="font-normal italic text-white/90">Private Golf Club</span>
           </motion.h1>
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-6 inline-block max-w-2xl rounded-2xl bg-black/24 px-4 py-3 backdrop-blur-md"
+            className="mt-6 inline-block max-w-2xl rounded-2xl bg-black/28 px-4 py-3 backdrop-blur-md"
           >
             <p className="break-keep text-[15px] leading-8 text-white sm:text-[17px]">
-              단국대학교 도시계획부동산학부 09학번 골프 클럽의 라운드 기록, 멤버 흐름, 랭킹과 아카이브를 정리한 프라이빗 기록 공간입니다.
+              동기들끼리 라운드와 저녁 자리를 이어가며, 기록과 분위기를 함께 쌓아두는 프라이빗 클럽 공간입니다.
+              스코어보다도 사람과 장면이 오래 남는 모임을 위한 기록 보관소입니다.
             </p>
           </motion.div>
 
@@ -93,7 +94,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             className="mt-10 grid max-w-3xl gap-3 sm:grid-cols-3"
           >
             <div className="rounded-[1.7rem] border border-white/16 bg-white/10 p-4 backdrop-blur-md">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/55">최신 우승</p>
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/55">최근 우승</p>
               <p className="mt-3 break-words text-[1.35rem] font-semibold tracking-[-0.02em] text-white">{latestRecord?.winner}</p>
             </div>
             <div className="rounded-[1.7rem] border border-white/16 bg-white/10 p-4 backdrop-blur-md">

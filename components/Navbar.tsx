@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
 
   const navLinks: { label: string; view: ViewState }[] = [
     { label: '홈', view: 'home' },
-    { label: '아카이브', view: 'gallery' },
+    { label: '기록 보관소', view: 'gallery' },
     { label: '랭킹', view: 'ranking' },
     { label: '멤버', view: 'members' },
     { label: '지도', view: 'map' },
@@ -41,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
             DKU-RE09
           </span>
           <span className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.22em] text-slate-400 sm:text-[10px] sm:tracking-[0.28em]">
-            Private golf archive
+            Private golf club
           </span>
         </button>
 

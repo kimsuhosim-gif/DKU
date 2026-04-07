@@ -53,17 +53,18 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
   return (
     <div>
       <div className="mb-8 sm:mb-12">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-sage-400">클럽 대시보드</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-sage-400">클럽 라운지</p>
         <div className="mt-4 grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             <h2 className="font-serif text-3xl italic leading-[1.02] tracking-[-0.03em] text-sage-700 sm:text-5xl">
-              기록과 멤버 흐름을
+              기록과 모임의 분위기를
               <br />
-              한 화면에서 빠르게.
+              한 화면에 담아둔 공간.
             </h2>
           </div>
           <p className="max-w-2xl break-keep text-[15px] leading-8 text-sage-500">
-            멤버, 라운드 기록, 랭킹, 지도, 사진 기록과 회비 장부까지 홈에서 바로 이동할 수 있도록 핵심 정보만 먼저 배치했습니다.
+            멤버, 라운드 기록, 랭킹, 지도, 사진 기록과 회비 장부까지 바로 이동할 수 있도록 핵심 정보만 정리했습니다.
+            동기들끼리의 프라이빗한 흐름이 먼저 보이도록 구성한 홈 화면입니다.
           </p>
         </div>
       </div>
