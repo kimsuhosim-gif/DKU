@@ -53,7 +53,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
   return (
     <div>
       <div className="mb-8 sm:mb-12">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-sage-400">Club dashboard</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-sage-400">클럽 대시보드</p>
         <div className="mt-4 grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             <h2 className="font-serif text-3xl italic leading-[1.02] tracking-[-0.03em] text-sage-700 sm:text-5xl">
@@ -63,7 +63,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </h2>
           </div>
           <p className="max-w-2xl break-keep text-[15px] leading-8 text-sage-500">
-            기존 구조는 유지하되, 홈에서 가장 많이 보는 정보만 먼저 배치했습니다. 멤버, 라운드, 랭킹, 날씨, 지도, 사진 기록으로 바로 이동할 수 있습니다.
+            멤버, 라운드 기록, 랭킹, 지도, 사진 기록과 회비 장부까지 홈에서 바로 이동할 수 있도록 핵심 정보만 먼저 배치했습니다.
           </p>
         </div>
       </div>
@@ -82,9 +82,9 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="font-serif text-2xl italic text-sage-600">Quick Access</h3>
-              <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-300">Members only dashboard</p>
+              <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-300">members only dashboard</p>
             </div>
-            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">Home</span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">홈</span>
           </div>
 
           <motion.div
@@ -129,19 +129,20 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         <motion.div
           variants={itemVariants}
           className="group -mt-1 flex cursor-pointer flex-col justify-between rounded-[2rem] border-2 border-transparent bg-white p-5 hover:border-sage-100 md:mt-0 md:col-span-1 md:row-span-1 md:p-8"
+          onClick={() => onNavigate('records')}
         >
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sage-400 text-white transition-colors group-hover:bg-sage-500">
               <CalendarDays size={24} />
             </div>
-            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">Next</span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">Round</span>
           </div>
           <div>
-            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">다음 라운드</h3>
-            <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-400">일정 확정 전</p>
+            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드 요약</h3>
+            <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
             <div className="mt-4 flex items-center space-x-1 text-sage-300">
               <Clock size={12} />
-              <span className="text-[10px] font-medium uppercase tracking-[0.16em]">장소와 시간 추후 공지</span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.16em]">{latestRecord?.winner} 우승</span>
             </div>
           </div>
         </motion.div>
@@ -158,11 +159,9 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             <ArrowUpRight size={18} className="text-sage-200 transition-colors group-hover:text-sage-400" />
           </div>
           <div>
-            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드</h3>
+            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 코스</h3>
             <p className="mt-1 break-keep text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
-            <p className="mt-4 break-keep text-sm leading-6 text-sage-500">
-              {latestRecord?.location}
-            </p>
+            <p className="mt-4 break-keep text-sm leading-6 text-sage-500">{latestRecord?.location}</p>
           </div>
         </motion.div>
 
@@ -174,7 +173,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           <div className="flex items-start justify-between">
             <div>
               <h3 className="font-serif text-2xl italic text-sage-600">Ranking</h3>
-              <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-sage-400">Current top 3</p>
+              <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-sage-400">current top 3</p>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-50 text-sage-400 transition-all group-hover:bg-sage-400 group-hover:text-white">
               <TrendingUp size={20} />
@@ -208,7 +207,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           <div className="flex items-center justify-between p-5 pb-4 md:p-8 md:pb-4">
             <div>
               <h3 className="font-serif text-2xl italic text-sage-600">The Archive</h3>
-              <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-300">Recent photo entries</p>
+              <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-300">recent photo entries</p>
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-sage-300">View gallery</span>

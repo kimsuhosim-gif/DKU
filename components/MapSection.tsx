@@ -138,18 +138,16 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
         className="group mb-8 flex items-center space-x-2 text-[11px] font-medium uppercase tracking-[0.22em] text-sage-400 transition-colors hover:text-sage-600 sm:mb-12"
       >
         <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-        <span>Back to Dashboard</span>
+        <span>대시보드로 돌아가기</span>
       </button>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
           <div className="mb-6 sm:mb-10">
-            <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">
-              Course Archive
-            </span>
-            <h2 className="mt-3 font-serif text-3xl italic text-sage-600 sm:text-5xl">Urban Rounding Map</h2>
+            <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">코스 아카이브</span>
+            <h2 className="mt-3 font-serif text-3xl italic text-sage-600 sm:text-5xl">라운딩 지도</h2>
             <p className="mt-3 max-w-sm text-sm italic leading-relaxed text-sage-400">
-              The club&apos;s rounds, organized geographically instead of chronologically.
+              클럽 라운드 기록을 날짜가 아니라 코스 위치 기준으로 정리한 지도 아카이브입니다.
             </p>
           </div>
 
@@ -190,20 +188,18 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                 {mapStatus === 'loading' ? (
                   <>
                     <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-sage-200 border-t-sage-400" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-sage-400">
-                      Synchronizing Map Data
-                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-sage-400">지도 데이터 불러오는 중</span>
                   </>
                 ) : (
                   <div className="flex flex-col items-center">
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-400">
                       <ExternalLink size={20} />
                     </div>
-                    <p className="mb-2 font-serif text-sm italic text-sage-600">Map Authentication Failed</p>
+                    <p className="mb-2 font-serif text-sm italic text-sage-600">네이버 지도 인증 실패</p>
                     <p className="text-[10px] leading-relaxed text-sage-400">
-                      Check the Naver Cloud service URL and client ID.
+                      네이버 클라우드 서비스 URL과 클라이언트 ID를 확인해주세요.
                       <br />
-                      Current client ID: {NAVER_MAP_CLIENT_ID || 'Not configured'}
+                      현재 Client ID: {NAVER_MAP_CLIENT_ID || 'Not configured'}
                     </p>
                   </div>
                 )}
@@ -222,7 +218,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                 >
                   <div className="mb-4 flex items-start justify-between gap-4">
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-dustyGold">Rounding Archive</span>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-dustyGold">라운딩 아카이브</span>
                       <h3 className="mt-1 font-serif text-xl italic text-sage-600">{selectedProject.name}</h3>
                     </div>
                     <button onClick={() => setSelectedProject(null)} className="p-2 text-sage-300 transition-colors hover:text-sage-500">
@@ -238,14 +234,14 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                     <div>
                       <span className="flex items-center text-[8px] uppercase text-sage-300">
                         <Ruler size={10} className="mr-1" />
-                        Best Score
+                        베스트 스코어
                       </span>
                       <span className="text-sm font-bold text-sage-600">{selectedProject.score}</span>
                     </div>
                     <div>
                       <span className="flex items-center text-[8px] uppercase text-sage-300">
                         <Star size={10} className="mr-1" />
-                        Winner
+                        우승자
                       </span>
                       <span className="text-sm font-bold text-sage-600">{selectedProject.winner}</span>
                     </div>
@@ -267,7 +263,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                 >
                   <div className="mb-6 flex items-start justify-between">
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-dustyGold">Rounding Archive</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-dustyGold">라운딩 아카이브</span>
                       <h3 className="mt-1 font-serif text-2xl italic text-sage-600">{selectedProject.name}</h3>
                     </div>
                     <button onClick={() => setSelectedProject(null)} className="p-2 text-sage-200 transition-colors hover:text-sage-400">
@@ -282,23 +278,23 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
 
                   <div className="flex-grow space-y-4">
                     <div className="flex flex-col">
-                      <span className="text-[9px] font-bold uppercase text-sage-300">Champion of Round</span>
+                      <span className="text-[9px] font-bold uppercase text-sage-300">라운드 우승자</span>
                       <span className="font-serif text-xl italic text-dustyGold">{selectedProject.winner}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-3 border-t border-champagne-50 pt-4">
                       <div className="flex flex-col">
                         <span className="flex items-center text-[8px] uppercase text-sage-300">
                           <Ruler size={10} className="mr-1" />
-                          Best Score
+                          베스트 스코어
                         </span>
                         <span className="text-xs font-bold text-sage-600">{selectedProject.score}</span>
                       </div>
                       <div className="flex flex-col">
                         <span className="flex items-center text-[8px] uppercase text-sage-300">
                           <Star size={10} className="mr-1" />
-                          Record
+                          기록 상태
                         </span>
-                        <span className="text-xs font-bold text-sage-500">Official</span>
+                        <span className="text-xs font-bold text-sage-500">공식 기록</span>
                       </div>
                     </div>
                   </div>
@@ -314,7 +310,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                       rel="noreferrer"
                       className="block w-full rounded-2xl bg-[#03C75A] py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[#02b351] active:scale-95"
                     >
-                      Naver Maps Direction
+                      네이버 지도 길찾기
                     </a>
                   </div>
                 </motion.div>

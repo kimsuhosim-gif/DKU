@@ -18,16 +18,22 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
         className="group mb-8 flex items-center space-x-2 text-[11px] font-medium uppercase tracking-[0.22em] text-sage-400 transition-colors hover:text-sage-600 sm:mb-12"
       >
         <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-        <span>Back to Dashboard</span>
+        <span>대시보드로 돌아가기</span>
       </button>
 
-      <div className="mb-10 flex flex-col gap-4 sm:mb-16 md:flex-row md:items-end md:justify-between md:gap-8">
+      <div className="mb-8 flex flex-col gap-4 sm:mb-10 md:flex-row md:items-end md:justify-between md:gap-8">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">
-            Official WHS Applied
-          </span>
-          <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">DKU-RE09 Ranking</h2>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">WHS 적용 순위</span>
+          <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">DKU-RE09 랭킹</h2>
         </div>
+      </div>
+
+      <div className="mb-10 rounded-[2rem] border border-champagne-100 bg-sage-50/60 p-5 sm:mb-16 sm:p-6">
+        <p className="text-sm leading-7 text-sage-500">
+          이 순위는 <span className="font-semibold text-sage-600">핸디캡을 반영한 순위</span>입니다.
+          <br />
+          <span className="font-semibold text-sage-600">Net (Gross - HC)</span>는 실제 타수(Gross)에서 현재 핸디캡(HC)을 뺀 값입니다.
+        </p>
       </div>
 
       <div className="mb-10 grid grid-cols-3 items-end gap-2 sm:mb-16 sm:gap-8">
@@ -43,9 +49,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           <div className="mb-2 h-11 w-11 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-6 sm:h-24 sm:w-24 sm:border-4">
             <img src={podium[1].img} alt={podium[1].name} className="h-full w-full object-cover" />
           </div>
-          <span className="text-[7px] font-bold uppercase tracking-[0.16em] text-sage-300 sm:text-[10px] sm:tracking-[0.3em]">
-            Runner Up
-          </span>
+          <span className="text-[7px] font-bold uppercase tracking-[0.16em] text-sage-300 sm:text-[10px] sm:tracking-[0.3em]">2위</span>
           <h3 className="mt-1 text-xs font-bold text-sage-600 sm:mt-2 sm:text-2xl">{podium[1].name}</h3>
           <div className="mt-2 rounded-full border border-champagne-100 bg-white px-2 py-1 font-mono text-[9px] text-sage-400 sm:mt-4 sm:px-4 sm:text-xs">
             {podium[1].netScoreDisplay}
@@ -64,9 +68,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           <div className="relative z-10 mb-2 h-16 w-16 overflow-hidden rounded-full border-2 border-champagne-100 shadow-xl sm:mb-6 sm:h-32 sm:w-32 sm:border-4">
             <img src={podium[0].img} alt={podium[0].name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
           </div>
-          <span className="relative z-10 text-[8px] font-bold uppercase tracking-[0.2em] text-amber-500 sm:text-xs sm:tracking-[0.5em]">
-            Champion
-          </span>
+          <span className="relative z-10 text-[8px] font-bold uppercase tracking-[0.2em] text-amber-500 sm:text-xs sm:tracking-[0.5em]">1위</span>
           <h3 className="relative z-10 mt-1 text-lg font-bold text-sage-600 sm:mt-3 sm:text-4xl">{podium[0].name}</h3>
           <div className="relative z-10 mt-2 rounded-full bg-sage-400 px-3 py-1 font-mono text-[10px] text-white shadow-lg shadow-sage-400/20 sm:mt-6 sm:px-8 sm:py-2 sm:text-sm">
             {podium[0].netScoreDisplay}
@@ -85,7 +87,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           <div className="mb-2 h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-4 sm:h-20 sm:w-20 sm:border-4">
             <img src={podium[2].img} alt={podium[2].name} className="h-full w-full object-cover" />
           </div>
-          <span className="text-[7px] font-bold uppercase tracking-[0.16em] text-sage-300 sm:text-[10px] sm:tracking-[0.2em]">Third</span>
+          <span className="text-[7px] font-bold uppercase tracking-[0.16em] text-sage-300 sm:text-[10px] sm:tracking-[0.2em]">3위</span>
           <h3 className="mt-1 text-xs font-bold text-sage-600 sm:mt-2 sm:text-xl">{podium[2].name}</h3>
           <div className="mt-2 rounded-full bg-champagne-50 px-2 py-1 font-mono text-[9px] text-sage-400 sm:px-4 sm:text-xs">
             {podium[2].netScoreDisplay}
@@ -95,12 +97,12 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
 
       <div className="space-y-3">
         <div className="grid grid-cols-12 px-4 py-3 text-[9px] font-bold uppercase tracking-[0.2em] text-sage-300 sm:px-10 sm:py-4 md:text-[10px]">
-          <div className="col-span-2 md:col-span-1">Rank</div>
-          <div className="col-span-6 md:col-span-3">Member</div>
+          <div className="col-span-2 md:col-span-1">순위</div>
+          <div className="col-span-6 md:col-span-3">멤버</div>
           <div className="col-span-4 text-right md:col-span-2">Net (Gross - HC)</div>
           <div className="hidden text-center md:block md:col-span-2">Gross</div>
           <div className="hidden text-center md:block md:col-span-2">Handicap</div>
-          <div className="hidden text-right md:block md:col-span-2 md:pr-4">Change</div>
+          <div className="hidden text-right md:block md:col-span-2 md:pr-4">변동</div>
         </div>
 
         <AnimatePresence mode="popLayout">
@@ -124,7 +126,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
                 </div>
                 <div className="min-w-0">
                   <span className="block truncate text-sm font-bold text-sage-600">{member.name}</span>
-                  <span className="text-[7px] uppercase tracking-[0.2em] text-sage-300 md:text-[8px]">WHS Standard</span>
+                  <span className="text-[7px] uppercase tracking-[0.2em] text-sage-300 md:text-[8px]">WHS 적용</span>
                 </div>
               </div>
 
@@ -153,7 +155,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
                 {member.improved ? (
                   <div className="flex items-center justify-end space-x-1 font-bold text-green-500">
                     <ArrowUp size={14} className="animate-bounce" />
-                    <span className="text-[10px] uppercase tracking-[0.16em]">Up</span>
+                    <span className="text-[10px] uppercase tracking-[0.16em]">상승</span>
                   </div>
                 ) : (
                   <div className="flex items-center justify-end space-x-1 text-sage-200">
@@ -173,8 +175,8 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           <div className="h-px w-12 bg-champagne-100" />
         </div>
         <p className="mx-auto max-w-2xl text-[10px] font-medium uppercase tracking-[0.16em] text-sage-400 sm:tracking-[0.2em]">
-          WHS preview for the latest recorded round. Adjusted gross is applied when hole-by-hole data exists.
-          Net (Gross - HC) is shown as gross minus current handicap index.
+          최신 라운드 기준 WHS 미리보기입니다. 홀별 데이터가 있으면 Adjusted Gross가 적용됩니다.
+          Net (Gross - HC)는 실제 타수에서 현재 핸디캡을 뺀 값입니다.
         </p>
       </div>
     </div>

@@ -10,13 +10,15 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
     { date: '2025.11.29', desc: '분기 회비 수납', amount: 1600000, type: 'income' },
     { date: '2025.11.29', desc: '골프존 상품권', amount: -300000, type: 'expense' },
     { date: '2025.11.29', desc: '현수막 제작', amount: -15000, type: 'expense' },
-    { date: '2025.11.29', desc: '네임 스티커 제작', amount: -33000, type: 'expense' },
+    { date: '2025.11.29', desc: '스티커 제작', amount: -33000, type: 'expense' },
     { date: '2025.11.29', desc: '저녁 1차 (판교돈)', amount: -580000, type: 'expense' },
     { date: '2025.11.29', desc: '저녁 2차 (본술)', amount: -134000, type: 'expense' },
     { date: '2025.11.29', desc: '편의점', amount: -27500, type: 'expense' },
   ] as const;
 
   const currentBalance = transactions.reduce((acc, t) => acc + t.amount, 0);
+  const totalIncome = transactions.filter((t) => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+  const totalExpense = transactions.filter((t) => t.type === 'expense').reduce((acc, t) => acc + Math.abs(t.amount), 0);
   const formatAmount = (amount: number) => `₩${Math.abs(amount).toLocaleString()}`;
 
   return (
@@ -64,6 +66,21 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
         <div className="rounded-2xl bg-sage-600 p-4 text-white">
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">현재 잔액</p>
           <p className="mt-2 text-xl font-serif">{formatAmount(currentBalance)}</p>
+        </div>
+      </div>
+
+      <div className="mb-8 hidden grid-cols-3 gap-4 sm:grid lg:mb-10">
+        <div className="rounded-[1.8rem] bg-sage-50 p-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">총 수입</p>
+          <p className="mt-3 text-2xl font-serif text-green-600">{formatAmount(totalIncome)}</p>
+        </div>
+        <div className="rounded-[1.8rem] border border-champagne-100 bg-white p-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">총 지출</p>
+          <p className="mt-3 text-2xl font-serif text-rose-500">{formatAmount(totalExpense)}</p>
+        </div>
+        <div className="rounded-[1.8rem] bg-sage-600 p-5 text-white">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">현재 잔액</p>
+          <p className="mt-3 text-2xl font-serif">{formatAmount(currentBalance)}</p>
         </div>
       </div>
 

@@ -23,7 +23,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
       return {
         name: m.name,
         role: m.role,
-        handicap: m.scoreHistory.length > 0 ? m.handicap.toFixed(1) : 'New',
+        handicap: m.scoreHistory.length > 0 ? m.handicap.toFixed(1) : '신규',
         averageScore: avg,
         phone: m.phone,
         wins,
@@ -33,6 +33,12 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
+  const getRoleBadge = (role: string) => {
+    if (role === '?뚯옣') return { label: '회장', className: 'bg-amber-100 text-amber-700 border-amber-200' };
+    if (role === '珥앸Т') return { label: '총무', className: 'bg-blue-100 text-blue-700 border-blue-200' };
+    return { label: '정회원', className: 'bg-sage-50 text-sage-600 border-sage-100' };
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
       <button
@@ -40,98 +46,101 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         className="group mb-8 flex items-center space-x-2 text-[11px] font-medium uppercase tracking-[0.22em] text-sage-400 transition-colors hover:text-sage-600 sm:mb-12"
       >
         <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-        <span>Back to Dashboard</span>
+        <span>대시보드로 돌아가기</span>
       </button>
 
       <div className="mb-10 flex flex-col gap-4 sm:mb-16 md:flex-row md:items-end md:justify-between">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">
-            Brotherhood
-          </span>
-          <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">Club Members</h2>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">멤버 디렉토리</span>
+          <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">클럽 멤버</h2>
         </div>
         <p className="max-w-sm text-sm italic text-sage-400">
-          Class of 2009, still meeting through rounds, records, and the occasional dinner after play.
+          09학번 멤버들의 현재 핸디캡, 평균 타수, 참가 라운드 수를 한 번에 볼 수 있는 명부입니다.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-        {members.map((member, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.05 }}
-            className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-4 transition-all duration-500 hover:bg-champagne-50/50 sm:rounded-[3rem] sm:p-7"
-          >
-            <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-sage-50 opacity-50 transition-transform duration-700 group-hover:scale-150 sm:-right-10 sm:-top-10 sm:h-32 sm:w-32" />
+        {members.map((member, idx) => {
+          const badge = getRoleBadge(member.role);
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-4 transition-all duration-500 hover:bg-champagne-50/50 sm:rounded-[3rem] sm:p-7"
+            >
+              <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-sage-50 opacity-50 transition-transform duration-700 group-hover:scale-150 sm:-right-10 sm:-top-10 sm:h-32 sm:w-32" />
 
-            <div className="relative z-10 flex items-center gap-4">
-              <div
-                className="h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-champagne-100 bg-white shadow-md transition-transform duration-500 group-hover:scale-105 sm:h-28 sm:w-28 sm:rounded-[2rem]"
-                onClick={() => setSelectedImage(member.img)}
-              >
-                <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
-              </div>
-
-              <div className="min-w-0 flex-grow">
-                <div className="mb-1 flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <h4 className="truncate text-lg font-bold leading-tight text-sage-600 sm:text-2xl">{member.name}</h4>
-                    <p className="mt-1 text-[10px] font-bold tracking-[0.22em] text-sage-400">{member.role}</p>
-                  </div>
-
-                  <div className="flex shrink-0 items-center gap-1">
-                    {member.role === '회장' && (
-                      <div className="rounded-lg bg-amber-100 p-1 text-amber-600 shadow-sm sm:rounded-xl sm:p-1.5" title="회장">
-                        <Crown size={12} />
-                      </div>
-                    )}
-                    {member.role === '총무' && (
-                      <div className="rounded-lg bg-blue-100 p-1 text-blue-600 shadow-sm sm:rounded-xl sm:p-1.5" title="총무">
-                        <Medal size={12} />
-                      </div>
-                    )}
-                    {member.wins > 0 && (
-                      <div
-                        className="flex items-center gap-1 rounded-lg bg-rose-100 px-1.5 py-1 text-rose-600 shadow-sm sm:rounded-xl sm:px-2 sm:py-1.5"
-                        title={`${member.wins} wins`}
-                      >
-                        <Award size={12} />
-                        <span className="text-[10px] font-bold">{member.wins}</span>
-                      </div>
-                    )}
-                  </div>
+              <div className="relative z-10 flex items-center gap-4">
+                <div
+                  className="h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-champagne-100 bg-white shadow-md transition-transform duration-500 group-hover:scale-105 sm:h-28 sm:w-28 sm:rounded-[2rem]"
+                  onClick={() => setSelectedImage(member.img)}
+                >
+                  <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
                 </div>
 
-                {member.phone && (
-                  <a
-                    href={`tel:${member.phone}`}
-                    className="mt-3 inline-flex items-center gap-2 rounded-xl bg-sage-50 px-3 py-2 text-xs font-bold text-sage-500 transition-all duration-300 hover:bg-sage-600 hover:text-white sm:rounded-2xl"
-                  >
-                    <Phone size={12} />
-                    <span>Call</span>
-                  </a>
-                )}
-              </div>
-            </div>
+                <div className="min-w-0 flex-grow">
+                  <div className="mb-2 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h4 className="truncate text-lg font-bold leading-tight text-sage-600 sm:text-2xl">{member.name}</h4>
+                      <div className={`mt-2 inline-flex rounded-full border px-3 py-1 text-[10px] font-bold tracking-[0.16em] ${badge.className}`}>
+                        {badge.label}
+                      </div>
+                    </div>
 
-            <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
-              <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
-                <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">HC</span>
-                <span className="text-sm font-bold text-sage-600">{member.handicap}</span>
+                    <div className="flex shrink-0 items-center gap-1">
+                      {member.role === '?뚯옣' && (
+                        <div className="rounded-lg bg-amber-100 p-1 text-amber-600 shadow-sm sm:rounded-xl sm:p-1.5" title="회장">
+                          <Crown size={12} />
+                        </div>
+                      )}
+                      {member.role === '珥앸Т' && (
+                        <div className="rounded-lg bg-blue-100 p-1 text-blue-600 shadow-sm sm:rounded-xl sm:p-1.5" title="총무">
+                          <Medal size={12} />
+                        </div>
+                      )}
+                      {member.wins > 0 && (
+                        <div
+                          className="flex items-center gap-1 rounded-lg bg-rose-100 px-1.5 py-1 text-rose-600 shadow-sm sm:rounded-xl sm:px-2 sm:py-1.5"
+                          title={`우승 ${member.wins}회`}
+                        >
+                          <Award size={12} />
+                          <span className="text-[10px] font-bold">{member.wins}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {member.phone && (
+                    <a
+                      href={`tel:${member.phone}`}
+                      className="mt-3 inline-flex items-center gap-2 rounded-xl bg-sage-50 px-3 py-2 text-xs font-bold text-sage-500 transition-all duration-300 hover:bg-sage-600 hover:text-white sm:rounded-2xl"
+                    >
+                      <Phone size={12} />
+                      <span>전화</span>
+                    </a>
+                  )}
+                </div>
               </div>
-              <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
-                <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">Avg</span>
-                <span className="text-sm font-bold text-sage-600">{member.averageScore}</span>
+
+              <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
+                <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">핸디캡</span>
+                  <span className="text-sm font-bold text-sage-600">{member.handicap}</span>
+                </div>
+                <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">평균</span>
+                  <span className="text-sm font-bold text-sage-600">{member.averageScore}</span>
+                </div>
+                <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">참가</span>
+                  <span className="text-sm font-bold text-sage-600">{member.rounds}</span>
+                </div>
               </div>
-              <div className="rounded-xl border border-champagne-50 bg-white/70 px-3 py-2 sm:rounded-2xl sm:px-4 sm:py-3">
-                <span className="mb-1 block text-[8px] font-extrabold uppercase tracking-[0.22em] text-sage-300">Rnd</span>
-                <span className="text-sm font-bold text-sage-600">{member.rounds}</span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       <AnimatePresence>
