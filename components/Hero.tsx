@@ -91,24 +91,24 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-3"
+            className="mt-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3"
           >
-            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-5 py-4 backdrop-blur-md sm:p-4">
+            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-4 py-3 backdrop-blur-md sm:p-4">
               <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">최근 우승</p>
               <p className="mt-2 break-words text-[1.1rem] font-semibold tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.35rem]">
                 {latestRecord?.winner}
               </p>
             </div>
-            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-5 py-4 backdrop-blur-md sm:p-4">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">최근 코스</p>
-              <p className="mt-2 break-keep text-[1rem] font-semibold leading-[1.18] tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.15rem]">
-                {latestRecord?.location}
-              </p>
-            </div>
-            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-5 py-4 backdrop-blur-md sm:p-4">
+            <div className="rounded-[1.7rem] border border-white/16 bg-white/10 px-4 py-3 backdrop-blur-md sm:p-4">
               <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">현재 1위</p>
               <p className="mt-2 break-words text-[1.1rem] font-semibold tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.35rem]">
                 {ranking[0]?.name}
+              </p>
+            </div>
+            <div className="col-span-2 rounded-[1.7rem] border border-white/16 bg-white/10 px-4 py-3 backdrop-blur-md sm:col-span-1 sm:p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-white/55">최근 코스</p>
+              <p className="mt-2 break-keep text-[1rem] font-semibold leading-[1.18] tracking-[-0.03em] text-white sm:mt-3 sm:text-[1.15rem]">
+                {latestRecord?.location}
               </p>
             </div>
           </motion.div>
