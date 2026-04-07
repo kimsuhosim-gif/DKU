@@ -54,14 +54,16 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <span className="font-normal italic text-white/90">Golf Club Archive</span>
           </motion.h1>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-6 max-w-2xl break-keep text-[15px] leading-8 text-white/82 sm:text-[17px]"
+            className="mt-6 inline-block max-w-2xl rounded-2xl bg-black/24 px-4 py-3 backdrop-blur-md"
           >
-            단국대학교 도시계획부동산학부 09학번 골프 클럽의 라운드 기록, 멤버 흐름, 랭킹과 아카이브를 정리한 프라이빗 기록 공간입니다.
-          </motion.p>
+            <p className="break-keep text-[15px] leading-8 text-white sm:text-[17px]">
+              단국대학교 도시계획부동산학부 09학번 골프 클럽의 라운드 기록, 멤버 흐름, 랭킹과 아카이브를 정리한 프라이빗 기록 공간입니다.
+            </p>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
