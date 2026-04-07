@@ -97,7 +97,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
         <div className="grid grid-cols-12 px-4 py-3 text-[9px] font-bold uppercase tracking-[0.2em] text-sage-300 sm:px-10 sm:py-4 md:text-[10px]">
           <div className="col-span-2 md:col-span-1">Rank</div>
           <div className="col-span-6 md:col-span-3">Member</div>
-          <div className="col-span-4 text-right md:col-span-2">Net</div>
+          <div className="col-span-4 text-right md:col-span-2">Net (Gross - HC)</div>
           <div className="hidden text-center md:block md:col-span-2">Gross</div>
           <div className="hidden text-center md:block md:col-span-2">Handicap</div>
           <div className="hidden text-right md:block md:col-span-2 md:pr-4">Change</div>
@@ -174,7 +174,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
         </div>
         <p className="mx-auto max-w-2xl text-[10px] font-medium uppercase tracking-[0.16em] text-sage-400 sm:tracking-[0.2em]">
           WHS preview for the latest recorded round. Adjusted gross is applied when hole-by-hole data exists.
-          Net score is shown as gross minus current handicap index.
+          Net (Gross - HC) is shown as gross minus current handicap index.
         </p>
       </div>
     </div>
