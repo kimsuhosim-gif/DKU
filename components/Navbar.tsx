@@ -13,11 +13,11 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const navLinks: { label: string; view: ViewState }[] = [
-    { label: 'Home', view: 'home' },
-    { label: 'Archive', view: 'gallery' },
-    { label: 'Ranking', view: 'ranking' },
-    { label: 'Members', view: 'members' },
-    { label: 'Map', view: 'map' },
+    { label: '홈', view: 'home' },
+    { label: '아카이브', view: 'gallery' },
+    { label: '랭킹', view: 'ranking' },
+    { label: '멤버', view: 'members' },
+    { label: '지도', view: 'map' },
   ];
 
   const handleLinkClick = (view: ViewState) => {
@@ -29,19 +29,23 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 px-4 py-3 transition-all duration-500 sm:px-6 sm:py-4 ${
+      className={`fixed left-0 right-0 top-0 z-50 px-4 py-3 transition-all duration-500 sm:px-6 sm:py-4 ${
         isScrolled || currentView !== 'home'
-          ? 'border-b border-white/60 bg-[#f7f1e8]/80 shadow-[0_20px_45px_-35px_rgba(34,48,34,0.45)] backdrop-blur-xl'
+          ? 'border-b border-white/60 bg-[#f7f1e8]/84 shadow-[0_20px_45px_-35px_rgba(34,48,34,0.45)] backdrop-blur-xl'
           : 'bg-transparent'
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
-        <button onClick={() => handleLinkClick('home')} className="flex flex-col text-left group">
-          <span className="font-serif text-xl italic tracking-tight text-[#2d382d] transition-colors group-hover:text-[#66785c] sm:text-2xl">DKU-RE09</span>
-          <span className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400 sm:text-[10px] sm:tracking-[0.32em]">Private golf archive</span>
+        <button onClick={() => handleLinkClick('home')} className="group flex flex-col text-left">
+          <span className="font-serif text-xl italic tracking-tight text-[#2d382d] transition-colors group-hover:text-[#66785c] sm:text-2xl">
+            DKU-RE09
+          </span>
+          <span className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.22em] text-slate-400 sm:text-[10px] sm:tracking-[0.28em]">
+            Private golf archive
+          </span>
         </button>
 
-        <div className="hidden lg:flex items-center gap-10 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#334034]">
+        <div className="hidden items-center gap-10 text-[11px] font-medium uppercase tracking-[0.18em] text-[#334034] lg:flex">
           {navLinks.map((link) => (
             <button
               key={link.view}
@@ -63,9 +67,9 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
         <div className="hidden lg:block">
           <button
             onClick={() => handleLinkClick('records')}
-            className="rounded-full border border-[#2d382d]/10 bg-white/70 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#2d382d] backdrop-blur transition hover:border-[#2d382d]/30 hover:bg-white"
+            className="rounded-full border border-[#2d382d]/10 bg-white/72 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#2d382d] backdrop-blur transition hover:border-[#2d382d]/24 hover:bg-white"
           >
-            Round records
+            라운드 기록
           </button>
         </div>
 
@@ -87,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
             exit={{ opacity: 0, height: 0 }}
             className="mx-auto mt-3 max-w-7xl overflow-hidden rounded-[1.5rem] border border-white/70 bg-[#fcfaf6]/95 shadow-[0_24px_60px_-40px_rgba(34,48,34,0.45)] backdrop-blur-xl lg:hidden sm:mt-4 sm:rounded-[2rem]"
           >
-            <div className="flex flex-col px-5 py-5 text-[13px] uppercase tracking-[0.18em] text-[#334034] sm:px-6 sm:py-6 sm:text-sm sm:tracking-[0.22em]">
+            <div className="flex flex-col px-5 py-5 text-[13px] uppercase tracking-[0.12em] text-[#334034] sm:px-6 sm:py-6 sm:text-sm sm:tracking-[0.16em]">
               {navLinks.map((link) => (
                 <button
                   key={link.view}
@@ -101,9 +105,9 @@ const Navbar: React.FC<NavbarProps> = ({ isScrolled, setView, currentView }) => 
               ))}
               <button
                 onClick={() => handleLinkClick('records')}
-                className="mt-4 rounded-full bg-[#2d382d] px-5 py-4 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-white"
+                className="mt-4 rounded-full bg-[#2d382d] px-5 py-4 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-white"
               >
-                Round records
+                라운드 기록 보기
               </button>
             </div>
           </motion.div>
