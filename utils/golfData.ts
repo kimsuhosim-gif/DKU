@@ -159,6 +159,15 @@ export const members: MemberData[] = [
     since: '2023.01',
     phone: '01071659043',
   },
+  {
+    name: '이상우',
+    role: '정회원',
+    prevHandicap: 18.0,
+    scoreHistory: [],
+    img: '/images/profiles/members_이상우.svg',
+    since: '2026.04',
+    phone: '01087862324',
+  },
 ];
 
 export const calculateAdjustedGross = (holeScores: number[], currentHandicap: number) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CalendarDays, Trophy, Users } from 'lucide-react';
 import { ViewState } from '../App';
-import { getProcessRankings, records } from '../utils/golfData';
+import { getProcessRankings, members, records } from '../utils/golfData';
 
 interface HeroProps {
   onNavigate: (view: ViewState) => void;
@@ -136,7 +136,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 <Users size={16} className="text-white/70" />
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.16em] text-white/50">Members</p>
-                  <p className="mt-1 text-sm font-medium text-white">현재 멤버 15명</p>
+                  <p className="mt-1 text-sm font-medium text-white">현재 멤버 {members.length}명</p>
                 </div>
               </div>
             </div>
