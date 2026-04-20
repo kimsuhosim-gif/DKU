@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { galleryPhotos, getProcessRankings, records } from '../utils/golfData';
+import { clubEvents, galleryPhotos, getProcessRankings, records } from '../utils/golfData';
 import {
   Users,
   Trophy,
@@ -13,6 +13,8 @@ import {
   Images,
   Wallet,
   Camera,
+  Bell,
+  HeartHandshake,
 } from 'lucide-react';
 import { ViewState } from '../App';
 
@@ -24,6 +26,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
   const latestRecord = records[0];
   const ranking = getProcessRankings();
   const balance = 510500;
+  const latestEvent = clubEvents[0];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -57,14 +60,14 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         <div className="mt-4 grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             <h2 className="font-serif text-3xl italic leading-[1.02] tracking-[-0.03em] text-sage-700 sm:text-5xl">
-              기록과 모임의 분위기를
+              라운드 기록과
               <br />
-              한 화면에 담아둔 공간.
+              동기 모임의 흐름.
             </h2>
           </div>
           <p className="max-w-2xl break-keep text-[15px] leading-8 text-sage-500">
-            멤버, 라운드 기록, 랭킹, 지도, 사진 기록과 회비 장부까지 바로 이동할 수 있도록 핵심 정보만 정리했습니다.
-            동기들끼리의 프라이빗한 흐름이 먼저 보이도록 구성한 홈 화면입니다.
+            스코어, 멤버, 랭킹, 회비 장부는 물론 골프 밖의 멤버 소식까지 한 화면에서 확인할 수 있도록 정리했습니다.
+            동기들끼리 공유하는 프라이빗 클럽 대시보드입니다.
           </p>
         </div>
       </div>
@@ -74,7 +77,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid h-auto grid-cols-1 gap-3 md:h-[700px] md:grid-cols-4 md:grid-rows-2 md:gap-4"
+        className="grid h-auto grid-cols-1 gap-3 md:h-[880px] md:grid-cols-4 md:grid-rows-3 md:gap-4"
       >
         <motion.div
           variants={itemVariants}
@@ -85,7 +88,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
               <h3 className="font-serif text-2xl italic text-sage-600">Quick Access</h3>
               <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-300">members only dashboard</p>
             </div>
-            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">홈</span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">09 club</span>
           </div>
 
           <motion.div
@@ -114,9 +117,9 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           </motion.div>
 
           <div className="grid grid-cols-3 gap-2 sm:gap-4">
-            {quickActions.map((btn, idx) => (
+            {quickActions.map((btn) => (
               <button
-                key={idx}
+                key={btn.label}
                 onClick={() => onNavigate(btn.view)}
                 className={`group/btn flex flex-col items-center justify-center space-y-2 rounded-2xl border border-transparent px-1 py-4 text-[10px] font-medium uppercase tracking-[0.08em] text-sage-600 transition-all duration-300 hover:scale-[1.05] hover:border-sage-200/50 active:scale-95 sm:py-5 sm:text-[11px] ${btn.padding}`}
               >
@@ -202,16 +205,45 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
+          className="group/event flex flex-col justify-between overflow-hidden rounded-[2rem] border border-[#e7dcc9] bg-[#fcf8ef] p-5 md:col-span-2 md:row-span-1 md:p-8"
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-sage-400 shadow-sm">
+                <Bell size={12} />
+                Event Board
+              </div>
+              <h3 className="mt-5 font-serif text-2xl italic leading-tight text-sage-600 sm:text-3xl">골프 밖의 멤버 소식</h3>
+            </div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-600 text-white shadow-lg shadow-sage-600/10">
+              <HeartHandshake size={22} />
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-[1.5rem] border border-champagne-100 bg-white/70 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="rounded-full bg-sage-50 px-3 py-1 text-[10px] font-bold tracking-[0.12em] text-sage-500">
+                {latestEvent.type}
+              </span>
+              <span className="text-[11px] font-medium text-sage-300">{latestEvent.date}</span>
+            </div>
+            <p className="mt-4 break-keep text-lg font-semibold tracking-[-0.03em] text-sage-700">{latestEvent.title}</p>
+            <p className="mt-2 break-keep text-sm leading-6 text-sage-500">{latestEvent.description}</p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
           className="group/archive flex cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-champagne-100 bg-white md:col-span-2 md:row-span-1"
           onClick={() => onNavigate('gallery')}
         >
           <div className="flex items-center justify-between p-5 pb-4 md:p-8 md:pb-4">
             <div>
-              <h3 className="font-serif text-2xl italic text-sage-600">The Archive</h3>
+              <h3 className="font-serif text-2xl italic text-sage-600">Photo Archive</h3>
               <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-300">recent photo entries</p>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-sage-300">View gallery</span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-sage-300">갤러리 보기</span>
               <Images size={16} className="text-sage-300 transition-colors group-hover/archive:text-sage-400" />
             </div>
           </div>
@@ -234,7 +266,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           </div>
 
           <div className="flex items-center justify-between border-t border-champagne-100/50 bg-champagne-50/50 px-5 py-4 md:px-8 md:py-5">
-            <span className="text-[11px] text-sage-400 opacity-80">{latestRecord?.location} 라운드의 현장 사진 기록입니다.</span>
+            <span className="break-keep text-[11px] text-sage-400 opacity-80">{latestRecord?.location} 라운드의 현장 사진 기록입니다.</span>
             <span className="flex items-center text-[9px] font-medium uppercase tracking-[0.18em] text-sage-400 transition-transform group-hover/archive:translate-x-1">
               Explore <ArrowRight size={10} className="ml-2" />
             </span>

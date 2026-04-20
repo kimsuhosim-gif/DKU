@@ -292,3 +292,21 @@ export const galleryPhotos: PhotoItem[] = [
     category: '2025',
   },
 ];
+
+export interface ClubEvent {
+  id: string;
+  type: '경조사' | '모임' | '공지';
+  title: string;
+  date: string;
+  description: string;
+}
+
+export const clubEvents: ClubEvent[] = [
+  {
+    id: 'event-ready',
+    type: '공지',
+    title: '멤버 소식 등록 대기',
+    date: '상시',
+    description: '결혼, 가족 행사, 번개 모임, 골프 외 동기 모임 소식을 이곳에 올릴 수 있습니다.',
+  },
+];
