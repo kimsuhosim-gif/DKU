@@ -77,7 +77,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid h-auto grid-cols-1 gap-4 md:grid-cols-4 md:auto-rows-fr md:gap-4"
+        className="grid h-auto grid-cols-1 gap-4 md:grid-cols-4 md:gap-4"
       >
         <motion.div
           variants={itemVariants}
@@ -132,7 +132,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group -mt-1 flex cursor-pointer flex-col justify-between rounded-[2rem] border-2 border-transparent bg-white p-5 hover:border-sage-100 md:mt-0 md:col-span-1 md:row-span-1 md:p-8"
+          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] border-2 border-transparent bg-white p-5 hover:border-sage-100 md:mt-0 md:col-span-1 md:row-span-1 md:min-h-[260px] md:p-8"
           onClick={() => onNavigate('records')}
         >
           <div className="flex items-start justify-between">
@@ -141,7 +141,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </div>
             <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">Round</span>
           </div>
-          <div>
+          <div className="mt-12 md:mt-14">
             <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드 요약</h3>
             <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
             <div className="mt-4 flex items-center space-x-1 text-sage-300">
@@ -153,7 +153,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group -mt-1 flex cursor-pointer flex-col justify-between rounded-[2rem] bg-sage-50 p-5 md:mt-0 md:col-span-1 md:row-span-1 md:p-8"
+          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] bg-sage-50 p-5 md:mt-0 md:col-span-1 md:row-span-1 md:min-h-[260px] md:p-8"
           onClick={() => onNavigate('records')}
         >
           <div className="flex items-start justify-between">
@@ -162,7 +162,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </div>
             <ArrowUpRight size={18} className="text-sage-200 transition-colors group-hover:text-sage-400" />
           </div>
-          <div>
+          <div className="mt-12 md:mt-14">
             <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 코스</h3>
             <p className="mt-1 break-keep text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
             <p className="mt-4 break-keep text-sm leading-6 text-sage-500">{latestRecord?.location}</p>
@@ -171,7 +171,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group flex cursor-pointer flex-col justify-between rounded-[2rem] bg-white p-5 md:col-span-2 md:row-span-1 md:p-8"
+          className="group flex cursor-pointer flex-col rounded-[2rem] bg-white p-5 md:col-span-2 md:row-span-1 md:p-8"
           onClick={() => onNavigate('ranking')}
         >
           <div className="flex items-start justify-between">
@@ -184,7 +184,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="mt-4 space-y-3">
+          <div className="mt-8 space-y-3">
             {rankingData.map((p) => (
               <div
                 key={p.rank}
@@ -205,7 +205,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group/event flex flex-col justify-between overflow-hidden rounded-[2rem] border border-[#e7dcc9] bg-[#fcf8ef] p-5 md:col-span-2 md:row-span-1 md:p-6"
+          className="group/event flex flex-col overflow-hidden rounded-[2rem] border border-[#e7dcc9] bg-[#fcf8ef] p-5 md:col-span-2 md:row-span-1 md:p-6"
         >
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -220,7 +220,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="mt-4 rounded-[1.5rem] border border-champagne-100 bg-white/75 p-4">
+          <div className="mt-6 rounded-[1.5rem] border border-champagne-100 bg-white/75 p-4">
             <div className="flex items-start gap-3">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff4df] text-lg shadow-sm">
                   {latestEvent.emoji}
