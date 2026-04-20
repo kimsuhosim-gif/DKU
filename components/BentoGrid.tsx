@@ -205,38 +205,39 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group/event flex flex-col justify-between overflow-hidden rounded-[2rem] border border-[#e7dcc9] bg-[#fcf8ef] p-5 md:col-span-2 md:row-span-1 md:p-8"
+          className="group/event flex flex-col justify-between overflow-hidden rounded-[2rem] border border-[#e7dcc9] bg-[#fcf8ef] p-5 md:col-span-2 md:row-span-1 md:p-6"
         >
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-sage-400 shadow-sm">
                 <Bell size={12} />
                 Event Board
               </div>
-              <h3 className="mt-5 font-serif text-2xl italic leading-tight text-sage-600 sm:text-3xl">골프 밖의 멤버 소식</h3>
+              <h3 className="mt-3 font-serif text-xl italic leading-tight text-sage-600 sm:text-2xl">멤버 소식</h3>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-600 text-white shadow-lg shadow-sage-600/10">
-              <HeartHandshake size={22} />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sage-600 text-white shadow-lg shadow-sage-600/10">
+              <HeartHandshake size={18} />
             </div>
           </div>
 
-          <div className="mt-6 rounded-[1.5rem] border border-champagne-100 bg-white/70 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fff4df] text-lg shadow-sm">
+          <div className="mt-4 rounded-[1.5rem] border border-champagne-100 bg-white/75 p-4">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff4df] text-lg shadow-sm">
                   {latestEvent.emoji}
-                </span>
-                <span className="rounded-full bg-sage-50 px-3 py-1 text-[10px] font-bold tracking-[0.12em] text-sage-500">
-                  {latestEvent.type}
-                </span>
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-sage-50 px-2.5 py-1 text-[10px] font-bold tracking-[0.1em] text-sage-500">
+                    {latestEvent.type}
+                  </span>
+                  <span className="text-[11px] font-semibold text-sage-400">{latestEvent.date}</span>
+                </div>
+                <p className="mt-2 truncate text-base font-semibold tracking-[-0.03em] text-sage-700">{latestEvent.title}</p>
+                {latestEvent.venue ? (
+                  <p className="mt-1 truncate text-[13px] font-semibold text-sage-500">📍 {latestEvent.venue}</p>
+                ) : null}
               </div>
-              <span className="text-[11px] font-medium text-sage-300">{latestEvent.date}</span>
             </div>
-            <p className="mt-4 break-keep text-lg font-semibold tracking-[-0.03em] text-sage-700">{latestEvent.title}</p>
-            {latestEvent.venue ? (
-              <p className="mt-2 break-keep text-sm font-semibold text-sage-500">📍 {latestEvent.venue}</p>
-            ) : null}
-            <p className="mt-2 break-keep text-sm leading-6 text-sage-500">{latestEvent.description}</p>
           </div>
         </motion.div>
 
