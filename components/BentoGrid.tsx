@@ -77,11 +77,11 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid h-auto grid-cols-1 gap-3 md:h-[880px] md:grid-cols-4 md:grid-rows-3 md:gap-4"
+        className="grid h-auto grid-cols-1 gap-4 md:h-[880px] md:grid-cols-4 md:grid-rows-3 md:gap-4"
       >
         <motion.div
           variants={itemVariants}
-          className="bento-card relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-8 md:col-span-2 md:row-span-1"
+          className="bento-card relative flex flex-col justify-between overflow-visible rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-8 md:col-span-2 md:row-span-1 md:overflow-hidden"
         >
           <div className="mb-4 flex items-center justify-between">
             <div>
@@ -243,7 +243,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group/archive flex cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-champagne-100 bg-white md:col-span-2 md:row-span-1"
+          className="group/archive flex cursor-pointer flex-col overflow-visible rounded-[2rem] border border-champagne-100 bg-white md:col-span-2 md:row-span-1 md:overflow-hidden"
           onClick={() => onNavigate('gallery')}
         >
           <div className="flex items-center justify-between p-5 pb-4 md:p-8 md:pb-4">
@@ -259,7 +259,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
           <div className="grid flex-grow grid-cols-3 gap-2 px-5 pb-5 md:gap-3 md:px-8 md:pb-6">
             {galleryPhotos.slice(0, 3).map((photo) => (
-              <div key={photo.id} className="group/img relative aspect-[3/4] overflow-hidden rounded-2xl border-[0.5px] border-dustyGold/20">
+              <div key={photo.id} className="group/img relative aspect-[4/3] overflow-hidden rounded-2xl border-[0.5px] border-dustyGold/20 md:aspect-[3/4]">
                 <img
                   src={photo.src}
                   alt={photo.location}
