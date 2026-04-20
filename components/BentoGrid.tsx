@@ -222,12 +222,20 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
           <div className="mt-6 rounded-[1.5rem] border border-champagne-100 bg-white/70 p-4">
             <div className="flex items-center justify-between gap-3">
-              <span className="rounded-full bg-sage-50 px-3 py-1 text-[10px] font-bold tracking-[0.12em] text-sage-500">
-                {latestEvent.type}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fff4df] text-lg shadow-sm">
+                  {latestEvent.emoji}
+                </span>
+                <span className="rounded-full bg-sage-50 px-3 py-1 text-[10px] font-bold tracking-[0.12em] text-sage-500">
+                  {latestEvent.type}
+                </span>
+              </div>
               <span className="text-[11px] font-medium text-sage-300">{latestEvent.date}</span>
             </div>
             <p className="mt-4 break-keep text-lg font-semibold tracking-[-0.03em] text-sage-700">{latestEvent.title}</p>
+            {latestEvent.venue ? (
+              <p className="mt-2 break-keep text-sm font-semibold text-sage-500">📍 {latestEvent.venue}</p>
+            ) : null}
             <p className="mt-2 break-keep text-sm leading-6 text-sage-500">{latestEvent.description}</p>
           </div>
         </motion.div>

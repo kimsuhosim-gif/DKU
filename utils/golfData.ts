@@ -296,17 +296,21 @@ export const galleryPhotos: PhotoItem[] = [
 export interface ClubEvent {
   id: string;
   type: '경조사' | '모임' | '공지';
+  emoji: string;
   title: string;
   date: string;
+  venue?: string;
   description: string;
 }
 
 export const clubEvents: ClubEvent[] = [
   {
-    id: 'event-ready',
-    type: '공지',
-    title: '멤버 소식 등록 대기',
-    date: '상시',
-    description: '결혼, 가족 행사, 번개 모임, 골프 외 동기 모임 소식을 이곳에 올릴 수 있습니다.',
+    id: 'kim-sungjin-wedding-20260704',
+    type: '경조사',
+    emoji: '💍',
+    title: '김성진 결혼식',
+    date: '2026.07.04 (토) 12:30',
+    venue: '더채플앳청담',
+    description: '김성진 동기의 결혼을 축하합니다. 동기들의 따뜻한 마음을 함께 전하는 자리입니다.',
   },
 ];
