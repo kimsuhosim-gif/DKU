@@ -77,11 +77,11 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid h-auto grid-cols-1 gap-4 md:h-[880px] md:grid-cols-4 md:grid-rows-3 md:gap-4"
+        className="grid h-auto grid-cols-1 gap-4 md:grid-cols-4 md:auto-rows-fr md:gap-4"
       >
         <motion.div
           variants={itemVariants}
-          className="bento-card relative flex flex-col justify-between overflow-visible rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-8 md:col-span-2 md:row-span-1 md:overflow-hidden"
+          className="bento-card relative flex flex-col justify-between overflow-visible rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-8 md:col-span-2 md:row-span-1"
         >
           <div className="mb-4 flex items-center justify-between">
             <div>
@@ -243,7 +243,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group/archive flex cursor-pointer flex-col overflow-visible rounded-[2rem] border border-champagne-100 bg-white md:col-span-2 md:row-span-1 md:overflow-hidden"
+          className="group/archive flex cursor-pointer flex-col overflow-visible rounded-[2rem] border border-champagne-100 bg-white md:col-span-2 md:row-span-1"
           onClick={() => onNavigate('gallery')}
         >
           <div className="flex items-center justify-between p-5 pb-4 md:p-8 md:pb-4">
