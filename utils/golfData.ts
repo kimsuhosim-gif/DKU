@@ -323,3 +323,39 @@ export const clubEvents: ClubEvent[] = [
     description: '김성진 동기의 결혼을 축하합니다. 동기들의 따뜻한 마음을 함께 전하는 자리입니다.',
   },
 ];
+
+export interface NextSchedule {
+  title: string;
+  date: string;
+  location: string;
+  note: string;
+}
+
+export const nextSchedule: NextSchedule = {
+  title: '2회 정기 라운드',
+  date: '일정 조율 중',
+  location: '추후 공지',
+  note: '코스와 시간을 확정하면 이 카드에 바로 업데이트됩니다.',
+};
+
+export interface HallOfFameItem {
+  label: string;
+  name: string;
+  value: string;
+}
+
+export const hallOfFame: HallOfFameItem[] = [
+  { label: '초대 우승', name: '정재엽', value: '90타' },
+  { label: '현재 1위', name: '모성진', value: 'Net 72.8' },
+  { label: '최다 참가', name: '12명', value: '1회 라운드' },
+];
+
+export interface RoundGroup {
+  group: string;
+  members: string[];
+}
+
+export const nextRoundGroups: RoundGroup[] = [
+  { group: '1조', members: ['정재엽', '모성진', '김성진', '이상우'] },
+  { group: '2조', members: ['유만종', '양창운', '김영웅', '신연성'] },
+];

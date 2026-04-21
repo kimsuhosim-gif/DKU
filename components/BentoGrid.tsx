@@ -1,6 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { clubEvents, galleryPhotos, getProcessRankings, records } from '../utils/golfData';
+import {
+  clubEvents,
+  galleryPhotos,
+  getProcessRankings,
+  hallOfFame,
+  nextRoundGroups,
+  nextSchedule,
+  records,
+} from '../utils/golfData';
 import {
   Users,
   Trophy,
@@ -15,6 +23,9 @@ import {
   Camera,
   Bell,
   HeartHandshake,
+  Flag,
+  Crown,
+  ListChecks,
 } from 'lucide-react';
 import { ViewState } from '../App';
 
@@ -279,6 +290,74 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             <span className="flex items-center text-[9px] font-medium uppercase tracking-[0.18em] text-sage-400 transition-transform group-hover/archive:translate-x-1">
               Explore <ArrowRight size={10} className="ml-2" />
             </span>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="rounded-[2rem] border border-champagne-100 bg-white p-5 md:col-span-1 md:p-6"
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">Next Schedule</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-sage-700">다음 일정</h3>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sage-50 text-sage-500">
+              <Flag size={18} />
+            </div>
+          </div>
+          <div className="mt-5 rounded-[1.4rem] bg-champagne-50/70 p-4">
+            <p className="text-[15px] font-semibold text-sage-700">{nextSchedule.title}</p>
+            <p className="mt-2 text-sm font-medium text-sage-500">{nextSchedule.date}</p>
+            <p className="mt-1 text-xs text-sage-400">📍 {nextSchedule.location}</p>
+            <p className="mt-4 break-keep text-xs leading-5 text-sage-400">{nextSchedule.note}</p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="rounded-[2rem] border border-champagne-100 bg-[#243326] p-5 text-white md:col-span-2 md:p-6"
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">Hall of Fame</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">명예의 전당</h3>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-[#f6df9f]">
+              <Crown size={18} />
+            </div>
+          </div>
+          <div className="mt-5 grid gap-2 sm:grid-cols-3">
+            {hallOfFame.map((item) => (
+              <div key={item.label} className="rounded-[1.2rem] border border-white/10 bg-white/8 p-3">
+                <p className="text-[10px] font-semibold tracking-[0.12em] text-white/45">{item.label}</p>
+                <p className="mt-2 truncate text-base font-semibold">{item.name}</p>
+                <p className="mt-1 text-xs text-[#f6df9f]">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="rounded-[2rem] border border-champagne-100 bg-white p-5 md:col-span-1 md:p-6"
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">Pairing</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-sage-700">이번 라운드 조</h3>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sage-50 text-sage-500">
+              <ListChecks size={18} />
+            </div>
+          </div>
+          <div className="mt-5 space-y-2">
+            {nextRoundGroups.map((group) => (
+              <div key={group.group} className="rounded-[1.2rem] bg-champagne-50/70 p-3">
+                <p className="text-[10px] font-bold tracking-[0.14em] text-sage-300">{group.group}</p>
+                <p className="mt-2 break-keep text-sm font-semibold leading-5 text-sage-600">{group.members.join(' · ')}</p>
+              </div>
+            ))}
           </div>
         </motion.div>
       </motion.div>
