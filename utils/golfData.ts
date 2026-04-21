@@ -333,9 +333,9 @@ export interface NextSchedule {
 
 export const nextSchedule: NextSchedule = {
   title: '2회 정기 라운드',
-  date: '일정 조율 중',
-  location: '추후 공지',
-  note: '코스와 시간을 확정하면 이 카드에 바로 업데이트됩니다.',
+  date: '2026.06.13 (토) · 티업 미정',
+  location: '크리스탈C',
+  note: '점심 12:00 천련소나무 예정. 티업 시간은 확정 후 업데이트됩니다.',
 };
 
 export interface HallOfFameItem {
@@ -356,6 +356,8 @@ export interface RoundGroup {
 }
 
 export const nextRoundGroups: RoundGroup[] = [
-  { group: '1조', members: ['정재엽', '모성진', '김성진', '이상우'] },
-  { group: '2조', members: ['유만종', '양창운', '김영웅', '신연성'] },
+  { group: '1조', members: ['이상우', '정재엽', '모성진'] },
+  { group: '2조', members: ['김효민', '김영웅', '양창운'] },
+  { group: '3조', members: ['신연성', '김도윤', '유만종'] },
+  { group: '미정', members: ['김성태', '김성진'] },
 ];

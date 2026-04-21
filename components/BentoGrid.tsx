@@ -295,7 +295,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="rounded-[2rem] border border-champagne-100 bg-white p-5 md:col-span-1 md:p-6"
+          className="rounded-[2rem] border border-champagne-100 bg-white p-5 md:col-span-2 md:p-6"
         >
           <div className="flex items-start justify-between">
             <div>
@@ -351,7 +351,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
               <ListChecks size={18} />
             </div>
           </div>
-          <div className="mt-5 space-y-2">
+          <div className="mt-5 grid gap-2 sm:grid-cols-2">
             {nextRoundGroups.map((group) => (
               <div key={group.group} className="rounded-[1.2rem] bg-champagne-50/70 p-3">
                 <p className="text-[10px] font-bold tracking-[0.14em] text-sage-300">{group.group}</p>
