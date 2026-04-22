@@ -12,7 +12,6 @@ import {
 import {
   Users,
   Trophy,
-  ArrowUpRight,
   Clock,
   ArrowRight,
   Map as MapIcon,
@@ -143,7 +142,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] border-2 border-transparent bg-white p-5 hover:border-sage-100 md:mt-0 md:col-span-1 md:row-span-1 md:min-h-[260px] md:p-8"
+          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] border-2 border-transparent bg-white p-5 hover:border-sage-100 md:mt-0 md:col-span-2 md:row-span-1 md:p-8"
           onClick={() => onNavigate('records')}
         >
           <div className="flex items-start justify-between">
@@ -152,31 +151,26 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </div>
             <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">Round</span>
           </div>
-          <div className="mt-12 md:mt-14">
-            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드 요약</h3>
-            <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
+          <div className="mt-8">
+            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드</h3>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-champagne-50/70 p-3">
+                <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-sage-300">날짜</p>
+                <p className="mt-2 text-sm font-semibold text-sage-600">{latestRecord?.date}</p>
+              </div>
+              <div className="rounded-2xl bg-champagne-50/70 p-3">
+                <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-sage-300">우승</p>
+                <p className="mt-2 text-sm font-semibold text-sage-600">{latestRecord?.winner}</p>
+              </div>
+              <div className="rounded-2xl bg-champagne-50/70 p-3">
+                <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-sage-300">코스</p>
+                <p className="mt-2 break-keep text-sm font-semibold leading-5 text-sage-600">{latestRecord?.location}</p>
+              </div>
+            </div>
             <div className="mt-4 flex items-center space-x-1 text-sage-300">
               <Clock size={12} />
-              <span className="text-[10px] font-medium uppercase tracking-[0.16em]">{latestRecord?.winner} 우승</span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.16em]">기록 상세 보기</span>
             </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] bg-sage-50 p-5 md:mt-0 md:col-span-1 md:row-span-1 md:min-h-[260px] md:p-8"
-          onClick={() => onNavigate('records')}
-        >
-          <div className="flex items-start justify-between">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-sage-400 shadow-sm transition-colors group-hover:text-sage-500">
-              <Trophy size={24} />
-            </div>
-            <ArrowUpRight size={18} className="text-sage-200 transition-colors group-hover:text-sage-400" />
-          </div>
-          <div className="mt-12 md:mt-14">
-            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 코스</h3>
-            <p className="mt-1 break-keep text-[11px] uppercase tracking-[0.16em] text-sage-400">{latestRecord?.date}</p>
-            <p className="mt-4 break-keep text-sm leading-6 text-sage-500">{latestRecord?.location}</p>
           </div>
         </motion.div>
 
