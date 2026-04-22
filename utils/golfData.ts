@@ -334,7 +334,7 @@ export interface NextSchedule {
 export const nextSchedule: NextSchedule = {
   title: '2회 정기 라운드',
   date: '2026.06.13 (토) · 티업 미정',
-  location: '크리스탈C',
+  location: '코브스윙CC',
   note: '점심 12:00 천련소나무 예정. 티업 시간은 확정 후 업데이트됩니다.',
 };
 
@@ -356,8 +356,7 @@ export interface RoundGroup {
 }
 
 export const nextRoundGroups: RoundGroup[] = [
-  { group: '1조', members: ['이상우', '정재엽', '모성진'] },
-  { group: '2조', members: ['김효민', '김영웅', '양창운'] },
-  { group: '3조', members: ['신연성', '김도윤', '유만종'] },
-  { group: '미정', members: ['김성태', '김성진'] },
+  { group: '1조', members: ['이상우', '김효민', '신연성', '김성태'] },
+  { group: '2조', members: ['정재엽', '김영웅', '김도윤', '미정'] },
+  { group: '3조', members: ['모성진', '양창운', '유만종', '김성진'] },
 ];
