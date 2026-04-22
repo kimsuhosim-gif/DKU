@@ -24,7 +24,6 @@ import {
   HeartHandshake,
   Flag,
   Crown,
-  ListChecks,
 } from 'lucide-react';
 import { ViewState } from '../App';
 
@@ -306,6 +305,14 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             <p className="mt-1 text-xs text-sage-400">📍 {nextSchedule.location}</p>
             <p className="mt-4 break-keep text-xs leading-5 text-sage-400">{nextSchedule.note}</p>
           </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+            {nextRoundGroups.map((group) => (
+              <div key={group.group} className="rounded-[1.1rem] bg-sage-50/70 p-3">
+                <p className="text-[10px] font-bold tracking-[0.14em] text-sage-300">{group.group}</p>
+                <p className="mt-2 break-keep text-xs font-semibold leading-5 text-sage-600">{group.members.join(' · ')}</p>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div
@@ -332,28 +339,6 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           </div>
         </motion.div>
 
-        <motion.div
-          variants={itemVariants}
-          className="rounded-[2rem] border border-champagne-100 bg-white p-5 md:col-span-1 md:p-6"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">Pairing</p>
-              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-sage-700">이번 라운드 조</h3>
-            </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sage-50 text-sage-500">
-              <ListChecks size={18} />
-            </div>
-          </div>
-          <div className="mt-5 grid gap-2 sm:grid-cols-2">
-            {nextRoundGroups.map((group) => (
-              <div key={group.group} className="rounded-[1.2rem] bg-champagne-50/70 p-3">
-                <p className="text-[10px] font-bold tracking-[0.14em] text-sage-300">{group.group}</p>
-                <p className="mt-2 break-keep text-sm font-semibold leading-5 text-sage-600">{group.members.join(' · ')}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );
