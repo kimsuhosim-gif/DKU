@@ -24,6 +24,7 @@ import {
   HeartHandshake,
   Flag,
   Crown,
+  Share2,
 } from 'lucide-react';
 import { ViewState } from '../App';
 
@@ -336,6 +337,54 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
                 <p className="mt-1 text-xs text-[#f6df9f]">{item.value}</p>
               </div>
             ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="overflow-hidden rounded-[2rem] border border-[#d9cfbb] bg-[#f9f4e9] p-5 md:col-span-2 md:p-6"
+        >
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">Share Card</p>
+              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-sage-700">단톡방 공유 카드</h3>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-sage-500 shadow-sm">
+              <Share2 size={18} />
+            </div>
+          </div>
+
+          <div className="mt-5 rounded-[1.5rem] bg-[#263525] p-5 text-white shadow-[0_22px_50px_-34px_rgba(35,45,30,0.7)]">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">DKU-RE09 Golf Club</p>
+                <p className="mt-2 text-lg font-semibold tracking-[-0.03em]">라운드 요약</p>
+              </div>
+              <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold text-[#f3dfaa]">{latestRecord?.date}</span>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-2xl bg-white/8 p-3">
+                <p className="text-[10px] font-semibold tracking-[0.12em] text-white/40">우승</p>
+                <p className="mt-2 text-lg font-semibold">{latestRecord?.winner}</p>
+              </div>
+              <div className="rounded-2xl bg-white/8 p-3">
+                <p className="text-[10px] font-semibold tracking-[0.12em] text-white/40">참가</p>
+                <p className="mt-2 text-lg font-semibold">{latestRecord?.attendees.length}명</p>
+              </div>
+              <div className="rounded-2xl bg-white/8 p-3">
+                <p className="text-[10px] font-semibold tracking-[0.12em] text-white/40">회비 잔액</p>
+                <p className="mt-2 text-lg font-semibold">₩{balance.toLocaleString()}</p>
+              </div>
+              <div className="rounded-2xl bg-white/8 p-3">
+                <p className="text-[10px] font-semibold tracking-[0.12em] text-white/40">다음 라운드</p>
+                <p className="mt-2 break-keep text-sm font-semibold leading-5">{nextSchedule.date}</p>
+              </div>
+            </div>
+
+            <p className="mt-4 break-keep text-xs leading-5 text-white/55">
+              캡처해서 단톡방에 공유하기 좋은 요약 카드입니다.
+            </p>
           </div>
         </motion.div>
 
