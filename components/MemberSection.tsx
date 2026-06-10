@@ -89,7 +89,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         </p>
       </div>
 
-      <section className="mb-8 overflow-hidden rounded-[1.35rem] border border-[#c8a86b]/28 bg-[#16171b] shadow-[0_26px_80px_-64px_rgba(22,23,27,0.52)]">
+      <section className="mb-8 hidden overflow-hidden rounded-[1.35rem] border border-[#c8a86b]/28 bg-[#16171b] shadow-[0_26px_80px_-64px_rgba(22,23,27,0.52)] sm:block">
         <div className="relative aspect-[16/9]">
           <img src="/images/golf-lifestyle-member-wide.jpg" alt="Golf course member lifestyle" className="absolute inset-0 h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(22,23,27,0.68)_0%,rgba(22,23,27,0.34)_42%,rgba(22,23,27,0.02)_100%)]" />
@@ -109,7 +109,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7a715f]">참석 멤버</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {members.map((member, idx) => {
           const role = getRoleMeta(member.role);
 
@@ -119,11 +119,11 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.04 }}
-              className="luxury-card group relative flex flex-col overflow-hidden rounded-[1.25rem] p-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-[#a57f43]/34 hover:shadow-[0_24px_64px_-46px_rgba(12,18,13,0.62)] sm:rounded-[1.5rem] sm:p-6"
+              className="luxury-card group relative flex flex-col overflow-hidden rounded-[1rem] p-3 transition-all duration-500 hover:-translate-y-0.5 hover:border-[#a57f43]/34 hover:shadow-[0_24px_64px_-46px_rgba(12,18,13,0.62)] sm:rounded-[1.5rem] sm:p-6"
             >
-              <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <div className="relative z-10 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                 <div
-                  className="h-20 w-20 cursor-pointer overflow-hidden rounded-[1rem] border border-[#cdb786]/35 bg-[#fbf7ee] shadow-[0_16px_34px_-26px_rgba(12,18,13,0.55)] transition-transform duration-500 group-hover:scale-[1.03] sm:h-24 sm:w-24 sm:rounded-[1.2rem]"
+                  className="h-16 w-16 cursor-pointer overflow-hidden rounded-[0.8rem] border border-[#cdb786]/35 bg-[#fbf7ee] shadow-[0_16px_34px_-26px_rgba(12,18,13,0.55)] transition-transform duration-500 group-hover:scale-[1.03] sm:h-24 sm:w-24 sm:rounded-[1.2rem]"
                   onClick={() => setSelectedImage(member.img)}
                 >
                   <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
@@ -132,11 +132,11 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h4 className="truncate text-[1.35rem] font-bold leading-tight tracking-normal text-[#243321] sm:text-[1.75rem]">
+                      <h4 className="truncate text-lg font-bold leading-tight tracking-normal text-[#243321] sm:text-[1.75rem]">
                         {member.name}
                       </h4>
-                      <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <div className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold tracking-[0.14em] ${role.badgeClass}`}>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-1.5 sm:mt-2 sm:gap-2">
+                        <div className={`inline-flex rounded-full border px-2 py-0.5 text-[9px] font-bold tracking-[0.08em] sm:px-2.5 sm:py-1 sm:text-[10px] sm:tracking-[0.14em] ${role.badgeClass}`}>
                           {role.label}
                         </div>
                         {role.icon ? (
@@ -159,38 +159,38 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                     {member.phone ? (
                       <a
                         href={`tel:${member.phone}`}
-                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#cdb786]/28 bg-[#f7f1e6] text-[#34462f] transition-all duration-300 hover:bg-[#243321] hover:text-[#fbf7ee]"
+                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#cdb786]/28 bg-[#f7f1e6] text-[#34462f] transition-all duration-300 hover:bg-[#243321] hover:text-[#fbf7ee] sm:h-9 sm:w-9"
                         title="전화 걸기"
                         aria-label={`${member.name} 전화 걸기`}
                       >
-                        <Phone size={15} />
+                        <Phone size={14} />
                       </a>
                     ) : null}
                   </div>
                 </div>
               </div>
 
-              <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
-                <div className="rounded-[0.85rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">
+              <div className="relative z-10 mt-3 grid grid-cols-3 gap-1 sm:mt-5 sm:gap-3">
+                <div className="rounded-[0.7rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-1.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:rounded-[0.85rem] sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[8px] font-extrabold tracking-normal text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">
                     <span className="sm:hidden">핸디</span>
                     <span className="hidden sm:inline">핸디캡</span>
                   </span>
                   <span
-                    className={`whitespace-nowrap text-sm font-bold tracking-normal text-[#243321] sm:text-base ${
+                    className={`whitespace-nowrap text-xs font-bold tracking-normal text-[#243321] sm:text-base ${
                       member.handicap === '신규' ? 'text-[0.82rem] sm:text-base' : ''
                     }`}
                   >
                     {member.handicap}
                   </span>
                 </div>
-                <div className="rounded-[0.85rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
-                  <span className="text-sm font-bold text-[#243321] sm:text-base">{member.averageScore}</span>
+                <div className="rounded-[0.7rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-1.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:rounded-[0.85rem] sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[8px] font-extrabold tracking-normal text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
+                  <span className="text-xs font-bold text-[#243321] sm:text-base">{member.averageScore}</span>
                 </div>
-                <div className="rounded-[0.85rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">참가</span>
-                  <span className="text-sm font-bold text-[#243321] sm:text-base">{member.rounds}</span>
+                <div className="rounded-[0.7rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-1.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:rounded-[0.85rem] sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[8px] font-extrabold tracking-normal text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">참가</span>
+                  <span className="text-xs font-bold text-[#243321] sm:text-base">{member.rounds}</span>
                 </div>
               </div>
 

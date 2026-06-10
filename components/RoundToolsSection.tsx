@@ -516,12 +516,6 @@ const RoundToolsSection: React.FC<RoundToolsSectionProps> = ({ onBack }) => {
                 </div>
               </div>
 
-              <div className="mt-5 overflow-hidden rounded-[1.4rem] border border-[#d6c5a8]">
-                <div className="relative h-36 sm:h-44">
-                  <img src="/images/golf-lifestyle-award-wide.jpg" alt="Award card visual" className="h-full w-full object-cover object-center" />
-                </div>
-              </div>
-
               <div className="mt-6 rounded-[1.4rem] border border-[#d6c5a8] bg-[#fbf7ef] p-3">
                 <div className="space-y-3 md:hidden">
                   {scoreRows.map((row, index) => (
