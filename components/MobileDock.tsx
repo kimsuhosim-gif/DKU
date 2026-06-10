@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, House, Map, Trophy, Users } from 'lucide-react';
+import { Calculator, House, Map, Sparkles, Users } from 'lucide-react';
 import { ViewState } from '../App';
 
 interface MobileDockProps {
@@ -8,17 +8,17 @@ interface MobileDockProps {
 }
 
 const items: { label: string; view: ViewState; icon: React.ComponentType<{ size?: number }> }[] = [
-  { label: 'Home', view: 'home', icon: House },
-  { label: 'Archive', view: 'gallery', icon: Camera },
-  { label: 'Ranking', view: 'ranking', icon: Trophy },
-  { label: 'Members', view: 'members', icon: Users },
-  { label: 'Map', view: 'map', icon: Map },
+  { label: '홈', view: 'home', icon: House },
+  { label: '내기', view: 'bets', icon: Calculator },
+  { label: '도구', view: 'tools', icon: Sparkles },
+  { label: '멤버', view: 'members', icon: Users },
+  { label: '지도', view: 'map', icon: Map },
 ];
 
 const MobileDock: React.FC<MobileDockProps> = ({ currentView, onNavigate }) => {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/70 bg-[#fcfaf6]/92 px-3 pb-[calc(env(safe-area-inset-bottom)+0.7rem)] pt-3 shadow-[0_-20px_45px_-35px_rgba(34,48,34,0.45)] backdrop-blur-xl lg:hidden">
-      <div className="mx-auto grid max-w-md grid-cols-5 gap-2 rounded-[1.6rem] border border-[#e6ddd2] bg-white/75 p-2">
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#16171b]/8 bg-[#fbfaf7]/94 px-3 pb-[calc(env(safe-area-inset-bottom)+0.7rem)] pt-3 shadow-[0_-20px_48px_-38px_rgba(22,23,27,0.36)] backdrop-blur-xl lg:hidden">
+      <div className="mx-auto grid max-w-md grid-cols-5 gap-2 rounded-[1.1rem] border border-[#c8a86b]/28 bg-white/72 p-2">
         {items.map((item) => {
           const Icon = item.icon;
           const active = currentView === item.view;
@@ -26,12 +26,12 @@ const MobileDock: React.FC<MobileDockProps> = ({ currentView, onNavigate }) => {
             <button
               key={item.view}
               onClick={() => onNavigate(item.view)}
-              className={`flex flex-col items-center justify-center gap-1 rounded-[1.1rem] px-2 py-2.5 transition ${
-                active ? 'bg-[#2d382d] text-white' : 'text-[#5f6a5a]'
+              className={`flex min-w-0 flex-col items-center justify-center gap-1 rounded-[0.9rem] px-1 py-2.5 transition ${
+                active ? 'bg-[#6d1f2a] text-[#fbfaf7]' : 'text-[#4f4b47]'
               }`}
             >
               <Icon size={18} />
-              <span className="text-[9px] font-semibold uppercase tracking-[0.16em]">{item.label}</span>
+              <span className="max-w-full truncate text-[10px] font-bold tracking-normal">{item.label}</span>
             </button>
           );
         })}

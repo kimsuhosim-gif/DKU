@@ -11,14 +11,13 @@ import {
   Trophy,
   Wallet,
 } from 'lucide-react';
-import { COURSE_LOCATIONS, galleryPhotos, getProcessRankings, members, records } from '../utils/golfData';
+import { ACCOUNT_NUMBER, COURSE_LOCATIONS, clubFinanceSummary, galleryPhotos, getProcessRankings, members, records } from '../utils/golfData';
 
 const ledgerTransactions = [
-  { date: '2025.11.29', desc: '분기 회비 수납', amount: 1600000 },
-  { date: '2025.11.29', desc: '골프용품 구매', amount: -300000 },
-  { date: '2025.11.29', desc: '라운드 간식 및 음료', amount: -15000 },
-  { date: '2025.11.29', desc: '네임 스티커 제작', amount: -33000 },
-  { date: '2025.11.29', desc: '라운드 뒤풀이 식사', amount: -580000 },
+  { date: '2026', desc: '25년 이월 회비', amount: clubFinanceSummary.carriedBalance2025 },
+  { date: '2026', desc: '26년 회비 납부액', amount: clubFinanceSummary.paidAmount2026 },
+  { date: '2026', desc: '26년 전반기 예상 지출', amount: -clubFinanceSummary.expectedFirstHalfExpense2026 },
+  { date: '2026', desc: '26년 하반기 예상 지출', amount: -clubFinanceSummary.expectedSecondHalfExpense2026 },
 ];
 
 const fadeInUp = {
@@ -41,7 +40,7 @@ const NewArchiveSite: React.FC = () => {
     latestRecord && latestRecord.attendees.length
       ? Math.round(latestRecord.attendees.reduce((sum, player) => sum + player.score, 0) / latestRecord.attendees.length)
       : 0;
-  const balance = ledgerTransactions.reduce((acc, entry) => acc + entry.amount, 0);
+  const balance = clubFinanceSummary.currentCash;
   const recentScores = latestRecord?.attendees.slice().sort((a, b) => a.score - b.score) ?? [];
 
   const scrollToSection = (id: string) => {
@@ -449,7 +448,7 @@ const NewArchiveSite: React.FC = () => {
                   </div>
                   <div className="rounded-[1.5rem] bg-[#ece2d5] p-5 text-[#101822]">
                     <p className="text-[10px] uppercase tracking-[0.18em] text-[#6a7682]">회비 계좌</p>
-                    <p className="mt-4 break-all text-[1rem] leading-8">KakaoBank 3333-16-4428815</p>
+                    <p className="mt-4 break-all text-[1rem] leading-8">KakaoBank {ACCOUNT_NUMBER}</p>
                   </div>
                 </div>
 

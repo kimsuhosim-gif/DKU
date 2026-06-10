@@ -72,16 +72,20 @@
 
 :root {
   color-scheme: light;
-  --bg: #f6f0e8;
-  --bg-soft: #fbf8f2;
-  --surface: rgba(255, 255, 255, 0.78);
+  --bg: #f6f2eb;
+  --bg-soft: #fbfaf7;
+  --surface: rgba(251, 250, 247, 0.9);
   --surface-strong: #ffffff;
-  --line: rgba(45, 56, 45, 0.12);
-  --text: #243124;
-  --muted: #6d756d;
-  --accent: #50604a;
-  --accent-soft: #e8efe3;
-  --gold: #c9a66b;
+  --line: rgba(22, 23, 27, 0.11);
+  --text: #16171b;
+  --muted: #6e665a;
+  --accent: #6d1f2a;
+  --accent-soft: #ece5da;
+  --gold: #c8a86b;
+  --deep: #16171b;
+  --oxblood: #6d1f2a;
+  --petrol: #1d4d55;
+  --font-a2z: "A2Z", "Outfit", sans-serif;
   --font-a2z: "A2Z", "에이투지체", "Outfit", sans-serif;
 }
 
@@ -97,8 +101,8 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 30%),
-    linear-gradient(180deg, #f7f1e8 0%, #f4eee4 100%);
+    linear-gradient(115deg, rgba(255, 255, 255, 0.82) 0%, rgba(246, 242, 235, 0.96) 46%, rgba(229, 235, 235, 0.88) 100%),
+    linear-gradient(180deg, #fbfaf7 0%, #f6f2eb 48%, #eceff0 100%);
   color: var(--text);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -120,7 +124,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-a2z);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .font-serif,
@@ -139,7 +143,7 @@ button {
 }
 
 ::selection {
-  background: rgba(80, 96, 74, 0.18);
+  background: rgba(200, 168, 107, 0.3);
   color: var(--text);
 }
 
@@ -156,7 +160,7 @@ button {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.035;
   background-image:
     linear-gradient(transparent 0, transparent calc(100% - 1px), rgba(0, 0, 0, 0.08) calc(100% - 1px)),
     linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(0, 0, 0, 0.06) calc(100% - 1px));
@@ -164,7 +168,34 @@ button {
 }
 
 .soft-shadow {
-  box-shadow: 0 30px 80px -55px rgba(34, 48, 34, 0.45);
+  box-shadow: 0 34px 92px -58px rgba(22, 23, 27, 0.42);
+}
+
+.luxury-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(246, 242, 235, 0.88)),
+    linear-gradient(135deg, rgba(200, 168, 107, 0.12), rgba(29, 77, 85, 0.06));
+  border: 1px solid rgba(200, 168, 107, 0.24);
+  box-shadow: 0 30px 90px -66px rgba(22, 23, 27, 0.48);
+}
+
+.luxury-dark {
+  background:
+    linear-gradient(135deg, rgba(109, 31, 42, 0.1), rgba(255, 255, 255, 0) 42%),
+    linear-gradient(180deg, #fbfaf7 0%, #ede7dd 100%);
+  border: 1px solid rgba(200, 168, 107, 0.28);
+}
+
+.luxury-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 242, 235, 0.92));
+  border: 1px solid rgba(200, 168, 107, 0.22);
+  box-shadow: 0 18px 52px -42px rgba(22, 23, 27, 0.34);
+}
+
+.luxury-chip {
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(200, 168, 107, 0.24);
+  color: #1d4d55;
 }
 
 ::-webkit-scrollbar {
@@ -172,11 +203,11 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(45, 56, 45, 0.04);
+  background: rgba(22, 23, 27, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(80, 96, 74, 0.25);
+  background: rgba(109, 31, 42, 0.28);
   border-radius: 999px;
   border: 2px solid rgba(255, 255, 255, 0.75);
 }

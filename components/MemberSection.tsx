@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Crown, Award, Medal, Phone, X } from 'lucide-react';
-import { getProcessRankings, records } from '../utils/golfData';
+import { getProcessRankings, memberPersonas, records } from '../utils/golfData';
 
 interface MemberSectionProps {
   onBack: () => void;
@@ -30,6 +30,14 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         wins,
         rounds,
         img: m.img,
+        latestScore: m.latestScore,
+        netScore: m.netScoreDisplay,
+        persona: memberPersonas[m.name] ?? {
+          title: '비공개 전력',
+          line: '기록이 쌓이면 캐릭터가 바로 정리될 멤버.',
+          tags: ['관찰 중', '신규 변수'],
+          watchPoint: '첫 공식 기록이 생기면 라이벌 보드에 올라올 수 있습니다.',
+        },
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -38,24 +46,24 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
     if (role === '회장') {
       return {
         label: '회장',
-        badgeClass: 'border-amber-200 bg-amber-100 text-amber-700',
+        badgeClass: 'border-[#a57f43]/30 bg-[#f0e6d2] text-[#6f512a]',
         icon: <Crown size={12} />,
-        iconClass: 'bg-amber-100 text-amber-600',
+        iconClass: 'bg-[#f0e6d2] text-[#6f512a]',
       };
     }
 
     if (role === '총무') {
       return {
         label: '총무',
-        badgeClass: 'border-blue-200 bg-blue-100 text-blue-700',
+        badgeClass: 'border-[#34462f]/20 bg-[#e8ebe2] text-[#34462f]',
         icon: <Medal size={12} />,
-        iconClass: 'bg-blue-100 text-blue-600',
+        iconClass: 'bg-[#e8ebe2] text-[#34462f]',
       };
     }
 
     return {
       label: '정회원',
-      badgeClass: 'border-sage-100 bg-sage-50 text-sage-600',
+      badgeClass: 'border-[#cdb786]/24 bg-[#f4eee3] text-[#34462f]',
       icon: null,
       iconClass: '',
     };
@@ -65,23 +73,43 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
       <button
         onClick={onBack}
-        className="group mb-8 flex items-center space-x-2 text-[11px] font-medium uppercase tracking-[0.22em] text-sage-400 transition-colors hover:text-sage-600 sm:mb-12"
+        className="group mb-8 flex items-center space-x-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#6f7668] transition-colors hover:text-[#243321] sm:mb-12"
       >
         <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
         <span>대시보드로 돌아가기</span>
       </button>
 
-      <div className="mb-8 flex flex-col gap-4 sm:mb-16 md:flex-row md:items-end md:justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:mb-10 md:flex-row md:items-end md:justify-between">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">멤버 디렉토리</span>
-          <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">클럽 멤버</h2>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#6f7668] sm:text-xs">멤버 명단</span>
+          <h2 className="mt-3 text-3xl font-bold text-[#243321] sm:text-5xl">이번 라운딩 멤버</h2>
         </div>
-        <p className="max-w-sm text-sm italic text-sage-400">
-          현재 핸디캡, 평균 타수, 참가 횟수를 한 번에 볼 수 있도록 멤버 현황을 정리했습니다.
+        <p className="max-w-sm text-sm italic text-[#686b62]">
+          참석자, 역할, 핸디와 최근 기록만 간단하게 확인하는 전용 명단입니다.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+      <section className="mb-8 overflow-hidden rounded-[1.35rem] border border-[#c8a86b]/28 bg-[#16171b] shadow-[0_26px_80px_-64px_rgba(22,23,27,0.52)]">
+        <div className="relative aspect-[16/9]">
+          <img src="/images/member-lifestyle-banner-ai.png" alt="Luxury poolside member mood" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(22,23,27,0.68)_0%,rgba(22,23,27,0.34)_42%,rgba(22,23,27,0.02)_100%)]" />
+          <div className="relative z-10 flex h-full max-w-md flex-col justify-end p-4 text-[#fbfaf7] sm:p-6">
+            <p className="text-[9px] font-bold tracking-[0.18em] text-[#d9c08c] sm:text-[10px]">멤버 명단</p>
+            <h3 className="mt-1.5 break-keep text-xl font-bold leading-tight sm:text-2xl">
+              멤버 명단 소개
+            </h3>
+            <p className="mt-2 max-w-sm break-keep text-xs font-semibold leading-5 text-white/76 sm:text-sm sm:leading-6">
+              이번 라운딩 참석 멤버와 기본 정보를 한눈에 정리했습니다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="mb-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7a715f]">참석 멤버</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {members.map((member, idx) => {
           const role = getRoleMeta(member.role);
 
@@ -91,14 +119,11 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.04 }}
-              className="group relative flex flex-col overflow-hidden rounded-[1.8rem] border border-[#eadfce] bg-[linear-gradient(180deg,rgba(255,252,247,0.96)_0%,rgba(247,244,236,0.94)_100%)] p-3 shadow-[0_18px_40px_-30px_rgba(145,153,122,0.3)] transition-all duration-500 hover:bg-[linear-gradient(180deg,rgba(255,252,247,1)_0%,rgba(242,248,238,0.98)_100%)] sm:rounded-[2.4rem] sm:p-6"
+              className="luxury-card group relative flex flex-col overflow-hidden rounded-[1.25rem] p-4 transition-all duration-500 hover:-translate-y-0.5 hover:border-[#a57f43]/34 hover:shadow-[0_24px_64px_-46px_rgba(12,18,13,0.62)] sm:rounded-[1.5rem] sm:p-6"
             >
-              <div className="absolute -right-8 -top-8 h-16 w-16 rounded-full bg-[#f1f5e8] opacity-60 transition-transform duration-700 group-hover:scale-150 sm:-right-10 sm:-top-10 sm:h-28 sm:w-28" />
-              <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-r from-[#f8f3dd]/35 via-white/0 to-[#edf6e7]/25 opacity-80" />
-
               <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <div
-                  className="h-20 w-20 cursor-pointer overflow-hidden rounded-2xl border border-champagne-100 bg-white shadow-md transition-transform duration-500 group-hover:scale-105 sm:h-24 sm:w-24 sm:rounded-[2rem]"
+                  className="h-20 w-20 cursor-pointer overflow-hidden rounded-[1rem] border border-[#cdb786]/35 bg-[#fbf7ee] shadow-[0_16px_34px_-26px_rgba(12,18,13,0.55)] transition-transform duration-500 group-hover:scale-[1.03] sm:h-24 sm:w-24 sm:rounded-[1.2rem]"
                   onClick={() => setSelectedImage(member.img)}
                 >
                   <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
@@ -107,7 +132,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h4 className="truncate text-[1.35rem] font-bold leading-tight tracking-[-0.03em] text-sage-600 sm:text-[1.75rem]">
+                      <h4 className="truncate text-[1.35rem] font-bold leading-tight tracking-normal text-[#243321] sm:text-[1.75rem]">
                         {member.name}
                       </h4>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -121,7 +146,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                         ) : null}
                         {member.wins > 0 ? (
                           <div
-                            className="flex items-center gap-1 rounded-full bg-rose-100 px-2 py-1 text-rose-600 shadow-sm"
+                            className="flex items-center gap-1 rounded-full border border-[#5a2a24]/14 bg-[#f0e2dc] px-2 py-1 text-[#5a2a24] shadow-sm"
                             title={`우승 ${member.wins}회`}
                           >
                             <Award size={12} />
@@ -134,7 +159,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                     {member.phone ? (
                       <a
                         href={`tel:${member.phone}`}
-                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage-50 text-sage-500 transition-all duration-300 hover:bg-sage-600 hover:text-white"
+                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#cdb786]/28 bg-[#f7f1e6] text-[#34462f] transition-all duration-300 hover:bg-[#243321] hover:text-[#fbf7ee]"
                         title="전화 걸기"
                         aria-label={`${member.name} 전화 걸기`}
                       >
@@ -146,28 +171,29 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               </div>
 
               <div className="relative z-10 mt-4 grid grid-cols-3 gap-2 sm:mt-5 sm:gap-3">
-                <div className="rounded-xl border border-[#efe6d7] bg-white/80 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(120,130,100,0.45)] sm:rounded-2xl sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">
+                <div className="rounded-[0.85rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">
                     <span className="sm:hidden">핸디</span>
                     <span className="hidden sm:inline">핸디캡</span>
                   </span>
                   <span
-                    className={`whitespace-nowrap text-sm font-bold tracking-[-0.04em] text-sage-600 sm:text-base ${
+                    className={`whitespace-nowrap text-sm font-bold tracking-normal text-[#243321] sm:text-base ${
                       member.handicap === '신규' ? 'text-[0.82rem] sm:text-base' : ''
                     }`}
                   >
                     {member.handicap}
                   </span>
                 </div>
-                <div className="rounded-xl border border-[#efe6d7] bg-white/80 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(120,130,100,0.45)] sm:rounded-2xl sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
-                  <span className="text-sm font-bold text-sage-600 sm:text-base">{member.averageScore}</span>
+                <div className="rounded-[0.85rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">평균</span>
+                  <span className="text-sm font-bold text-[#243321] sm:text-base">{member.averageScore}</span>
                 </div>
-                <div className="rounded-xl border border-[#efe6d7] bg-white/80 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(120,130,100,0.45)] sm:rounded-2xl sm:px-4 sm:py-3">
-                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-sage-300 sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">참가</span>
-                  <span className="text-sm font-bold text-sage-600 sm:text-base">{member.rounds}</span>
+                <div className="rounded-[0.85rem] border border-[#cdb786]/24 bg-[#fbf7ee]/78 px-2.5 py-2 shadow-[0_10px_24px_-24px_rgba(12,18,13,0.5)] sm:px-4 sm:py-3">
+                  <span className="mb-1 block text-[9px] font-extrabold tracking-[0.08em] text-[#7b8c6a] sm:text-[8px] sm:uppercase sm:tracking-[0.2em]">참가</span>
+                  <span className="text-sm font-bold text-[#243321] sm:text-base">{member.rounds}</span>
                 </div>
               </div>
+
             </motion.div>
           );
         })}

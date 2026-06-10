@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import BentoGrid from './components/BentoGrid';
+import ClubBrief from './components/ClubBrief';
+import MoneyGameSection from './components/MoneyGameSection';
+import RoundToolsSection from './components/RoundToolsSection';
 import MobileDock from './components/MobileDock';
 import Footer from './components/Footer';
 import MemberSection from './components/MemberSection';
@@ -16,7 +18,7 @@ import GallerySection from './components/GallerySection';
 import PasswordGate from './components/PasswordGate';
 import NewArchiveSite from './components/NewArchiveSite';
 
-export type ViewState = 'home' | 'members' | 'records' | 'ledger' | 'weather' | 'map' | 'ranking' | 'gallery';
+export type ViewState = 'home' | 'members' | 'records' | 'ledger' | 'weather' | 'map' | 'ranking' | 'gallery' | 'bets' | 'tools';
 
 const App: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,10 +63,10 @@ const App: React.FC = () => {
       {hashRoute === '#/new-archive' ? (
         <NewArchiveSite />
       ) : (
-      <div className="min-h-screen bg-champagne-50 font-sans selection:bg-sage-200 selection:text-sage-600">
+      <div className="min-h-screen bg-[#f6f2eb] font-sans selection:bg-champagne-200 selection:text-[#16171b]">
         <Navbar isScrolled={isScrolled} setView={navigateTo} currentView={currentView} />
 
-        <main className="pb-28 pt-16 sm:pb-0 sm:pt-20">
+        <main className={currentView === 'home' ? 'pb-28 sm:pb-0' : 'pb-28 pt-16 sm:pb-0 sm:pt-20'}>
           <AnimatePresence mode="wait">
             {currentView === 'home' && (
               <motion.div
@@ -79,9 +81,9 @@ const App: React.FC = () => {
                   <Hero onNavigate={navigateTo} />
                 </section>
 
-                <section id="content" className="bg-[#f3ede3] px-4 py-10 sm:px-6 sm:py-16">
+                <section id="content" className="bg-[linear-gradient(180deg,#e4e9e8_0%,#f6f2eb_7rem,#eef1f1_100%)] px-4 py-8 sm:px-6 sm:py-12 lg:py-14">
                   <div className="mx-auto max-w-7xl">
-                    <BentoGrid onNavigate={navigateTo} />
+                    <ClubBrief onNavigate={navigateTo} />
                   </div>
                 </section>
               </motion.div>
@@ -95,7 +97,7 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-white"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <MemberSection onBack={() => navigateTo('home')} />
               </motion.section>
@@ -109,7 +111,7 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-champagne-50"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <RecordsSection onBack={() => navigateTo('home')} />
               </motion.section>
@@ -123,7 +125,7 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-white"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <LedgerSection onBack={() => navigateTo('home')} />
               </motion.section>
@@ -137,7 +139,7 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-champagne-50"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <WeatherSection onBack={() => navigateTo('home')} />
               </motion.section>
@@ -151,7 +153,7 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-white"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <MapSection onBack={() => navigateTo('home')} />
               </motion.section>
@@ -165,7 +167,7 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-champagne-50"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <RankingSection onBack={() => navigateTo('home')} />
               </motion.section>
@@ -179,9 +181,37 @@ const App: React.FC = () => {
                 animate="animate"
                 exit="exit"
                 transition={pageTransition}
-                className="min-h-screen bg-champagne-50"
+                className="min-h-screen bg-[#f6f2eb]"
               >
                 <GallerySection onBack={() => navigateTo('home')} />
+              </motion.section>
+            )}
+
+            {currentView === 'bets' && (
+              <motion.section
+                key="bets"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+                className="min-h-screen bg-[#f6f2eb]"
+              >
+                <MoneyGameSection onBack={() => navigateTo('home')} />
+              </motion.section>
+            )}
+
+            {currentView === 'tools' && (
+              <motion.section
+                key="tools"
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+                className="min-h-screen bg-[#f6f2eb]"
+              >
+                <RoundToolsSection onBack={() => navigateTo('home')} />
               </motion.section>
             )}
           </AnimatePresence>

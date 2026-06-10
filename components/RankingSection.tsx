@@ -36,42 +36,57 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
         </p>
       </div>
 
-      <div className="mb-10 grid grid-cols-3 items-end gap-2 sm:mb-16 sm:gap-8">
+      <div className="mb-10 grid grid-cols-1 items-stretch gap-4 sm:mb-16 md:grid-cols-3 md:items-end md:gap-6 lg:gap-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative order-1 flex h-[150px] flex-col items-center justify-center rounded-[1.5rem] border border-sage-100 bg-sage-50 p-3 text-center sm:h-[320px] sm:rounded-[3rem] sm:p-8"
+          className="relative order-2 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-sage-100 bg-sage-50 p-4 text-left sm:min-h-[18rem] sm:rounded-[3rem] sm:p-6 md:order-1 md:h-[320px]"
         >
-          <div className="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm sm:left-6 sm:top-6 sm:h-10 sm:w-10">
-            <Medal size={12} className="text-sage-200" />
+          <img
+            src="/images/ranking-silver-model-ai.png"
+            alt="은메달 시상 모델"
+            className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[52%_center]"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,250,248,0.99)_0%,rgba(248,250,248,0.92)_43%,rgba(248,250,248,0.32)_73%,rgba(248,250,248,0.02)_100%)]" />
+          <div className="absolute left-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/92 shadow-sm sm:left-6 sm:top-6 sm:h-10 sm:w-10">
+            <Medal size={15} className="text-sage-300" />
           </div>
-          <div className="mb-2 h-11 w-11 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-6 sm:h-24 sm:w-24 sm:border-4">
-            <img src={podium[1].img} alt={podium[1].name} className="h-full w-full object-cover" />
-          </div>
-          <span className="text-[7px] font-bold uppercase tracking-[0.16em] text-sage-300 sm:text-[10px] sm:tracking-[0.3em]">2위</span>
-          <h3 className="mt-1 text-xs font-bold text-sage-600 sm:mt-2 sm:text-2xl">{podium[1].name}</h3>
-          <div className="mt-2 rounded-full border border-champagne-100 bg-white px-2 py-1 font-mono text-[9px] text-sage-400 sm:mt-4 sm:px-4 sm:text-xs">
-            {podium[1].netScoreDisplay}
+          <div className="relative z-10 flex h-full max-w-[52%] flex-col justify-center">
+            <div className="mb-3 h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-5 sm:h-24 sm:w-24 sm:border-4">
+              <img src={podium[1].img} alt={podium[1].name} className="h-full w-full object-cover" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-sage-300">2위</span>
+            <h3 className="mt-2 break-keep text-2xl font-bold leading-tight text-sage-600 sm:text-3xl md:text-2xl">{podium[1].name}</h3>
+            <div className="mt-3 w-fit rounded-full border border-champagne-100 bg-white/92 px-4 py-1.5 font-mono text-xs font-bold text-sage-500 shadow-sm">
+              {podium[1].netScoreDisplay}
+            </div>
           </div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative order-2 flex h-[190px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-3 text-center shadow-xl sm:h-[400px] sm:rounded-[4rem] sm:p-10 sm:shadow-2xl"
+          className="relative order-1 flex min-h-[16rem] overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-4 text-left shadow-xl sm:min-h-[22rem] sm:rounded-[4rem] sm:p-7 sm:shadow-2xl md:order-2 md:h-[400px]"
         >
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-champagne-100/20 to-transparent" />
-          <div className="absolute top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-champagne-100 shadow-md sm:top-8 sm:h-12 sm:w-12">
-            <Crown size={14} className="fill-amber-500/20 text-amber-500" />
+          <img
+            src="/images/ranking-gold-model-ai.png"
+            alt="금메달 시상 모델"
+            className="absolute inset-y-0 right-0 h-full w-[58%] object-cover object-[54%_center]"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(255,255,255,0.92)_41%,rgba(255,255,255,0.26)_72%,rgba(255,255,255,0.02)_100%)]" />
+          <div className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-champagne-100/95 shadow-md sm:left-7 sm:top-7 sm:h-12 sm:w-12">
+            <Crown size={18} className="fill-amber-500/20 text-amber-500" />
           </div>
-          <div className="relative z-10 mb-2 h-16 w-16 overflow-hidden rounded-full border-2 border-champagne-100 shadow-xl sm:mb-6 sm:h-32 sm:w-32 sm:border-4">
-            <img src={podium[0].img} alt={podium[0].name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-          </div>
-          <span className="relative z-10 text-[8px] font-bold uppercase tracking-[0.2em] text-amber-500 sm:text-xs sm:tracking-[0.5em]">1위</span>
-          <h3 className="relative z-10 mt-1 text-lg font-bold text-sage-600 sm:mt-3 sm:text-4xl">{podium[0].name}</h3>
-          <div className="relative z-10 mt-2 rounded-full bg-sage-400 px-3 py-1 font-mono text-[10px] text-white shadow-lg shadow-sage-400/20 sm:mt-6 sm:px-8 sm:py-2 sm:text-sm">
-            {podium[0].netScoreDisplay}
+          <div className="relative z-10 flex h-full max-w-[52%] flex-col justify-center pt-6 sm:pt-8">
+            <div className="mb-3 h-20 w-20 overflow-hidden rounded-full border-2 border-champagne-100 shadow-xl sm:mb-5 sm:h-32 sm:w-32 sm:border-4">
+              <img src={podium[0].img} alt={podium[0].name} className="h-full w-full object-cover" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-[0.32em] text-amber-500">1위</span>
+            <h3 className="mt-2 break-keep text-4xl font-bold leading-tight text-sage-600 sm:text-5xl md:text-4xl">{podium[0].name}</h3>
+            <div className="mt-4 w-fit rounded-full bg-sage-400 px-6 py-2 font-mono text-sm font-bold text-white shadow-lg shadow-sage-400/20">
+              {podium[0].netScoreDisplay}
+            </div>
           </div>
         </motion.div>
 
@@ -79,18 +94,26 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="relative order-3 flex h-[140px] flex-col items-center justify-center rounded-[1.5rem] border border-champagne-100 bg-white p-3 text-center sm:h-[280px] sm:rounded-[3rem] sm:p-8"
+          className="relative order-3 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-champagne-100 bg-white p-4 text-left sm:min-h-[17rem] sm:rounded-[3rem] sm:p-6 md:h-[280px]"
         >
-          <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-champagne-50 sm:right-6 sm:top-6 sm:h-8 sm:w-8">
-            <Medal size={10} className="text-amber-800/30" />
+          <img
+            src="/images/ranking-bronze-model-ai.png"
+            alt="동메달 시상 모델"
+            className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[51%_center]"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.9)_42%,rgba(255,255,255,0.3)_73%,rgba(255,255,255,0.02)_100%)]" />
+          <div className="absolute left-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-champagne-50/95 shadow-sm sm:left-6 sm:top-6">
+            <Medal size={15} className="text-amber-800/35" />
           </div>
-          <div className="mb-2 h-10 w-10 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-4 sm:h-20 sm:w-20 sm:border-4">
-            <img src={podium[2].img} alt={podium[2].name} className="h-full w-full object-cover" />
-          </div>
-          <span className="text-[7px] font-bold uppercase tracking-[0.16em] text-sage-300 sm:text-[10px] sm:tracking-[0.2em]">3위</span>
-          <h3 className="mt-1 text-xs font-bold text-sage-600 sm:mt-2 sm:text-xl">{podium[2].name}</h3>
-          <div className="mt-2 rounded-full bg-champagne-50 px-2 py-1 font-mono text-[9px] text-sage-400 sm:px-4 sm:text-xs">
-            {podium[2].netScoreDisplay}
+          <div className="relative z-10 flex h-full max-w-[52%] flex-col justify-center">
+            <div className="mb-3 h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-4 sm:h-20 sm:w-20 sm:border-4">
+              <img src={podium[2].img} alt={podium[2].name} className="h-full w-full object-cover" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-sage-300">3위</span>
+            <h3 className="mt-2 break-keep text-2xl font-bold leading-tight text-sage-600 sm:text-3xl md:text-xl">{podium[2].name}</h3>
+            <div className="mt-3 w-fit rounded-full bg-champagne-50/95 px-4 py-1.5 font-mono text-xs font-bold text-sage-500 shadow-sm">
+              {podium[2].netScoreDisplay}
+            </div>
           </div>
         </motion.div>
       </div>

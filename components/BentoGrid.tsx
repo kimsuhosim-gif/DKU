@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
+  ACCOUNT_NUMBER,
   clubEvents,
+  clubFinanceSummary,
   galleryPhotos,
   getProcessRankings,
   hallOfFame,
@@ -34,7 +36,7 @@ interface BentoGridProps {
 const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
   const latestRecord = records[0];
   const ranking = getProcessRankings();
-  const balance = 510500;
+  const balance = clubFinanceSummary.currentCash;
   const latestEvent = clubEvents[0];
 
   const containerVariants = {
@@ -68,7 +70,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-sage-400">클럽 라운지</p>
         <div className="mt-4 grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
-            <h2 className="font-serif text-3xl italic leading-[1.02] tracking-[-0.03em] text-sage-700 sm:text-5xl">
+            <h2 className="font-serif text-3xl italic leading-[1.02] tracking-normal text-sage-700 sm:text-5xl">
               라운드 기록과
               <br />
               동기 모임의 흐름.
@@ -111,8 +113,8 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
               </div>
               <div>
                 <p className="text-[9px] font-medium uppercase tracking-[0.16em] opacity-70">클럽 자산</p>
-                <p className="text-[1.45rem] font-semibold tracking-[-0.03em]">₩{balance.toLocaleString()}</p>
-                <p className="mt-0.5 text-[10px] opacity-80">카카오뱅크 3333-16-4428815</p>
+                <p className="text-[1.45rem] font-semibold tracking-normal">₩{balance.toLocaleString()}</p>
+                <p className="mt-0.5 text-[10px] opacity-80">카카오뱅크 {ACCOUNT_NUMBER}</p>
               </div>
             </div>
             <div className="hidden flex-col items-end text-right sm:flex">
@@ -141,7 +143,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] border-2 border-transparent bg-white p-5 hover:border-sage-100 md:mt-0 md:col-span-2 md:row-span-1 md:p-8"
+          className="group -mt-1 flex cursor-pointer flex-col rounded-[2rem] border border-[#d6c5a8] bg-[#fffaf2] p-5 hover:border-[#b9975b]/40 md:mt-0 md:col-span-2 md:row-span-1 md:p-8"
           onClick={() => onNavigate('records')}
         >
           <div className="flex items-start justify-between">
@@ -151,7 +153,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-sage-300">Round</span>
           </div>
           <div className="mt-8">
-            <h3 className="font-sans text-xl font-semibold tracking-[-0.02em] text-sage-600">최근 라운드</h3>
+            <h3 className="font-sans text-xl font-semibold tracking-normal text-sage-600">최근 라운드</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <div className="rounded-2xl bg-champagne-50/70 p-3">
                 <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-sage-300">날짜</p>
@@ -175,7 +177,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group flex cursor-pointer flex-col rounded-[2rem] bg-white p-5 md:col-span-2 md:row-span-1 md:p-8"
+          className="group flex cursor-pointer flex-col rounded-[2rem] border border-[#d6c5a8] bg-[#fffaf2] p-5 md:col-span-2 md:row-span-1 md:p-8"
           onClick={() => onNavigate('ranking')}
         >
           <div className="flex items-start justify-between">
@@ -209,7 +211,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group/event flex flex-col overflow-hidden rounded-[2rem] border border-[#e7dcc9] bg-[#fcf8ef] p-5 md:col-span-2 md:row-span-1 md:p-6"
+          className="group/event flex flex-col overflow-hidden rounded-[2rem] border border-[#d6c5a8] bg-[#fffaf2] p-5 md:col-span-2 md:row-span-1 md:p-6"
         >
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -224,9 +226,9 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="mt-6 rounded-[1.5rem] border border-champagne-100 bg-white/75 p-4">
+          <div className="mt-6 rounded-[1.5rem] border border-[#d6c5a8] bg-[#fffaf2]/75 p-4">
             <div className="flex items-start gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fff4df] text-lg shadow-sm">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#efe3d1] text-lg shadow-sm">
                   {latestEvent.emoji}
               </span>
               <div className="min-w-0 flex-1">
@@ -236,7 +238,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
                   </span>
                   <span className="text-[11px] font-semibold text-sage-400">{latestEvent.date}</span>
                 </div>
-                <p className="mt-2 truncate text-base font-semibold tracking-[-0.03em] text-sage-700">{latestEvent.title}</p>
+                <p className="mt-2 truncate text-base font-semibold tracking-normal text-sage-700">{latestEvent.title}</p>
                 {latestEvent.venue ? (
                   <p className="mt-1 truncate text-[13px] font-semibold text-sage-500">📍 {latestEvent.venue}</p>
                 ) : null}
@@ -247,7 +249,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="group/archive flex cursor-pointer flex-col overflow-visible rounded-[2rem] border border-champagne-100 bg-white md:col-span-2 md:row-span-1"
+          className="group/archive flex cursor-pointer flex-col overflow-visible rounded-[2rem] border border-[#d6c5a8] bg-[#fffaf2] md:col-span-2 md:row-span-1"
           onClick={() => onNavigate('gallery')}
         >
           <div className="flex items-center justify-between p-5 pb-4 md:p-8 md:pb-4">
@@ -288,12 +290,12 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="rounded-[2rem] border border-champagne-100 bg-white p-5 md:col-span-2 md:p-6"
+          className="rounded-[2rem] border border-[#d6c5a8] bg-[#fffaf2] p-5 md:col-span-2 md:p-6"
         >
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sage-300">Next Schedule</p>
-              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-sage-700">다음 일정</h3>
+              <h3 className="mt-2 text-xl font-semibold tracking-normal text-sage-700">다음 일정</h3>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sage-50 text-sage-500">
               <Flag size={18} />
@@ -317,23 +319,23 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
 
         <motion.div
           variants={itemVariants}
-          className="rounded-[2rem] border border-champagne-100 bg-[#243326] p-5 text-white md:col-span-2 md:p-6"
+          className="rounded-[2rem] border border-[#344433] bg-[#172117] p-5 text-[#fffaf2] md:col-span-2 md:p-6"
         >
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">Hall of Fame</p>
-              <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">명예의 전당</h3>
+              <h3 className="mt-2 text-xl font-semibold tracking-normal">명예의 전당</h3>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-[#f6df9f]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-[#d8c39a]">
               <Crown size={18} />
             </div>
           </div>
           <div className="mt-5 grid gap-2 sm:grid-cols-3">
             {hallOfFame.map((item) => (
-              <div key={item.label} className="rounded-[1.2rem] border border-white/10 bg-white/8 p-3">
+              <div key={item.label} className="rounded-[1.2rem] border border-white/10 bg-white/10 p-3">
                 <p className="text-[10px] font-semibold tracking-[0.12em] text-white/45">{item.label}</p>
                 <p className="mt-2 truncate text-base font-semibold">{item.name}</p>
-                <p className="mt-1 text-xs text-[#f6df9f]">{item.value}</p>
+                <p className="mt-1 text-xs text-[#d8c39a]">{item.value}</p>
               </div>
             ))}
           </div>

@@ -6,6 +6,7 @@ import { records, COURSE_LOCATIONS } from '../utils/golfData';
 declare global {
   interface Window {
     naver: any;
+    navermap_authFailure?: () => void;
   }
 }
 
@@ -26,20 +27,14 @@ interface MapProject {
 
 const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
 const MAP_ID = 'map';
-const NAVER_MAP_CLIENT_ID = '02j9jku1mt';
+const NAVER_MAP_CLIENT_ID = import.meta.env.VITE_NAVER_MAP_CLIENT_ID;
+const NAVER_MAP_SCRIPT_URL = import.meta.env.VITE_NAVER_MAP_SCRIPT_URL;
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const naverMapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
-
-  useEffect(() => {
-    (window as any).setNaverMapError = () => setMapStatus('error');
-    return () => {
-      (window as any).setNaverMapError = null;
-    };
-  }, []);
 
   const projects: MapProject[] = useMemo(() => {
     return records
@@ -63,14 +58,22 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   useEffect(() => {
     let retryCount = 0;
     const maxRetries = 20;
+    let retryTimer: number | undefined;
+    let isCancelled = false;
+
+    const setMapError = () => {
+      if (!isCancelled) setMapStatus('error');
+    };
 
     const initMap = () => {
+      if (isCancelled) return;
+
       if (!window.naver || !window.naver.maps) {
         if (retryCount < maxRetries) {
           retryCount++;
-          setTimeout(initMap, 200);
+          retryTimer = window.setTimeout(initMap, 200);
         } else {
-          setMapStatus('error');
+          setMapError();
         }
         return;
       }
@@ -115,12 +118,47 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
         setMapStatus('ready');
       } catch (err) {
         console.error('Naver Map Init Error:', err);
-        setMapStatus('error');
+        setMapError();
       }
     };
 
-    const timer = setTimeout(initMap, 500);
-    return () => clearTimeout(timer);
+    const loadMapScript = () => {
+      window.navermap_authFailure = setMapError;
+
+      if (!NAVER_MAP_SCRIPT_URL) {
+        setMapError();
+        return;
+      }
+
+      if (window.naver?.maps) {
+        initMap();
+        return;
+      }
+
+      let script = document.querySelector<HTMLScriptElement>('script[data-naver-map-script="true"]');
+
+      if (!script) {
+        script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = NAVER_MAP_SCRIPT_URL;
+        script.async = true;
+        script.defer = true;
+        script.dataset.naverMapScript = 'true';
+        document.head.appendChild(script);
+      }
+
+      script.addEventListener('load', initMap, { once: true });
+      script.addEventListener('error', setMapError, { once: true });
+      retryTimer = window.setTimeout(initMap, 500);
+    };
+
+    loadMapScript();
+
+    return () => {
+      isCancelled = true;
+      if (retryTimer) window.clearTimeout(retryTimer);
+      if (window.navermap_authFailure === setMapError) window.navermap_authFailure = undefined;
+    };
   }, [projects]);
 
   useEffect(() => {
