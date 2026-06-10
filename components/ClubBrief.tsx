@@ -74,14 +74,6 @@ const ClubBrief: React.FC<ClubBriefProps> = ({ onNavigate }) => {
       view: 'ranking' as ViewState,
       accent: 'text-[#b08a4d]',
     },
-    {
-      label: '참석 현황',
-      value: `${nextRoundParticipants.length}명`,
-      detail: `${nextRoundGroups.length}팀 · 게스트 포함`,
-      icon: Users,
-      view: 'members' as ViewState,
-      accent: 'text-[#1d4d55]',
-    },
   ];
 
   const quickActions = [
@@ -146,7 +138,7 @@ const ClubBrief: React.FC<ClubBriefProps> = ({ onNavigate }) => {
         </aside>
 
         <div className="min-w-0 space-y-3">
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-2">
             {briefCards.map((card) => {
               const Icon = card.icon;
               return (
