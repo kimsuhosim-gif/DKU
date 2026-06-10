@@ -17,11 +17,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         className="absolute inset-0 z-0"
       >
         <img
-          src="/images/clubhouse-hero-ai.png"
-          alt="DKU-RE09 private golf house"
-          className="h-full w-full object-cover brightness-[1.06] contrast-[1.06] saturate-[0.96]"
+          src="/images/golf-lifestyle-hero-wide.jpg"
+          alt="DKU-RE09 golf course lifestyle"
+          className="h-full w-full object-cover object-[76%_center] brightness-[1.06] contrast-[1.06] saturate-[0.96] md:object-center"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(251,250,247,0.72)_0%,rgba(251,250,247,0.42)_34%,rgba(246,242,235,0.1)_62%,rgba(22,23,27,0.08)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(251,250,247,0.78)_0%,rgba(251,250,247,0.54)_34%,rgba(246,242,235,0.14)_62%,rgba(22,23,27,0.04)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(251,250,247,0.18)_0%,rgba(251,250,247,0)_48%,rgba(246,242,235,0.7)_100%)]" />
       </motion.div>
 

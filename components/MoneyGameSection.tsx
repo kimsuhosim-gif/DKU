@@ -365,7 +365,7 @@ const MoneyGameSection: React.FC<MoneyGameSectionProps> = ({ onBack }) => {
 
             <div className="mt-6 overflow-hidden rounded-[1.4rem] border border-[#d8c39a]/24 bg-white/8">
               <div className="relative aspect-[16/10]">
-                <img src="/images/money-game-ai.png" alt="Money game desk visual" className="h-full w-full object-cover" />
+                <img src="/images/golf-lifestyle-white-visor.jpg" alt="Golf cart lifestyle" className="h-full w-full object-cover object-[50%_44%]" />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,16,0.02)_0%,rgba(16,24,16,0.72)_100%)]" />
               </div>
             </div>

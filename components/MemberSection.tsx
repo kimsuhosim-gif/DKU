@@ -91,7 +91,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
 
       <section className="mb-8 overflow-hidden rounded-[1.35rem] border border-[#c8a86b]/28 bg-[#16171b] shadow-[0_26px_80px_-64px_rgba(22,23,27,0.52)]">
         <div className="relative aspect-[16/9]">
-          <img src="/images/member-lifestyle-banner-ai.png" alt="Luxury poolside member mood" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <img src="/images/golf-lifestyle-member-wide.jpg" alt="Golf course member lifestyle" className="absolute inset-0 h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(22,23,27,0.68)_0%,rgba(22,23,27,0.34)_42%,rgba(22,23,27,0.02)_100%)]" />
           <div className="relative z-10 flex h-full max-w-md flex-col justify-end p-4 text-[#fbfaf7] sm:p-6">
             <p className="text-[9px] font-bold tracking-[0.18em] text-[#d9c08c] sm:text-[10px]">멤버 명단</p>

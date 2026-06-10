@@ -151,7 +151,7 @@ const drawRoundPosterCard = async () => {
     await document.fonts.ready;
   }
 
-  const image = await loadCanvasImage('/images/round-poster-model-ai.png');
+  const image = await loadCanvasImage('/images/golf-lifestyle-black-fairway.jpg');
   const canvas = document.createElement('canvas');
   const width = 1080;
   const height = 1350;
@@ -469,7 +469,7 @@ const RoundToolsSection: React.FC<RoundToolsSectionProps> = ({ onBack }) => {
 
             <div className="mt-4 overflow-hidden rounded-[1.4rem] border border-[#d8c39a]/24 bg-white/8">
               <div className="relative aspect-[4/5]">
-                <img src="/images/round-poster-model-ai.png" alt="Round poster preview" className="h-full w-full object-cover" />
+                <img src="/images/golf-lifestyle-black-fairway.jpg" alt="Round poster preview" className="h-full w-full object-cover object-[52%_center]" />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,24,16,0.08)_0%,rgba(16,24,16,0.78)_100%)]" />
                 <div className="absolute inset-x-0 bottom-0 p-3">
                   <button
@@ -518,7 +518,7 @@ const RoundToolsSection: React.FC<RoundToolsSectionProps> = ({ onBack }) => {
 
               <div className="mt-5 overflow-hidden rounded-[1.4rem] border border-[#d6c5a8]">
                 <div className="relative h-36 sm:h-44">
-                  <img src="/images/award-card-ai.png" alt="Award card visual" className="h-full w-full object-cover" />
+                  <img src="/images/golf-lifestyle-award-wide.jpg" alt="Award card visual" className="h-full w-full object-cover object-center" />
                 </div>
               </div>
 

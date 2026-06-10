@@ -44,9 +44,9 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           className="relative order-2 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-sage-100 bg-sage-50 p-4 text-left sm:min-h-[18rem] sm:rounded-[3rem] sm:p-6 md:order-1 md:h-[320px]"
         >
           <img
-            src="/images/ranking-silver-model-ai.png"
-            alt="은메달 시상 모델"
-            className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[52%_center]"
+            src="/images/golf-lifestyle-white-visor.jpg"
+            alt="은메달 랭킹 배경"
+            className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[54%_center]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,250,248,0.99)_0%,rgba(248,250,248,0.92)_43%,rgba(248,250,248,0.32)_73%,rgba(248,250,248,0.02)_100%)]" />
           <div className="absolute left-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/92 shadow-sm sm:left-6 sm:top-6 sm:h-10 sm:w-10">
@@ -70,9 +70,9 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           className="relative order-1 flex min-h-[16rem] overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-4 text-left shadow-xl sm:min-h-[22rem] sm:rounded-[4rem] sm:p-7 sm:shadow-2xl md:order-2 md:h-[400px]"
         >
           <img
-            src="/images/ranking-gold-model-ai.png"
-            alt="금메달 시상 모델"
-            className="absolute inset-y-0 right-0 h-full w-[58%] object-cover object-[54%_center]"
+            src="/images/golf-lifestyle-white-cart.jpg"
+            alt="금메달 랭킹 배경"
+            className="absolute inset-y-0 right-0 h-full w-[58%] object-cover object-[52%_center]"
           />
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(255,255,255,0.92)_41%,rgba(255,255,255,0.26)_72%,rgba(255,255,255,0.02)_100%)]" />
           <div className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-champagne-100/95 shadow-md sm:left-7 sm:top-7 sm:h-12 sm:w-12">
@@ -97,9 +97,9 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           className="relative order-3 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-champagne-100 bg-white p-4 text-left sm:min-h-[17rem] sm:rounded-[3rem] sm:p-6 md:h-[280px]"
         >
           <img
-            src="/images/ranking-bronze-model-ai.png"
-            alt="동메달 시상 모델"
-            className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[51%_center]"
+            src="/images/golf-lifestyle-black-fairway.jpg"
+            alt="동메달 랭킹 배경"
+            className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[54%_center]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.9)_42%,rgba(255,255,255,0.3)_73%,rgba(255,255,255,0.02)_100%)]" />
           <div className="absolute left-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-champagne-50/95 shadow-sm sm:left-6 sm:top-6">
