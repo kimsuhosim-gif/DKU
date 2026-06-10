@@ -1,13 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import { ViewState } from '../App';
 
 interface HeroProps {
   onNavigate: (view: ViewState) => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
+const Hero: React.FC<HeroProps> = () => {
   return (
     <div className="relative flex min-h-[78svh] w-full items-center overflow-hidden bg-[#f6f2eb] md:min-h-[86vh]">
       <motion.div
@@ -58,27 +57,6 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           >
             라운드 일정, 회비, 순위, 멤버 소식을 한 화면에서 확인하는 09 전용 프라이빗 골프 하우스.
           </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-7 flex flex-col gap-3 sm:flex-row"
-          >
-            <button
-              onClick={() => onNavigate('records')}
-              className="inline-flex items-center justify-center gap-3 rounded-full bg-[#16171b] px-6 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-[#fbfaf7] shadow-[0_20px_48px_-34px_rgba(22,23,27,0.62)] transition hover:bg-[#6d1f2a]"
-            >
-              기록 보기
-              <ArrowRight size={16} />
-            </button>
-            <button
-              onClick={() => onNavigate('members')}
-              className="inline-flex items-center justify-center gap-3 rounded-full border border-[#c8a86b]/45 bg-white/54 px-6 py-4 text-[12px] font-bold uppercase tracking-[0.16em] text-[#16171b] shadow-[0_18px_42px_-36px_rgba(22,23,27,0.32)] backdrop-blur-md transition hover:border-[#6d1f2a]/45 hover:bg-white/78"
-            >
-              멤버 보기
-            </button>
-          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
