@@ -138,6 +138,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
           const RoleIcon = role.Icon;
           const TagIcon = tag.Icon;
           const tone = cardTones[idx % cardTones.length];
+          const companionImage = member.name === '신연성' ? '/images/member-companion-shinyeonsung.png' : null;
 
           return (
             <motion.article
@@ -160,18 +161,33 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
               </div>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_4%,var(--member-wash),transparent_38%)]" />
 
-              <div className="relative z-10 flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-4">
-                <button
-                  type="button"
-                  className="relative h-[4.15rem] w-[4.15rem] shrink-0 overflow-hidden rounded-[1rem] border border-white bg-[#f6efe3] shadow-[0_18px_34px_-24px_rgba(22,23,27,0.58)] transition-transform duration-500 group-hover:scale-[1.04] sm:h-[5.9rem] sm:w-[5.9rem] sm:rounded-[1.25rem]"
-                  onClick={() => setSelectedImage(member.img)}
-                  aria-label={`${member.name} 사진 크게 보기`}
-                >
-                  <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
-                  <span className="absolute inset-x-0 bottom-0 bg-black/38 py-1 text-[8px] font-bold text-white opacity-0 transition-opacity group-hover:opacity-100">
-                    VIEW
-                  </span>
-                </button>
+              <div className={`relative z-10 flex flex-col gap-2 ${companionImage ? 'sm:gap-3' : 'sm:flex-row sm:items-start sm:gap-4'}`}>
+                <div className={`relative w-fit shrink-0 ${companionImage ? 'pr-7 sm:pr-9' : ''}`}>
+                  <button
+                    type="button"
+                    className="relative h-[4.15rem] w-[4.15rem] shrink-0 overflow-hidden rounded-[1rem] border border-white bg-[#f6efe3] shadow-[0_18px_34px_-24px_rgba(22,23,27,0.58)] transition-transform duration-500 group-hover:scale-[1.04] sm:h-[5.9rem] sm:w-[5.9rem] sm:rounded-[1.25rem]"
+                    onClick={() => setSelectedImage(member.img)}
+                    aria-label={`${member.name} 사진 크게 보기`}
+                  >
+                    <img src={member.img} alt={member.name} className="h-full w-full object-cover" />
+                    <span className="absolute inset-x-0 bottom-0 bg-black/38 py-1 text-[8px] font-bold text-white opacity-0 transition-opacity group-hover:opacity-100">
+                      VIEW
+                    </span>
+                  </button>
+                  {companionImage ? (
+                    <button
+                      type="button"
+                      className="absolute -right-1 top-2 h-[3.35rem] w-[2.55rem] overflow-hidden rounded-[0.9rem] border border-white bg-[#f6efe3] shadow-[0_18px_34px_-24px_rgba(22,23,27,0.5)] transition-transform duration-500 group-hover:-rotate-1 group-hover:scale-[1.04] sm:-right-1 sm:top-2 sm:h-[4.65rem] sm:w-[3.55rem] sm:rounded-[1.1rem]"
+                      onClick={() => setSelectedImage(companionImage)}
+                      aria-label="신연성 카드 인물 사진 크게 보기"
+                    >
+                      <img src={companionImage} alt="신연성 카드 인물 컷" className="h-full w-full object-cover object-[50%_18%]" />
+                      <span className="absolute inset-x-1 bottom-1 rounded-full bg-black/42 px-1.5 py-0.5 text-[7px] font-bold text-white">
+                        GUEST
+                      </span>
+                    </button>
+                  ) : null}
+                </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
