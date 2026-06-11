@@ -1,0 +1,30 @@
+{
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "X-DKU-Build",
+          "value": "map-fix-20260611-3"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "X-DKU-Build",
+          "value": "map-fix-20260611-3"
+        }
+      ]
+    }
+  ]
+}

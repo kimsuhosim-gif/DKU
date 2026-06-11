@@ -27,15 +27,18 @@ interface MapProject {
 
 const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
 const MAP_ID = 'map';
+const NAVER_MAP_SCRIPT_VERSION = 'dku-re09-20260611-3';
 const normalizeMapEnv = (value?: string) => {
   const trimmed = value?.trim() ?? '';
   if (!trimmed || trimmed.includes('YOUR_')) return '';
   return trimmed;
 };
+const appendMapScriptVersion = (url: string) => `${url}${url.includes('?') ? '&' : '?'}siteVersion=${NAVER_MAP_SCRIPT_VERSION}`;
 const NAVER_MAP_CLIENT_ID = normalizeMapEnv(import.meta.env.VITE_NAVER_MAP_CLIENT_ID);
-const NAVER_MAP_SCRIPT_URL =
+const NAVER_MAP_SCRIPT_BASE_URL =
   normalizeMapEnv(import.meta.env.VITE_NAVER_MAP_SCRIPT_URL) ||
   (NAVER_MAP_CLIENT_ID ? `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(NAVER_MAP_CLIENT_ID)}` : '');
+const NAVER_MAP_SCRIPT_URL = NAVER_MAP_SCRIPT_BASE_URL ? appendMapScriptVersion(NAVER_MAP_SCRIPT_BASE_URL) : '';
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
@@ -80,6 +83,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
 
     const setMapError = (reason: typeof mapErrorReason = 'init') => {
       if (!isCancelled) {
+        if (naverMapRef.current && reason !== 'missing-key' && reason !== 'script') return;
         setMapErrorReason(reason);
         setMapStatus('error');
       }
