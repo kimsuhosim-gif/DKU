@@ -40,6 +40,7 @@ const NAVER_MAP_SCRIPT_URL =
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [mapErrorReason, setMapErrorReason] = useState<'missing-key' | 'auth' | 'script' | 'timeout' | 'init'>('missing-key');
   const naverMapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
 
@@ -63,9 +64,13 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   }, []);
   const fallbackProject = selectedProject ?? projects[0];
   const fallbackMapUrl = fallbackProject ? `https://map.naver.com/v5/search/${encodeURIComponent(fallbackProject.name)}` : 'https://map.naver.com';
-  const mapErrorMessage = NAVER_MAP_SCRIPT_URL
-    ? '네이버 클라우드 콘솔에서 현재 도메인 허용 여부를 확인해주세요.'
-    : '배포 환경변수 VITE_NAVER_MAP_CLIENT_ID가 빠져 있습니다.';
+  const mapErrorMessages = {
+    'missing-key': '배포 환경변수 VITE_NAVER_MAP_CLIENT_ID가 빠져 있습니다.',
+    auth: '네이버 클라우드 콘솔에서 Web 서비스 URL과 Maps API 사용 설정을 확인해주세요.',
+    script: '네이버 지도 스크립트를 불러오지 못했습니다. 네트워크나 API 키 상태를 확인해주세요.',
+    timeout: '네이버 지도 객체가 제시간에 준비되지 않았습니다. 잠시 후 다시 열어주세요.',
+    init: '지도 화면 초기화 중 오류가 발생했습니다. 지도 영역과 코스 좌표를 다시 확인합니다.',
+  } satisfies Record<typeof mapErrorReason, string>;
 
   useEffect(() => {
     let retryCount = 0;
@@ -73,8 +78,11 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
     let retryTimer: number | undefined;
     let isCancelled = false;
 
-    const setMapError = () => {
-      if (!isCancelled) setMapStatus('error');
+    const setMapError = (reason: typeof mapErrorReason = 'init') => {
+      if (!isCancelled) {
+        setMapErrorReason(reason);
+        setMapStatus('error');
+      }
     };
 
     const initMap = () => {
@@ -85,7 +93,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
           retryCount++;
           retryTimer = window.setTimeout(initMap, 200);
         } else {
-          setMapError();
+          setMapError('timeout');
         }
         return;
       }
@@ -100,8 +108,6 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
           center: new window.naver.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
           zoom: 11,
           minZoom: 7,
-          maxWidth: '100%',
-          maxHeight: '100%',
           zoomControl: true,
           zoomControlOptions: {
             position: window.naver.maps.Position.TOP_RIGHT,
@@ -130,15 +136,15 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
         setMapStatus('ready');
       } catch (err) {
         console.error('Naver Map Init Error:', err);
-        setMapError();
+        setMapError('init');
       }
     };
 
     const loadMapScript = () => {
-      window.navermap_authFailure = setMapError;
+      window.navermap_authFailure = () => setMapError('auth');
 
       if (!NAVER_MAP_SCRIPT_URL) {
-        setMapError();
+        setMapError('missing-key');
         return;
       }
 
@@ -165,7 +171,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
       }
 
       script.addEventListener('load', initMap, { once: true });
-      script.addEventListener('error', setMapError, { once: true });
+      script.addEventListener('error', () => setMapError('script'), { once: true });
       retryTimer = window.setTimeout(initMap, 500);
     };
 
@@ -174,7 +180,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
     return () => {
       isCancelled = true;
       if (retryTimer) window.clearTimeout(retryTimer);
-      if (window.navermap_authFailure === setMapError) window.navermap_authFailure = undefined;
+      window.navermap_authFailure = undefined;
     };
   }, [projects]);
 
@@ -229,8 +235,8 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-sage-100 bg-sage-50 shadow-inner sm:min-h-[560px] sm:rounded-[4rem] lg:col-span-8">
-          <div id={MAP_ID} className="h-full w-full" style={{ borderRadius: '4rem' }} />
+        <div className="relative h-[420px] overflow-hidden rounded-[2rem] border border-sage-100 bg-sage-50 shadow-inner sm:h-[560px] sm:rounded-[4rem] lg:col-span-8">
+          <div id={MAP_ID} className="absolute inset-0 h-full w-full" style={{ borderRadius: 'inherit' }} />
 
           <AnimatePresence>
             {mapStatus !== 'ready' && (
@@ -252,9 +258,9 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                     </div>
                     <p className="mb-2 font-serif text-sm italic text-sage-600">네이버 지도 연결 확인 필요</p>
                     <p className="text-[10px] leading-relaxed text-sage-400">
-                      {mapErrorMessage}
+                      {mapErrorMessages[mapErrorReason]}
                       <br />
-                      키 상태: {NAVER_MAP_SCRIPT_URL ? '설정됨' : '미설정'}
+                      상태: {mapErrorReason === 'auth' ? '도메인/API 인증 확인' : NAVER_MAP_SCRIPT_URL ? '키 설정됨' : '키 미설정'}
                     </p>
                     <a
                       href={fallbackMapUrl}
