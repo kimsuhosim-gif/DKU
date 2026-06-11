@@ -10,6 +10,7 @@ interface RankingSectionProps {
 const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
   const processedData = useMemo(() => getProcessRankings(), []);
   const podium = processedData.slice(0, 3);
+  const fourthRank = processedData[3];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
@@ -36,7 +37,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
         </p>
       </div>
 
-      <div className="mb-10 grid grid-cols-1 items-stretch gap-4 sm:mb-16 md:grid-cols-3 md:items-end md:gap-6 lg:gap-8">
+      <div className="mb-10 grid grid-cols-1 items-stretch gap-4 sm:mb-16 md:grid-cols-2 md:items-end md:gap-6 xl:grid-cols-4 lg:gap-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -116,6 +117,35 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             </div>
           </div>
         </motion.div>
+
+        {fourthRank ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="relative order-4 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-[#e5d7bd] bg-[#fbf8f1] p-4 text-left sm:min-h-[17rem] sm:rounded-[3rem] sm:p-6 md:h-[260px]"
+          >
+            <img
+              src="/images/ranking-fourth-shinyeonsung.png"
+              alt="4위 신연성 랭킹 컷"
+              className="absolute inset-y-0 right-0 h-full w-[58%] object-cover object-[52%_center]"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(251,248,241,0.99)_0%,rgba(251,248,241,0.92)_43%,rgba(251,248,241,0.28)_73%,rgba(251,248,241,0.02)_100%)]" />
+            <div className="absolute left-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/92 shadow-sm sm:left-6 sm:top-6">
+              <Medal size={15} className="text-[#8b2331]/70" />
+            </div>
+            <div className="relative z-10 flex h-full max-w-[52%] flex-col justify-center">
+              <div className="mb-3 h-14 w-14 overflow-hidden rounded-full border-2 border-white shadow-lg sm:mb-4 sm:h-20 sm:w-20 sm:border-4">
+                <img src={fourthRank.img} alt={fourthRank.name} className="h-full w-full object-cover" />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8b2331]/70">4위</span>
+              <h3 className="mt-2 break-keep text-2xl font-bold leading-tight text-sage-600 sm:text-3xl md:text-xl">{fourthRank.name}</h3>
+              <div className="mt-3 w-fit rounded-full bg-white/95 px-4 py-1.5 font-mono text-xs font-bold text-[#8b2331] shadow-sm">
+                {fourthRank.netScoreDisplay}
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
       </div>
 
       <div className="space-y-3">
