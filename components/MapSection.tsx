@@ -27,8 +27,15 @@ interface MapProject {
 
 const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
 const MAP_ID = 'map';
-const NAVER_MAP_CLIENT_ID = import.meta.env.VITE_NAVER_MAP_CLIENT_ID;
-const NAVER_MAP_SCRIPT_URL = import.meta.env.VITE_NAVER_MAP_SCRIPT_URL;
+const normalizeMapEnv = (value?: string) => {
+  const trimmed = value?.trim() ?? '';
+  if (!trimmed || trimmed.includes('YOUR_')) return '';
+  return trimmed;
+};
+const NAVER_MAP_CLIENT_ID = normalizeMapEnv(import.meta.env.VITE_NAVER_MAP_CLIENT_ID);
+const NAVER_MAP_SCRIPT_URL =
+  normalizeMapEnv(import.meta.env.VITE_NAVER_MAP_SCRIPT_URL) ||
+  (NAVER_MAP_CLIENT_ID ? `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(NAVER_MAP_CLIENT_ID)}` : '');
 
 const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
@@ -54,6 +61,11 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
       })
       .filter((p) => p !== null) as MapProject[];
   }, []);
+  const fallbackProject = selectedProject ?? projects[0];
+  const fallbackMapUrl = fallbackProject ? `https://map.naver.com/v5/search/${encodeURIComponent(fallbackProject.name)}` : 'https://map.naver.com';
+  const mapErrorMessage = NAVER_MAP_SCRIPT_URL
+    ? '네이버 클라우드 콘솔에서 현재 도메인 허용 여부를 확인해주세요.'
+    : '배포 환경변수 VITE_NAVER_MAP_CLIENT_ID가 빠져 있습니다.';
 
   useEffect(() => {
     let retryCount = 0;
@@ -136,6 +148,11 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
       }
 
       let script = document.querySelector<HTMLScriptElement>('script[data-naver-map-script="true"]');
+
+      if (script && script.getAttribute('src') !== NAVER_MAP_SCRIPT_URL) {
+        script.remove();
+        script = null;
+      }
 
       if (!script) {
         script = document.createElement('script');
@@ -233,12 +250,20 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-400">
                       <ExternalLink size={20} />
                     </div>
-                    <p className="mb-2 font-serif text-sm italic text-sage-600">네이버 지도 인증 실패</p>
+                    <p className="mb-2 font-serif text-sm italic text-sage-600">네이버 지도 연결 확인 필요</p>
                     <p className="text-[10px] leading-relaxed text-sage-400">
-                      네이버 클라우드 서비스 URL과 클라이언트 ID를 확인해주세요.
+                      {mapErrorMessage}
                       <br />
-                      현재 Client ID: {NAVER_MAP_CLIENT_ID || 'Not configured'}
+                      키 상태: {NAVER_MAP_SCRIPT_URL ? '설정됨' : '미설정'}
                     </p>
+                    <a
+                      href={fallbackMapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-5 rounded-full bg-[#03C75A] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow-md transition-all hover:bg-[#02b351] active:scale-95"
+                    >
+                      네이버 지도에서 열기
+                    </a>
                   </div>
                 )}
               </motion.div>
