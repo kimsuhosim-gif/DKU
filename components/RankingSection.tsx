@@ -13,8 +13,12 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
   const fourthRank = processedData[3];
   const formatGrossScore = (score: number | string) => (typeof score === 'number' ? `${score}타` : '-');
   const formatAverageScore = (score: string) => (score === '-' ? '-' : `평균 ${score}타`);
-  const getRankSideImage = (memberName: string | undefined, fallback: string) =>
-    memberName === '신연성' ? '/images/ranking-fourth-shinyeonsung.png' : fallback;
+  const rankSideImages = [
+    '/images/ranking-side-1.png',
+    '/images/ranking-side-2.png',
+    '/images/ranking-side-3.png',
+    '/images/ranking-side-4.png',
+  ];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
@@ -49,7 +53,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           className="relative order-2 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-sage-100 bg-sage-50 p-4 text-left sm:min-h-[18rem] sm:rounded-[3rem] sm:p-6 md:order-1 md:h-[320px]"
         >
           <img
-            src={getRankSideImage(podium[1]?.name, '/images/ranking-silver-model-ai.png')}
+            src={rankSideImages[1]}
             alt="2위 랭킹 컷"
             className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[52%_center]"
           />
@@ -75,7 +79,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           className="relative order-1 flex min-h-[16rem] overflow-hidden rounded-[2rem] border border-champagne-100 bg-white p-4 text-left shadow-xl sm:min-h-[22rem] sm:rounded-[4rem] sm:p-7 sm:shadow-2xl md:order-2 md:h-[400px]"
         >
           <img
-            src={getRankSideImage(podium[0]?.name, '/images/ranking-gold-model-ai.png')}
+            src={rankSideImages[0]}
             alt="1위 랭킹 컷"
             className="absolute inset-y-0 right-0 h-full w-[58%] object-cover object-[54%_center]"
           />
@@ -102,7 +106,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           className="relative order-3 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-champagne-100 bg-white p-4 text-left sm:min-h-[17rem] sm:rounded-[3rem] sm:p-6 md:h-[280px]"
         >
           <img
-            src={getRankSideImage(podium[2]?.name, '/images/ranking-bronze-model-ai.png')}
+            src={rankSideImages[2]}
             alt="3위 랭킹 컷"
             className="absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[51%_center]"
           />
@@ -130,7 +134,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             className="relative order-4 flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-[#e5d7bd] bg-[#fbf8f1] p-4 text-left sm:min-h-[17rem] sm:rounded-[3rem] sm:p-6 md:h-[260px]"
           >
             <img
-              src={getRankSideImage(fourthRank.name, '/images/ranking-silver-model-ai.png')}
+              src={rankSideImages[3]}
               alt="4위 랭킹 컷"
               className="absolute inset-y-0 right-0 h-full w-[58%] object-cover object-[52%_center]"
             />

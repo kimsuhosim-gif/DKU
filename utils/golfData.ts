@@ -223,7 +223,7 @@ export const members: MemberData[] = [
     holeScores: [[8, 6, 6, 5, 3, 4, 7, 3, 8, 5, 4, 5, 6, 7, 5, 4, 7, 6]],
     peoriaHandicap: 26.4,
     peoriaNet: 72.6,
-    img: '/images/profiles/members_이상우.svg',
+    img: '/images/profiles/members_이상우.png',
     since: '2026.04',
     phone: '01087862324',
   },
