@@ -416,7 +416,6 @@ export const calculateWHSIndex = (history: { gross: number; adjusted: number }[]
 export const getProcessRankings = () => {
   const latestAttendees = records[0]?.attendees ?? [];
   const latestParticipantNames = new Set(latestAttendees.map((attendee) => attendee.name));
-  const latestParticipantOrder = new Map(latestAttendees.map((attendee, index) => [attendee.name, index]));
 
   return members
     .map((m) => {
@@ -437,23 +436,31 @@ export const getProcessRankings = () => {
       const rankingHandicap = m.peoriaHandicap ?? newHandicap;
       const rankingNet = m.peoriaNet ?? (latestGross > 0 ? latestGross - rankingHandicap : 999);
       const net = latestGross > 0 ? parseFloat(rankingNet.toFixed(1)) : 999;
+      const roundCount = m.scoreHistory.length;
+      const grossAverage =
+        roundCount > 0 ? m.scoreHistory.reduce((sum, score) => sum + score, 0) / roundCount : 999;
+      const grossAverageDisplay = roundCount > 0 ? grossAverage.toFixed(1) : '-';
+      const lastRecordedScore = roundCount > 0 ? m.scoreHistory[0] : '-';
 
       return {
         ...m,
         whsHandicap: newHandicap,
         handicap: rankingHandicap,
         latestScore: latestGross === 0 ? '-' : latestGross,
+        lastRecordedScore,
+        roundCount,
+        grossAverageDisplay,
         latestAdjusted: latestAdjusted === 0 ? '-' : latestAdjusted,
         netScoreDisplay: latestGross > 0 ? rankingNet.toFixed(1) : '-',
         netScoreValue: net,
-        grossRankValue: latestGross > 0 ? latestGross : 999,
+        grossRankValue: grossAverage,
         improved: m.scoreHistory.length > 1 && latestGross < m.scoreHistory[1],
       };
     })
     .sort((a, b) => {
-      const orderA = latestParticipantOrder.get(a.name) ?? 999;
-      const orderB = latestParticipantOrder.get(b.name) ?? 999;
-      return a.grossRankValue - b.grossRankValue || orderA - orderB || a.netScoreValue - b.netScoreValue || a.name.localeCompare(b.name, 'ko');
+      const latestA = typeof a.lastRecordedScore === 'number' ? a.lastRecordedScore : 999;
+      const latestB = typeof b.lastRecordedScore === 'number' ? b.lastRecordedScore : 999;
+      return a.grossRankValue - b.grossRankValue || b.roundCount - a.roundCount || latestA - latestB || a.name.localeCompare(b.name, 'ko');
     });
 };
 

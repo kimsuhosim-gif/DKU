@@ -12,6 +12,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
   const podium = processedData.slice(0, 3);
   const fourthRank = processedData[3];
   const formatGrossScore = (score: number | string) => (typeof score === 'number' ? `${score}타` : '-');
+  const formatAverageScore = (score: string) => (score === '-' ? '-' : `평균 ${score}타`);
   const getRankSideImage = (memberName: string | undefined, fallback: string) =>
     memberName === '신연성' ? '/images/ranking-fourth-shinyeonsung.png' : fallback;
 
@@ -27,16 +28,16 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
 
       <div className="mb-8 flex flex-col gap-4 sm:mb-10 md:flex-row md:items-end md:justify-between md:gap-8">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">Gross 순위</span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">전체 평균 Gross 순위</span>
           <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">DKU-RE09 랭킹</h2>
         </div>
       </div>
 
       <div className="mb-10 rounded-[2rem] border border-champagne-100 bg-sage-50/60 p-5 sm:mb-16 sm:p-6">
         <p className="text-sm leading-7 text-sage-500">
-          이 순위는 <span className="font-semibold text-sage-600">이번 라운드 총타수(Gross) 기준</span>입니다.
+          이 순위는 <span className="font-semibold text-sage-600">기록된 모든 라운드의 총타수 평균</span> 기준입니다.
           <br />
-          신페리오 Net은 시상용 보조 지표로만 함께 표시합니다.
+          신페리오 Net은 라운드 시상용 보조 지표이고, 기본 랭킹에는 반영하지 않습니다.
         </p>
       </div>
 
@@ -63,7 +64,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-sage-300">2위</span>
             <h3 className="mt-2 break-keep text-2xl font-bold leading-tight text-sage-600 sm:text-3xl md:text-2xl">{podium[1].name}</h3>
             <div className="mt-3 w-fit rounded-full border border-champagne-100 bg-white/92 px-4 py-1.5 font-mono text-xs font-bold text-sage-500 shadow-sm">
-              {formatGrossScore(podium[1].latestScore)}
+              {formatAverageScore(podium[1].grossAverageDisplay)}
             </div>
           </div>
         </motion.div>
@@ -89,7 +90,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             <span className="text-xs font-bold uppercase tracking-[0.32em] text-amber-500">1위</span>
             <h3 className="mt-2 break-keep text-4xl font-bold leading-tight text-sage-600 sm:text-5xl md:text-4xl">{podium[0].name}</h3>
             <div className="mt-4 w-fit rounded-full bg-sage-400 px-6 py-2 font-mono text-sm font-bold text-white shadow-lg shadow-sage-400/20">
-              {formatGrossScore(podium[0].latestScore)}
+              {formatAverageScore(podium[0].grossAverageDisplay)}
             </div>
           </div>
         </motion.div>
@@ -116,7 +117,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-sage-300">3위</span>
             <h3 className="mt-2 break-keep text-2xl font-bold leading-tight text-sage-600 sm:text-3xl md:text-xl">{podium[2].name}</h3>
             <div className="mt-3 w-fit rounded-full bg-champagne-50/95 px-4 py-1.5 font-mono text-xs font-bold text-sage-500 shadow-sm">
-              {formatGrossScore(podium[2].latestScore)}
+              {formatAverageScore(podium[2].grossAverageDisplay)}
             </div>
           </div>
         </motion.div>
@@ -144,7 +145,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8b2331]/70">4위</span>
               <h3 className="mt-2 break-keep text-2xl font-bold leading-tight text-sage-600 sm:text-3xl md:text-xl">{fourthRank.name}</h3>
               <div className="mt-3 w-fit rounded-full bg-white/95 px-4 py-1.5 font-mono text-xs font-bold text-[#8b2331] shadow-sm">
-                {formatGrossScore(fourthRank.latestScore)}
+                {formatAverageScore(fourthRank.grossAverageDisplay)}
               </div>
             </div>
           </motion.div>
@@ -155,9 +156,9 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
         <div className="grid grid-cols-12 px-4 py-3 text-[9px] font-bold uppercase tracking-[0.2em] text-sage-300 sm:px-10 sm:py-4 md:text-[10px]">
           <div className="col-span-2 md:col-span-1">순위</div>
           <div className="col-span-6 md:col-span-3">멤버</div>
-          <div className="col-span-4 text-right md:col-span-2">총타수</div>
-          <div className="hidden text-center md:block md:col-span-2">Net</div>
-          <div className="hidden text-center md:block md:col-span-2">Handicap</div>
+          <div className="col-span-4 text-right md:col-span-2">평균 총타수</div>
+          <div className="hidden text-center md:block md:col-span-2">최근 기록</div>
+          <div className="hidden text-center md:block md:col-span-2">라운드</div>
           <div className="hidden text-right md:block md:col-span-2 md:pr-4">변동</div>
         </div>
 
@@ -182,27 +183,27 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
                 </div>
                 <div className="min-w-0">
                   <span className="block truncate text-sm font-bold text-sage-600">{member.name}</span>
-                  <span className="text-[7px] uppercase tracking-[0.2em] text-sage-300 md:text-[8px]">Gross 기준</span>
+                  <span className="text-[7px] uppercase tracking-[0.2em] text-sage-300 md:text-[8px]">전체 평균 Gross</span>
                 </div>
               </div>
 
               <div className="col-span-4 text-right md:col-span-2">
                 <div
                   className={`inline-block rounded-xl border px-3 py-1.5 md:px-4 ${
-                    member.latestScore === '-' ? 'border-sage-100 bg-sage-50' : 'border-sage-700 bg-sage-600 shadow-sm'
+                    member.grossAverageDisplay === '-' ? 'border-sage-100 bg-sage-50' : 'border-sage-700 bg-sage-600 shadow-sm'
                   }`}
                 >
-                  <span className={`font-mono text-xs font-bold md:text-sm ${member.latestScore === '-' ? 'text-sage-300' : 'text-white'}`}>
-                    {formatGrossScore(member.latestScore)}
+                  <span className={`font-mono text-xs font-bold md:text-sm ${member.grossAverageDisplay === '-' ? 'text-sage-300' : 'text-white'}`}>
+                    {member.grossAverageDisplay === '-' ? '-' : member.grossAverageDisplay}
                   </span>
                 </div>
               </div>
 
               <div className="hidden text-center font-mono text-xs text-sage-400 md:block md:col-span-2">
-                {member.netScoreDisplay}
+                {formatGrossScore(member.lastRecordedScore)}
               </div>
               <div className="hidden text-center font-mono text-xs text-sage-400 md:block md:col-span-2">
-                {member.handicap.toFixed(1)}
+                {member.roundCount}R
               </div>
               <div className="hidden text-right md:block md:col-span-2 md:pr-4">
                 {member.improved ? (
@@ -228,8 +229,8 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           <div className="h-px w-12 bg-champagne-100" />
         </div>
         <p className="mx-auto max-w-2xl text-[10px] font-medium uppercase tracking-[0.16em] text-sage-400 sm:tracking-[0.2em]">
-          최신 라운드 결과표 기준 총타수 순위입니다.
-          신페리오 Net은 시상 결과 참고용으로 함께 표시합니다.
+          모든 기록 라운드의 Gross 평균 기준 순위입니다.
+          동점이면 라운드 수, 최근 기록 순으로 정렬합니다.
         </p>
       </div>
     </div>

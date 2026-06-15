@@ -295,9 +295,9 @@ const NewArchiveSite: React.FC = () => {
                   <p className="mt-3 break-words font-sans text-[1.55rem] font-semibold leading-none tracking-[-0.03em] text-[#17202a]">{ranking[0]?.name}</p>
                 </div>
                 <div className="rounded-[1.5rem] bg-white p-4">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">GROSS</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">평균 Gross</p>
                   <p className="mt-3 font-sans text-[1.55rem] font-semibold leading-none text-[#17202a]">
-                    {typeof ranking[0]?.latestScore === 'number' ? `${ranking[0].latestScore}타` : '-'}
+                    {ranking[0]?.grossAverageDisplay && ranking[0].grossAverageDisplay !== '-' ? `${ranking[0].grossAverageDisplay}타` : '-'}
                   </p>
                 </div>
                 <div className="rounded-[1.5rem] bg-white p-4">
@@ -327,7 +327,7 @@ const NewArchiveSite: React.FC = () => {
                       <p className="mt-1 break-words text-[12px] text-[#6b7783]">{member.role}</p>
                     </div>
                     <div className="rounded-full bg-[#e1e7ed] px-3 py-2 text-[13px] font-semibold text-[#17202a]">
-                      {typeof member.latestScore === 'number' ? `${member.latestScore}타` : '-'}
+                      {member.grossAverageDisplay !== '-' ? `${member.grossAverageDisplay}타` : '-'}
                     </div>
                   </div>
                 ))}
@@ -392,8 +392,10 @@ const NewArchiveSite: React.FC = () => {
                         <p className="mt-3 text-[0.98rem] font-medium text-[#17202a]">{member.latestScore}</p>
                     </div>
                     <div className="rounded-[1.1rem] bg-[#e1e7ed] p-3">
-                      <p className="text-[9px] uppercase tracking-[0.22em] text-[#6b7783]">NET</p>
-                        <p className="mt-3 text-[0.98rem] font-medium text-[#17202a]">{member.netScoreDisplay}</p>
+                      <p className="text-[9px] uppercase tracking-[0.22em] text-[#6b7783]">평균</p>
+                        <p className="mt-3 text-[0.98rem] font-medium text-[#17202a]">
+                          {member.grossAverageDisplay !== '-' ? member.grossAverageDisplay : '-'}
+                        </p>
                     </div>
                   </div>
 

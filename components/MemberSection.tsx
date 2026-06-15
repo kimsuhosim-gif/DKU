@@ -42,8 +42,7 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
         rounds,
         img: m.img,
         latestScore: m.latestScore,
-        grossScore: typeof m.latestScore === 'number' ? `${m.latestScore}타` : '-',
-        netScore: m.netScoreDisplay,
+        grossScore: m.grossAverageDisplay === '-' ? '-' : `${m.grossAverageDisplay}타`,
         rank: rankIndex + 1,
         formLevel,
       };
@@ -251,12 +250,12 @@ const MemberSection: React.FC<MemberSectionProps> = ({ onBack }) => {
                 <div className="w-11 shrink-0 sm:w-auto">
                   <p className="text-[8px] font-bold text-[#746b5d]">
                     <span className="sm:hidden">RANK</span>
-                    <span className="hidden sm:inline">GROSS RANK</span>
+                    <span className="hidden sm:inline">AVG RANK</span>
                   </p>
                   <p className="mt-0.5 whitespace-nowrap text-[13px] font-black text-[#172117] sm:text-sm">#{member.rank}</p>
                 </div>
                 <div className="min-w-0 text-right">
-                  <p className="text-[8px] font-bold text-[#746b5d]">GROSS</p>
+                  <p className="text-[8px] font-bold text-[#746b5d]">AVG</p>
                   <p className="mt-0.5 whitespace-nowrap text-[13px] font-black text-[var(--member-accent)] sm:text-sm">{member.grossScore}</p>
                 </div>
                 {member.wins > 0 ? (
