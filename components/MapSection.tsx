@@ -246,7 +246,7 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="relative h-[420px] overflow-hidden rounded-[2rem] border border-sage-100 bg-sage-50 shadow-inner sm:h-[560px] sm:rounded-[4rem] lg:col-span-8">
+        <div className="relative h-[520px] overflow-hidden rounded-[2rem] border border-sage-100 bg-sage-50 shadow-inner sm:h-[560px] sm:rounded-[4rem] lg:col-span-8">
           <div id={MAP_ID} className="absolute inset-0 h-full w-full" style={{ borderRadius: 'inherit' }} />
 
           <AnimatePresence>
@@ -290,51 +290,6 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
           <AnimatePresence>
             {selectedProject && (
               <>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  className="absolute inset-x-4 bottom-4 z-20 rounded-[1.8rem] border border-white bg-white/95 p-4 shadow-2xl backdrop-blur-xl md:hidden"
-                >
-                  <div className="mb-4 flex items-start justify-between gap-4">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-dustyGold">라운딩 아카이브</span>
-                      <h3 className="mt-1 font-serif text-xl italic text-sage-600">{selectedProject.name}</h3>
-                    </div>
-                    <button onClick={() => setSelectedProject(null)} className="p-2 text-sage-300 transition-colors hover:text-sage-500">
-                      <ArrowLeft size={16} className="rotate-180" />
-                    </button>
-                  </div>
-
-                  <div className="mb-4 overflow-hidden rounded-[1.4rem] border border-sage-50">
-                    <img src={selectedProject.img} className="h-32 w-full object-cover" alt="course" />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 border-t border-champagne-50 pt-3">
-                    <div>
-                      <span className="flex items-center text-[8px] uppercase text-sage-300">
-                        <Ruler size={10} className="mr-1" />
-                        베스트 스코어
-                      </span>
-                      <span className="text-sm font-bold text-sage-600">{selectedProject.score}</span>
-                    </div>
-                    <div>
-                      <span className="flex items-center text-[8px] uppercase text-sage-300">
-                        <Star size={10} className="mr-1" />
-                        우승자
-                      </span>
-                      <span className="text-sm font-bold text-sage-600">{selectedProject.winner}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 rounded-2xl bg-sage-50/70 p-3 text-[10px] text-sage-500">
-                    <div className="flex items-start space-x-2">
-                      <MapPin size={12} className="mt-0.5 shrink-0" />
-                      <span>{selectedProject.address}</span>
-                    </div>
-                  </div>
-                </motion.div>
-
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, x: 20 }}
                   animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -398,6 +353,56 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
             )}
           </AnimatePresence>
         </div>
+
+        {selectedProject ? (
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-[1.8rem] border border-white bg-white/95 p-4 shadow-[0_22px_60px_-46px_rgba(22,23,27,0.45)] backdrop-blur-xl md:hidden"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-dustyGold">라운딩 아카이브</span>
+                <h3 className="mt-1 font-serif text-xl italic text-sage-600">{selectedProject.name}</h3>
+              </div>
+              <a
+                href={`https://map.naver.com/v5/search/${encodeURIComponent(selectedProject.name)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="shrink-0 rounded-full bg-[#03C75A] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-white"
+              >
+                열기
+              </a>
+            </div>
+
+            <div className="mt-4 grid grid-cols-[5.5rem_1fr] gap-3">
+              <img src={selectedProject.img} className="h-20 w-full rounded-[1.1rem] object-cover" alt="course" />
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-2xl bg-sage-50/70 p-3">
+                  <span className="flex items-center text-[8px] uppercase text-sage-300">
+                    <Ruler size={10} className="mr-1" />
+                    베스트
+                  </span>
+                  <span className="text-sm font-bold text-sage-600">{selectedProject.score}</span>
+                </div>
+                <div className="rounded-2xl bg-sage-50/70 p-3">
+                  <span className="flex items-center text-[8px] uppercase text-sage-300">
+                    <Star size={10} className="mr-1" />
+                    우승자
+                  </span>
+                  <span className="text-sm font-bold text-sage-600">{selectedProject.winner}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-2xl bg-sage-50/70 p-3 text-[10px] text-sage-500">
+              <div className="flex items-start space-x-2">
+                <MapPin size={12} className="mt-0.5 shrink-0" />
+                <span>{selectedProject.address}</span>
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
       </div>
     </div>
   );
