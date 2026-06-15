@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, Crown, FolderOpen, House, Map as MapIcon, Sparkles, Users } from 'lucide-react';
+import { Crown, FolderOpen, House, Landmark, Map as MapIcon, Sparkles, Users } from 'lucide-react';
 import { ViewState } from '../App';
 
 interface MobileDockProps {
@@ -9,7 +9,7 @@ interface MobileDockProps {
 
 const items: { label: string; view: ViewState; icon: React.ComponentType<{ size?: number }> }[] = [
   { label: '홈', view: 'home', icon: House },
-  { label: '내기', view: 'bets', icon: Calculator },
+  { label: '회비', view: 'ledger', icon: Landmark },
   { label: '도구', view: 'tools', icon: Sparkles },
   { label: '기록', view: 'gallery', icon: FolderOpen },
   { label: '랭킹', view: 'ranking', icon: Crown },
