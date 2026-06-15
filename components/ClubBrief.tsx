@@ -168,7 +168,7 @@ const ClubBrief: React.FC<ClubBriefProps> = ({ onNavigate }) => {
                 <div className="min-w-0">
                   <div className="inline-flex items-center gap-2 rounded-full border border-[#c8a86b]/28 bg-white/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#6d1f2a]">
                     <CalendarDays size={13} />
-                    Next round
+                    Latest round
                   </div>
                   <h4 className="mt-4 break-keep text-2xl font-bold leading-tight text-[#16171b] sm:text-[1.9rem]">
                     {nextSchedule.title}

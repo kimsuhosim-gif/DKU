@@ -6,18 +6,23 @@ export interface MemberData {
   prevHandicap: number;
   scoreHistory: number[];
   holeScores?: number[][];
+  latestParData?: number[];
   img: string;
 }
 
-export const PAR_DATA = [4, 5, 4, 3, 4, 4, 3, 5, 4, 4, 5, 4, 4, 4, 3, 5, 3, 4];
+const SIENNA_PAR_DATA = [4, 5, 4, 3, 4, 4, 3, 5, 4, 4, 5, 4, 4, 4, 3, 5, 3, 4];
+export const PAR_DATA = [4, 4, 4, 4, 3, 4, 5, 3, 5, 4, 4, 3, 5, 4, 4, 3, 4, 5];
 
 export const members: MemberData[] = [
   {
     name: '정재엽',
     role: '정회원',
     prevHandicap: 18.0,
-    scoreHistory: [90],
-    holeScores: [[4, 6, 4, 3, 6, 4, 5, 6, 6, 5, 5, 6, 5, 5, 4, 6, 4, 5]],
+    scoreHistory: [92, 90],
+    holeScores: [
+      [6, 5, 7, 6, 3, 5, 5, 4, 6, 6, 6, 3, 5, 5, 4, 4, 5, 7],
+      [4, 6, 4, 3, 6, 4, 5, 6, 6, 5, 5, 6, 5, 5, 4, 6, 4, 5],
+    ],
     img: '/images/profiles/members_정재엽.jpg',
     since: '2023.01',
     phone: '01026219101',
@@ -26,8 +31,11 @@ export const members: MemberData[] = [
     name: '모성진',
     role: '정회원',
     prevHandicap: 21.0,
-    scoreHistory: [93],
-    holeScores: [[6, 5, 6, 3, 6, 4, 3, 5, 7, 5, 6, 5, 6, 7, 4, 7, 4, 4]],
+    scoreHistory: [87, 93],
+    holeScores: [
+      [5, 7, 7, 5, 3, 4, 5, 3, 5, 5, 7, 3, 6, 5, 4, 3, 5, 5],
+      [6, 5, 6, 3, 6, 4, 3, 5, 7, 5, 6, 5, 6, 7, 4, 7, 4, 4],
+    ],
     img: '/images/profiles/members_모성진.png',
     since: '2023.01',
     phone: '01047682858',
@@ -36,8 +44,11 @@ export const members: MemberData[] = [
     name: '유만종',
     role: '회장',
     prevHandicap: 19.5,
-    scoreHistory: [94],
-    holeScores: [[6, 8, 7, 3, 4, 5, 3, 6, 5, 6, 7, 5, 6, 6, 4, 5, 3, 5]],
+    scoreHistory: [99, 94],
+    holeScores: [
+      [5, 7, 6, 6, 4, 4, 5, 4, 7, 5, 7, 4, 7, 7, 5, 4, 5, 7],
+      [6, 8, 7, 3, 4, 5, 3, 6, 5, 6, 7, 5, 6, 6, 4, 5, 3, 5],
+    ],
     img: '/images/profiles/members_유만종.jpg',
     since: '2023.01',
     phone: '01031999922',
@@ -46,8 +57,11 @@ export const members: MemberData[] = [
     name: '김영웅',
     role: '정회원',
     prevHandicap: 22.0,
-    scoreHistory: [95],
-    holeScores: [[4, 6, 5, 4, 5, 5, 4, 5, 6, 6, 8, 7, 5, 7, 4, 7, 2, 5]],
+    scoreHistory: [98, 95],
+    holeScores: [
+      [8, 4, 6, 7, 3, 4, 6, 4, 7, 6, 6, 5, 6, 6, 3, 6, 5, 6],
+      [4, 6, 5, 4, 5, 5, 4, 5, 6, 6, 8, 7, 5, 7, 4, 7, 2, 5],
+    ],
     img: '/images/profiles/members_김영웅.jpg',
     since: '2023.01',
     phone: '01028104255',
@@ -56,8 +70,11 @@ export const members: MemberData[] = [
     name: '신연성',
     role: '정회원',
     prevHandicap: 23.5,
-    scoreHistory: [97],
-    holeScores: [[7, 6, 6, 3, 5, 5, 4, 5, 5, 4, 6, 6, 7, 7, 5, 7, 3, 6]],
+    scoreHistory: [93, 97],
+    holeScores: [
+      [6, 6, 6, 6, 3, 4, 6, 3, 6, 4, 7, 4, 6, 5, 7, 4, 6, 4],
+      [7, 6, 6, 3, 5, 5, 4, 5, 5, 4, 6, 6, 7, 7, 5, 7, 3, 6],
+    ],
     img: '/images/profiles/members_신연성.jpg',
     since: '2023.01',
     phone: '01026966518',
@@ -66,8 +83,11 @@ export const members: MemberData[] = [
     name: '양창운',
     role: '총무',
     prevHandicap: 18.5,
-    scoreHistory: [101],
-    holeScores: [[5, 8, 6, 4, 4, 7, 3, 7, 7, 5, 5, 7, 5, 6, 4, 8, 5, 5]],
+    scoreHistory: [109, 101],
+    holeScores: [
+      [8, 5, 5, 5, 5, 7, 9, 5, 7, 5, 5, 3, 9, 6, 7, 4, 8, 6],
+      [5, 8, 6, 4, 4, 7, 3, 7, 7, 5, 5, 7, 5, 6, 4, 8, 5, 5],
+    ],
     img: '/images/profiles/members_양창운.jpg',
     since: '2023.01',
     phone: '01085426586',
@@ -76,8 +96,11 @@ export const members: MemberData[] = [
     name: '김효민',
     role: '정회원',
     prevHandicap: 24.0,
-    scoreHistory: [102],
-    holeScores: [[4, 6, 8, 4, 7, 5, 4, 5, 6, 4, 7, 7, 8, 7, 4, 8, 3, 5]],
+    scoreHistory: [109, 102],
+    holeScores: [
+      [6, 7, 7, 6, 4, 5, 6, 5, 7, 7, 5, 5, 5, 8, 7, 6, 6, 7],
+      [4, 6, 8, 4, 7, 5, 4, 5, 6, 4, 7, 7, 8, 7, 4, 8, 3, 5],
+    ],
     img: '/images/profiles/members_김효민.jpg',
     since: '2023.01',
     phone: '01093014798',
@@ -88,6 +111,7 @@ export const members: MemberData[] = [
     prevHandicap: 28.5,
     scoreHistory: [112],
     holeScores: [[7, 8, 7, 3, 4, 7, 5, 8, 5, 7, 6, 7, 6, 8, 6, 8, 3, 7]],
+    latestParData: SIENNA_PAR_DATA,
     img: '/images/profiles/members_최재호.jpg',
     since: '2023.01',
     phone: '01022698528',
@@ -98,6 +122,7 @@ export const members: MemberData[] = [
     prevHandicap: 32.0,
     scoreHistory: [124],
     holeScores: [[7, 9, 7, 6, 6, 6, 5, 10, 7, 6, 7, 8, 6, 8, 5, 10, 4, 7]],
+    latestParData: SIENNA_PAR_DATA,
     img: '/images/profiles/members_홍지훈.jpg',
     since: '2023.01',
     phone: '01041520738',
@@ -106,8 +131,11 @@ export const members: MemberData[] = [
     name: '김성태',
     role: '정회원',
     prevHandicap: 31.5,
-    scoreHistory: [126],
-    holeScores: [[6, 10, 6, 6, 7, 7, 5, 6, 8, 7, 8, 8, 8, 7, 6, 9, 5, 7]],
+    scoreHistory: [104, 126],
+    holeScores: [
+      [7, 6, 6, 7, 4, 7, 8, 4, 5, 7, 7, 4, 6, 6, 6, 5, 5, 4],
+      [6, 10, 6, 6, 7, 7, 5, 6, 8, 7, 8, 8, 8, 7, 6, 9, 5, 7],
+    ],
     img: '/images/profiles/members_김성태.jpg',
     since: '2023.01',
     phone: '01049029220',
@@ -116,8 +144,11 @@ export const members: MemberData[] = [
     name: '김성진',
     role: '정회원',
     prevHandicap: 33.0,
-    scoreHistory: [127],
-    holeScores: [[7, 8, 8, 6, 8, 8, 4, 9, 7, 7, 8, 8, 8, 8, 5, 7, 4, 7]],
+    scoreHistory: [120, 127],
+    holeScores: [
+      [7, 7, 7, 6, 6, 6, 8, 4, 8, 6, 7, 6, 8, 7, 7, 6, 7, 7],
+      [7, 8, 8, 6, 8, 8, 4, 9, 7, 7, 8, 8, 8, 8, 5, 7, 4, 7],
+    ],
     img: '/images/profiles/members_김성진.jpg',
     since: '2023.01',
     phone: '01020840638',
@@ -126,8 +157,11 @@ export const members: MemberData[] = [
     name: '김도윤',
     role: '정회원',
     prevHandicap: 37.0,
-    scoreHistory: [132],
-    holeScores: [[8, 9, 8, 6, 8, 7, 5, 8, 8, 7, 8, 8, 8, 6, 6, 9, 5, 8]],
+    scoreHistory: [125, 132],
+    holeScores: [
+      [8, 8, 8, 8, 4, 7, 8, 5, 9, 8, 5, 6, 6, 8, 6, 6, 7, 8],
+      [8, 9, 8, 6, 8, 7, 5, 8, 8, 7, 8, 8, 8, 6, 6, 9, 5, 8],
+    ],
     img: '/images/profiles/members_김도윤.jpg',
     since: '2023.01',
     phone: '01089463040',
@@ -163,7 +197,8 @@ export const members: MemberData[] = [
     name: '이상우',
     role: '정회원',
     prevHandicap: 18.0,
-    scoreHistory: [],
+    scoreHistory: [99],
+    holeScores: [[8, 6, 6, 5, 3, 4, 7, 3, 8, 5, 4, 5, 6, 7, 5, 4, 7, 6]],
     img: '/images/profiles/members_이상우.svg',
     since: '2026.04',
     phone: '01087862324',
@@ -315,7 +350,7 @@ export const memberRivalries: MemberRivalry[] = [
   },
 ];
 
-export const calculateAdjustedGross = (holeScores: number[], currentHandicap: number) => {
+export const calculateAdjustedGross = (holeScores: number[], currentHandicap: number, parData = PAR_DATA) => {
   if (!holeScores || holeScores.length !== 18) return 0;
 
   let adjustedGross = 0;
@@ -324,7 +359,7 @@ export const calculateAdjustedGross = (holeScores: number[], currentHandicap: nu
 
   holeScores.forEach((score, idx) => {
     const strokesReceived = baseStrokes + (idx < remainder ? 1 : 0);
-    const maxScore = PAR_DATA[idx] + 2 + strokesReceived;
+    const maxScore = parData[idx] + 2 + strokesReceived;
     adjustedGross += Math.min(score, maxScore);
   });
 
@@ -360,7 +395,7 @@ export const getProcessRankings = () => {
       let latestAdjusted = 0;
 
       if (m.holeScores && m.holeScores.length > 0) {
-        latestAdjusted = calculateAdjustedGross(m.holeScores[0], m.prevHandicap);
+        latestAdjusted = calculateAdjustedGross(m.holeScores[0], m.prevHandicap, m.latestParData);
       }
 
       const historyObjects = m.scoreHistory.map((gross, i) => {
@@ -394,6 +429,26 @@ export interface RoundingRecord {
 }
 
 export const records: RoundingRecord[] = [
+  {
+    date: '2026.06.13',
+    location: '코브스윙CC (구 참밸리)',
+    winner: '모성진',
+    score: 87,
+    attendees: [
+      { name: '모성진', score: 87, front: 44, back: 43 },
+      { name: '정재엽', score: 92, front: 47, back: 45 },
+      { name: '신연성', score: 93, front: 46, back: 47 },
+      { name: '김영웅', score: 98, front: 49, back: 49 },
+      { name: '이상우', score: 99, front: 50, back: 49 },
+      { name: '유만종', score: 99, front: 48, back: 51 },
+      { name: '김성태', score: 104, front: 54, back: 50 },
+      { name: '양창운', score: 109, front: 56, back: 53 },
+      { name: '김효민', score: 109, front: 53, back: 56 },
+      { name: '박준석(게스트)', score: 112, front: 58, back: 54 },
+      { name: '김성진', score: 120, front: 59, back: 61 },
+      { name: '김도윤', score: 125, front: 65, back: 60 },
+    ],
+  },
   {
     date: '2025.11.29',
     location: '더 시에나 벨루토 CC (여주)',
@@ -526,10 +581,10 @@ export interface NextSchedule {
 }
 
 export const nextSchedule: NextSchedule = {
-  title: '2회 정기 라운딩',
-  date: '2026.06.13 (토) · 06:03 첫 티업',
+  title: '2회 정기 라운딩 결과',
+  date: '2026.06.13 (토) · 06:14 티오프',
   location: '코브스윙CC (구 참밸리)',
-  note: '05:40 클하 집합 · 단체사진 촬영 후 06:03 첫 팀 출발. 점심은 12:00 천년소나무 예정입니다.',
+  note: '모성진 87타 우승 · 정재엽 92타 · 신연성 93타 · 12명 참가.',
 };
 
 export interface HallOfFameItem {
@@ -539,9 +594,9 @@ export interface HallOfFameItem {
 }
 
 export const hallOfFame: HallOfFameItem[] = [
-  { label: '초대 우승', name: '정재엽', value: '90타' },
-  { label: '현재 1위', name: '모성진', value: 'Net 72.8' },
-  { label: '최다 참가', name: '12명', value: '1회 라운드' },
+  { label: '2회 우승', name: '모성진', value: '87타' },
+  { label: '신페리오 우승', name: '박준석', value: '72.4' },
+  { label: '최다 참가', name: '12명', value: '2회 라운드' },
 ];
 
 export interface RoundGroup {
