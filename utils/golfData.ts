@@ -7,6 +7,8 @@ export interface MemberData {
   scoreHistory: number[];
   holeScores?: number[][];
   latestParData?: number[];
+  peoriaHandicap?: number;
+  peoriaNet?: number;
   img: string;
 }
 
@@ -23,6 +25,8 @@ export const members: MemberData[] = [
       [6, 5, 7, 6, 3, 5, 5, 4, 6, 6, 6, 3, 5, 5, 4, 4, 5, 7],
       [4, 6, 4, 3, 6, 4, 5, 6, 6, 5, 5, 6, 5, 5, 4, 6, 4, 5],
     ],
+    peoriaHandicap: 18.0,
+    peoriaNet: 74.0,
     img: '/images/profiles/members_정재엽.jpg',
     since: '2023.01',
     phone: '01026219101',
@@ -36,6 +40,8 @@ export const members: MemberData[] = [
       [5, 7, 7, 5, 3, 4, 5, 3, 5, 5, 7, 3, 6, 5, 4, 3, 5, 5],
       [6, 5, 6, 3, 6, 4, 3, 5, 7, 5, 6, 5, 6, 7, 4, 7, 4, 4],
     ],
+    peoriaHandicap: 12.0,
+    peoriaNet: 75.0,
     img: '/images/profiles/members_모성진.png',
     since: '2023.01',
     phone: '01047682858',
@@ -49,6 +55,8 @@ export const members: MemberData[] = [
       [5, 7, 6, 6, 4, 4, 5, 4, 7, 5, 7, 4, 7, 7, 5, 4, 5, 7],
       [6, 8, 7, 3, 4, 5, 3, 6, 5, 6, 7, 5, 6, 6, 4, 5, 3, 5],
     ],
+    peoriaHandicap: 21.6,
+    peoriaNet: 77.4,
     img: '/images/profiles/members_유만종.jpg',
     since: '2023.01',
     phone: '01031999922',
@@ -62,6 +70,8 @@ export const members: MemberData[] = [
       [8, 4, 6, 7, 3, 4, 6, 4, 7, 6, 6, 5, 6, 6, 3, 6, 5, 6],
       [4, 6, 5, 4, 5, 5, 4, 5, 6, 6, 8, 7, 5, 7, 4, 7, 2, 5],
     ],
+    peoriaHandicap: 19.2,
+    peoriaNet: 78.8,
     img: '/images/profiles/members_김영웅.jpg',
     since: '2023.01',
     phone: '01028104255',
@@ -75,6 +85,8 @@ export const members: MemberData[] = [
       [6, 6, 6, 6, 3, 4, 6, 3, 6, 4, 7, 4, 6, 5, 7, 4, 6, 4],
       [7, 6, 6, 3, 5, 5, 4, 5, 5, 4, 6, 6, 7, 7, 5, 7, 3, 6],
     ],
+    peoriaHandicap: 15.6,
+    peoriaNet: 77.4,
     img: '/images/profiles/members_신연성.jpg',
     since: '2023.01',
     phone: '01026966518',
@@ -88,6 +100,8 @@ export const members: MemberData[] = [
       [8, 5, 5, 5, 5, 7, 9, 5, 7, 5, 5, 3, 9, 6, 7, 4, 8, 6],
       [5, 8, 6, 4, 4, 7, 3, 7, 7, 5, 5, 7, 5, 6, 4, 8, 5, 5],
     ],
+    peoriaHandicap: 28.8,
+    peoriaNet: 80.2,
     img: '/images/profiles/members_양창운.jpg',
     since: '2023.01',
     phone: '01085426586',
@@ -101,6 +115,8 @@ export const members: MemberData[] = [
       [6, 7, 7, 6, 4, 5, 6, 5, 7, 7, 5, 5, 5, 8, 7, 6, 6, 7],
       [4, 6, 8, 4, 7, 5, 4, 5, 6, 4, 7, 7, 8, 7, 4, 8, 3, 5],
     ],
+    peoriaHandicap: 34.8,
+    peoriaNet: 74.2,
     img: '/images/profiles/members_김효민.jpg',
     since: '2023.01',
     phone: '01093014798',
@@ -136,6 +152,8 @@ export const members: MemberData[] = [
       [7, 6, 6, 7, 4, 7, 8, 4, 5, 7, 7, 4, 6, 6, 6, 5, 5, 4],
       [6, 10, 6, 6, 7, 7, 5, 6, 8, 7, 8, 8, 8, 7, 6, 9, 5, 7],
     ],
+    peoriaHandicap: 22.8,
+    peoriaNet: 81.2,
     img: '/images/profiles/members_김성태.jpg',
     since: '2023.01',
     phone: '01049029220',
@@ -149,6 +167,8 @@ export const members: MemberData[] = [
       [7, 7, 7, 6, 6, 6, 8, 4, 8, 6, 7, 6, 8, 7, 7, 6, 7, 7],
       [7, 8, 8, 6, 8, 8, 4, 9, 7, 7, 8, 8, 8, 8, 5, 7, 4, 7],
     ],
+    peoriaHandicap: 37.2,
+    peoriaNet: 82.8,
     img: '/images/profiles/members_김성진.jpg',
     since: '2023.01',
     phone: '01020840638',
@@ -162,6 +182,8 @@ export const members: MemberData[] = [
       [8, 8, 8, 8, 4, 7, 8, 5, 9, 8, 5, 6, 6, 8, 6, 6, 7, 8],
       [8, 9, 8, 6, 8, 7, 5, 8, 8, 7, 8, 8, 8, 6, 6, 9, 5, 8],
     ],
+    peoriaHandicap: 48.0,
+    peoriaNet: 77.0,
     img: '/images/profiles/members_김도윤.jpg',
     since: '2023.01',
     phone: '01089463040',
@@ -199,6 +221,8 @@ export const members: MemberData[] = [
     prevHandicap: 18.0,
     scoreHistory: [99],
     holeScores: [[8, 6, 6, 5, 3, 4, 7, 3, 8, 5, 4, 5, 6, 7, 5, 4, 7, 6]],
+    peoriaHandicap: 26.4,
+    peoriaNet: 72.6,
     img: '/images/profiles/members_이상우.svg',
     since: '2026.04',
     phone: '01087862324',
@@ -390,9 +414,12 @@ export const calculateWHSIndex = (history: { gross: number; adjusted: number }[]
 };
 
 export const getProcessRankings = () => {
+  const latestParticipantNames = new Set(records[0]?.attendees.map((attendee) => attendee.name) ?? []);
+
   return members
     .map((m) => {
       let latestAdjusted = 0;
+      const playedLatestRound = latestParticipantNames.size === 0 || latestParticipantNames.has(m.name);
 
       if (m.holeScores && m.holeScores.length > 0) {
         latestAdjusted = calculateAdjustedGross(m.holeScores[0], m.prevHandicap, m.latestParData);
@@ -404,20 +431,27 @@ export const getProcessRankings = () => {
       });
 
       const newHandicap = calculateWHSIndex(historyObjects);
-      const latestGross = m.scoreHistory.length > 0 ? m.scoreHistory[0] : 0;
-      const net = latestGross > 0 ? parseFloat((latestGross - newHandicap).toFixed(1)) : 999;
+      const latestGross = playedLatestRound && m.scoreHistory.length > 0 ? m.scoreHistory[0] : 0;
+      const rankingHandicap = m.peoriaHandicap ?? newHandicap;
+      const rankingNet = m.peoriaNet ?? (latestGross > 0 ? latestGross - rankingHandicap : 999);
+      const net = latestGross > 0 ? parseFloat(rankingNet.toFixed(1)) : 999;
 
       return {
         ...m,
-        handicap: newHandicap,
+        whsHandicap: newHandicap,
+        handicap: rankingHandicap,
         latestScore: latestGross === 0 ? '-' : latestGross,
         latestAdjusted: latestAdjusted === 0 ? '-' : latestAdjusted,
-        netScoreDisplay: latestGross > 0 ? (latestGross - newHandicap).toFixed(1) : '-',
+        netScoreDisplay: latestGross > 0 ? rankingNet.toFixed(1) : '-',
         netScoreValue: net,
-        improved: m.scoreHistory.length > 1 && newHandicap < m.prevHandicap,
+        improved: m.scoreHistory.length > 1 && latestGross < m.scoreHistory[1],
       };
     })
-    .sort((a, b) => a.netScoreValue - b.netScoreValue);
+    .sort((a, b) => {
+      const grossA = typeof a.latestScore === 'number' ? a.latestScore : 999;
+      const grossB = typeof b.latestScore === 'number' ? b.latestScore : 999;
+      return a.netScoreValue - b.netScoreValue || grossA - grossB;
+    });
 };
 
 export interface RoundingRecord {

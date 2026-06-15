@@ -26,14 +26,14 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
 
       <div className="mb-8 flex flex-col gap-4 sm:mb-10 md:flex-row md:items-end md:justify-between md:gap-8">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">WHS 적용 순위</span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-sage-400 sm:text-xs">공식 Net 순위</span>
           <h2 className="mt-3 text-3xl font-bold text-sage-600 sm:text-5xl">DKU-RE09 랭킹</h2>
         </div>
       </div>
 
       <div className="mb-10 rounded-[2rem] border border-champagne-100 bg-sage-50/60 p-5 sm:mb-16 sm:p-6">
         <p className="text-sm leading-7 text-sage-500">
-          이 순위는 <span className="font-semibold text-sage-600">핸디캡을 반영한 순위</span>입니다.
+          이 순위는 <span className="font-semibold text-sage-600">이번 결과표의 신페리오 핸디캡을 반영한 순위</span>입니다.
           <br />
           <span className="font-semibold text-sage-600">Net (Gross - HC)</span>는 실제 타수(Gross)에서 현재 핸디캡(HC)을 뺀 값입니다.
         </p>
@@ -181,7 +181,7 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
                 </div>
                 <div className="min-w-0">
                   <span className="block truncate text-sm font-bold text-sage-600">{member.name}</span>
-                  <span className="text-[7px] uppercase tracking-[0.2em] text-sage-300 md:text-[8px]">WHS 적용</span>
+                  <span className="text-[7px] uppercase tracking-[0.2em] text-sage-300 md:text-[8px]">신페리오 적용</span>
                 </div>
               </div>
 
@@ -230,8 +230,8 @@ const RankingSection: React.FC<RankingSectionProps> = ({ onBack }) => {
           <div className="h-px w-12 bg-champagne-100" />
         </div>
         <p className="mx-auto max-w-2xl text-[10px] font-medium uppercase tracking-[0.16em] text-sage-400 sm:tracking-[0.2em]">
-          최신 라운드 기준 WHS 미리보기입니다. 홀별 데이터가 있으면 Adjusted Gross가 적용됩니다.
-          Net (Gross - HC)는 실제 타수에서 현재 핸디캡을 뺀 값입니다.
+          최신 라운드 결과표 기준 신페리오 Net 순위입니다.
+          Net (Gross - HC)는 실제 타수에서 공식 핸디캡을 뺀 값입니다.
         </p>
       </div>
     </div>
