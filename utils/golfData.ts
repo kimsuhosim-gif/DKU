@@ -619,7 +619,7 @@ export interface ClubExpenseItem {
 
 export const clubExpenseItems2026Q2: ClubExpenseItem[] = [
   { no: 1, title: '신세계 상품권', amount: 400000, note: '현금결제' },
-  { no: 2, title: '카드비', amount: 300000, note: '영수증 첨부' },
+  { no: 2, title: '카트비', amount: 300000, note: '영수증 첨부' },
 ];
 
 export interface MembershipDueRow {
