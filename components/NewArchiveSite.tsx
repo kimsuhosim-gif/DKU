@@ -295,8 +295,10 @@ const NewArchiveSite: React.FC = () => {
                   <p className="mt-3 break-words font-sans text-[1.55rem] font-semibold leading-none tracking-[-0.03em] text-[#17202a]">{ranking[0]?.name}</p>
                 </div>
                 <div className="rounded-[1.5rem] bg-white p-4">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">NET</p>
-                  <p className="mt-3 font-sans text-[1.55rem] font-semibold leading-none text-[#17202a]">{ranking[0]?.netScoreDisplay}</p>
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">GROSS</p>
+                  <p className="mt-3 font-sans text-[1.55rem] font-semibold leading-none text-[#17202a]">
+                    {typeof ranking[0]?.latestScore === 'number' ? `${ranking[0].latestScore}타` : '-'}
+                  </p>
                 </div>
                 <div className="rounded-[1.5rem] bg-white p-4">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-[#7b8591]">최근 스코어</p>
@@ -325,7 +327,7 @@ const NewArchiveSite: React.FC = () => {
                       <p className="mt-1 break-words text-[12px] text-[#6b7783]">{member.role}</p>
                     </div>
                     <div className="rounded-full bg-[#e1e7ed] px-3 py-2 text-[13px] font-semibold text-[#17202a]">
-                      {member.netScoreDisplay}
+                      {typeof member.latestScore === 'number' ? `${member.latestScore}타` : '-'}
                     </div>
                   </div>
                 ))}

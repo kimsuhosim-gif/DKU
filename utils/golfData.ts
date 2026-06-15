@@ -414,7 +414,9 @@ export const calculateWHSIndex = (history: { gross: number; adjusted: number }[]
 };
 
 export const getProcessRankings = () => {
-  const latestParticipantNames = new Set(records[0]?.attendees.map((attendee) => attendee.name) ?? []);
+  const latestAttendees = records[0]?.attendees ?? [];
+  const latestParticipantNames = new Set(latestAttendees.map((attendee) => attendee.name));
+  const latestParticipantOrder = new Map(latestAttendees.map((attendee, index) => [attendee.name, index]));
 
   return members
     .map((m) => {
@@ -444,13 +446,14 @@ export const getProcessRankings = () => {
         latestAdjusted: latestAdjusted === 0 ? '-' : latestAdjusted,
         netScoreDisplay: latestGross > 0 ? rankingNet.toFixed(1) : '-',
         netScoreValue: net,
+        grossRankValue: latestGross > 0 ? latestGross : 999,
         improved: m.scoreHistory.length > 1 && latestGross < m.scoreHistory[1],
       };
     })
     .sort((a, b) => {
-      const grossA = typeof a.latestScore === 'number' ? a.latestScore : 999;
-      const grossB = typeof b.latestScore === 'number' ? b.latestScore : 999;
-      return a.netScoreValue - b.netScoreValue || grossA - grossB;
+      const orderA = latestParticipantOrder.get(a.name) ?? 999;
+      const orderB = latestParticipantOrder.get(b.name) ?? 999;
+      return a.grossRankValue - b.grossRankValue || orderA - orderB || a.netScoreValue - b.netScoreValue || a.name.localeCompare(b.name, 'ko');
     });
 };
 

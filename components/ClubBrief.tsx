@@ -69,7 +69,7 @@ const ClubBrief: React.FC<ClubBriefProps> = ({ onNavigate }) => {
     {
       label: '현재 리더',
       value: leader?.name ?? '-',
-      detail: `Net ${leader?.netScoreDisplay ?? '-'}`,
+      detail: leader && typeof leader.latestScore === 'number' ? `Gross ${leader.latestScore}타` : 'Gross -',
       icon: Trophy,
       view: 'ranking' as ViewState,
       accent: 'text-[#b08a4d]',

@@ -61,7 +61,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
   const rankingData = ranking.slice(0, 3).map((p, i) => ({
     rank: i + 1,
     name: p.name,
-    score: `Net ${p.netScoreDisplay}`,
+    score: typeof p.latestScore === 'number' ? `Gross ${p.latestScore}타` : 'Gross -',
   }));
 
   return (
@@ -183,7 +183,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ onNavigate }) => {
           <div className="flex items-start justify-between">
             <div>
               <h3 className="font-serif text-2xl italic text-sage-600">Ranking</h3>
-              <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-sage-400">current top 3</p>
+              <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-sage-400">gross top 3</p>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-50 text-sage-400 transition-all group-hover:bg-sage-400 group-hover:text-white">
               <TrendingUp size={20} />
