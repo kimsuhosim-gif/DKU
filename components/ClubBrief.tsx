@@ -213,6 +213,13 @@ const ClubBrief: React.FC<ClubBriefProps> = ({ onNavigate }) => {
                 >
                   기록 보기
                 </button>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('gallery')}
+                  className="inline-flex items-center justify-center rounded-full border border-[#c8a86b]/32 bg-white/64 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#16171b] transition hover:border-[#6d1f2a]/30 hover:bg-white"
+                >
+                  사진 보기
+                </button>
               </div>
             </section>
 

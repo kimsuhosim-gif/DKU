@@ -516,6 +516,12 @@ export const records: RoundingRecord[] = [
 ];
 
 export const COURSE_LOCATIONS: Record<string, { lat: number; lng: number; address: string; img: string }> = {
+  '코브스윙CC (구 참밸리)': {
+    lat: 37.867211,
+    lng: 127.136406,
+    address: '코브스윙CC 클럽하우스 좌표 기준',
+    img: '/images/round2/round2-01.jpg',
+  },
   '더 시에나 벨루토 CC (여주)': {
     lat: 37.227445,
     lng: 127.618625,
@@ -534,7 +540,21 @@ export interface PhotoItem {
   category: '2026' | '2025' | 'Memories';
 }
 
+const round2GalleryPhotos: PhotoItem[] = Array.from({ length: 16 }, (_, index) => {
+  const photoNumber = String(index + 1).padStart(2, '0');
+  return {
+    id: `round2-${photoNumber}`,
+    src: `/images/round2/round2-${photoNumber}.jpg`,
+    date: '2026.06.13',
+    location: '코브스윙CC (구 참밸리)',
+    bestScore: 87,
+    participants: 12,
+    category: '2026' as const,
+  };
+});
+
 export const galleryPhotos: PhotoItem[] = [
+  ...round2GalleryPhotos,
   {
     id: 'new-1',
     src: '/images/round1_group.jpg',

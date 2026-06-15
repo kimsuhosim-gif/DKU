@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Users, Trophy, Calendar, MapPin, Search } from 'lucide-react';
+import { ArrowLeft, Users, Trophy, Calendar, MapPin, Search, X } from 'lucide-react';
 import { galleryPhotos } from '../utils/golfData';
 
 interface GallerySectionProps {
@@ -8,6 +8,8 @@ interface GallerySectionProps {
 }
 
 const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
+  const [selectedPhoto, setSelectedPhoto] = useState<(typeof galleryPhotos)[number] | null>(null);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -40,11 +42,11 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
       <div className="mb-10 flex flex-col gap-6 sm:mb-16 md:flex-row md:items-end md:justify-between md:gap-10">
         <div className="max-w-xl">
           <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-sage-400">
-            Visual Chronicles
+            Round Gallery
           </span>
-          <h2 className="font-serif text-3xl italic text-sage-600 sm:text-5xl md:text-6xl">Seasonal Portfolio</h2>
-          <p className="mt-5 text-sm font-bold leading-relaxed tracking-[0.16em] text-sage-400 opacity-90 sm:mt-8">
-            Quiet documentation of rounds, places, and the atmosphere around them.
+          <h2 className="font-serif text-3xl italic text-sage-600 sm:text-5xl md:text-6xl">2026.06.13 코브스윙</h2>
+          <p className="mt-5 break-keep text-sm font-bold leading-relaxed tracking-normal text-sage-400 opacity-90 sm:mt-8">
+            이번 라운딩 현장 사진을 한 번에 볼 수 있게 정리했습니다. 사진을 누르면 크게 열립니다.
           </p>
         </div>
       </div>
@@ -57,16 +59,19 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
       >
         <AnimatePresence mode="popLayout">
           {galleryPhotos.map((photo) => (
-            <motion.div
+            <motion.button
               key={photo.id}
+              type="button"
               layout
               variants={itemVariants}
-              className="group relative overflow-hidden rounded-[2rem] border border-dustyGold/20 bg-white shadow-sm sm:rounded-[2.5rem]"
+              onClick={() => setSelectedPhoto(photo)}
+              className="group relative overflow-hidden rounded-[1.4rem] border border-dustyGold/20 bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:rounded-[2rem]"
             >
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                   src={photo.src}
                   alt={photo.location}
+                  loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-[3000ms] group-hover:scale-110 grayscale-[0.3] group-hover:grayscale-0"
                 />
 
@@ -109,10 +114,49 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </motion.button>
           ))}
         </AnimatePresence>
       </motion.div>
+
+      <AnimatePresence>
+        {selectedPhoto ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedPhoto(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/84 p-3 backdrop-blur-md sm:p-8"
+          >
+            <motion.div
+              initial={{ scale: 0.94, y: 16 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.94, y: 16 }}
+              className="relative w-full max-w-6xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedPhoto(null)}
+                className="absolute right-3 top-3 z-10 rounded-full bg-black/45 p-2 text-white backdrop-blur transition hover:bg-black/70"
+                aria-label="사진 닫기"
+              >
+                <X size={22} />
+              </button>
+              <img
+                src={selectedPhoto.src}
+                alt={selectedPhoto.location}
+                className="max-h-[82vh] w-full rounded-[1.4rem] object-contain shadow-2xl sm:rounded-[2rem]"
+              />
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-bold text-white/82">
+                <span>{selectedPhoto.date}</span>
+                <span className="h-1 w-1 rounded-full bg-white/40" />
+                <span>{selectedPhoto.location}</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-champagne-100 pt-10 sm:mt-24 sm:flex-row sm:items-center sm:gap-8 sm:pt-16">
         <div className="flex flex-col">

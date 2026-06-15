@@ -25,7 +25,7 @@ interface MapProject {
   score: number;
 }
 
-const DEFAULT_CENTER = { lat: 37.227445, lng: 127.618625 };
+const DEFAULT_CENTER = { lat: 37.867211, lng: 127.136406 };
 const MAP_ID = 'map';
 const NAVER_MAP_SCRIPT_VERSION = 'dku-re09-20260611-3';
 const normalizeMapEnv = (value?: string) => {
@@ -76,6 +76,12 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
   } satisfies Record<typeof mapErrorReason, string>;
 
   useEffect(() => {
+    if (!selectedProject && projects.length > 0) {
+      setSelectedProject(projects[0]);
+    }
+  }, [projects, selectedProject]);
+
+  useEffect(() => {
     let retryCount = 0;
     const maxRetries = 20;
     let retryTimer: number | undefined;
@@ -107,9 +113,10 @@ const MapSection: React.FC<MapSectionProps> = ({ onBack }) => {
       try {
         const mapContainer = document.getElementById(MAP_ID);
         if (!mapContainer) return;
+        const initialCenter = projects[0]?.location ?? DEFAULT_CENTER;
 
         const map = new window.naver.maps.Map(mapContainer, {
-          center: new window.naver.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
+          center: new window.naver.maps.LatLng(initialCenter.lat, initialCenter.lng),
           zoom: 11,
           minZoom: 7,
           zoomControl: true,
