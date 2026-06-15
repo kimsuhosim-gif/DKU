@@ -540,8 +540,10 @@ export interface PhotoItem {
   category: '2026' | '2025' | 'Memories';
 }
 
-const round2GalleryPhotos: PhotoItem[] = Array.from({ length: 16 }, (_, index) => {
-  const photoNumber = String(index + 1).padStart(2, '0');
+const round2PhotoOrder = [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 1, 2, 3, 4];
+
+const round2GalleryPhotos: PhotoItem[] = round2PhotoOrder.map((number) => {
+  const photoNumber = String(number).padStart(2, '0');
   return {
     id: `round2-${photoNumber}`,
     src: `/images/round2/round2-${photoNumber}.jpg`,
@@ -603,8 +605,22 @@ export const clubFinanceSummary = {
   expectedSecondHalfExpense2026: 1100000,
   paidAmount2026: 1370000,
   unpaidAmount2026: 750000,
-  currentCash: 1880500,
+  cashBeforeRoundExpense2026: 1880500,
+  actualRoundExpense2026: 700000,
+  currentCash: 1180500,
 };
+
+export interface ClubExpenseItem {
+  no: number;
+  title: string;
+  amount: number;
+  note: string;
+}
+
+export const clubExpenseItems2026Q2: ClubExpenseItem[] = [
+  { no: 1, title: '신세계 상품권', amount: 400000, note: '현금결제' },
+  { no: 2, title: '카드비', amount: 300000, note: '영수증 첨부' },
+];
 
 export interface MembershipDueRow {
   no: number;

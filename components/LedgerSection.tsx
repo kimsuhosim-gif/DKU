@@ -1,6 +1,6 @@
 import React from 'react';
-import { ArrowLeft, Download, Landmark } from 'lucide-react';
-import { ACCOUNT_HOLDER, ACCOUNT_NUMBER, clubFinanceSummary, membershipDues2026 } from '../utils/golfData';
+import { ArrowLeft, Download, Landmark, ReceiptText } from 'lucide-react';
+import { ACCOUNT_HOLDER, ACCOUNT_NUMBER, clubExpenseItems2026Q2, clubFinanceSummary, membershipDues2026 } from '../utils/golfData';
 
 interface LedgerSectionProps {
   onBack: () => void;
@@ -21,17 +21,17 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
     { annualDues: 0, entranceFee: 0, billedAmount: 0, paidAmount: 0, unpaidAmount: 0 }
   );
 
-  const expectedExpense =
-    clubFinanceSummary.expectedFirstHalfExpense2026 + clubFinanceSummary.expectedSecondHalfExpense2026;
+  const roundExpense = clubExpenseItems2026Q2.reduce((sum, item) => sum + item.amount, 0);
+  const expectedExpense = roundExpense + clubFinanceSummary.expectedSecondHalfExpense2026;
   const expectedYearEndBalance = clubFinanceSummary.totalBudget2026 - expectedExpense;
 
   const summaryCards = [
-    { label: '25년 이월회비', value: formatPlainAmount(clubFinanceSummary.carriedBalance2025), tone: 'bg-white text-[#172117]' },
-    { label: '26년 회비예산', value: formatPlainAmount(clubFinanceSummary.duesBudget2026), tone: 'bg-white text-[#172117]' },
-    { label: '26년 납부액', value: formatPlainAmount(totals.paidAmount), tone: 'bg-[#e8f0e6] text-[#243321]' },
+    { label: '납부액(이월포함)', value: formatPlainAmount(clubFinanceSummary.cashBeforeRoundExpense2026), tone: 'bg-white text-[#172117]' },
     { label: '26년 미납액', value: formatPlainAmount(totals.unpaidAmount), tone: 'bg-[#f3e5df] text-[#6d1f2a]' },
-    { label: '현재 확보액', value: formatPlainAmount(clubFinanceSummary.currentCash), tone: 'bg-[#172117] text-[#fffaf2]' },
-    { label: '예상 연말잔액', value: formatPlainAmount(expectedYearEndBalance), tone: 'bg-[#fff7df] text-[#6f512a]' },
+    { label: '이번 지출', value: formatPlainAmount(roundExpense), tone: 'bg-[#fff7df] text-[#6f512a]' },
+    { label: '결산 잔액', value: formatPlainAmount(clubFinanceSummary.currentCash), tone: 'bg-[#172117] text-[#fffaf2]' },
+    { label: '회원수', value: `${clubFinanceSummary.memberCount}명`, tone: 'bg-white text-[#172117]' },
+    { label: '하반기 예상지출', value: formatPlainAmount(clubFinanceSummary.expectedSecondHalfExpense2026), tone: 'bg-white text-[#172117]' },
   ];
 
   return (
@@ -46,10 +46,10 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
 
       <div className="mb-8 flex flex-col gap-5 sm:mb-10 md:flex-row md:items-end md:justify-between">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#6f7668] sm:text-xs">2026 회비 입금내역</span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#6f7668] sm:text-xs">2026 Q2 1회 회비 결산내역</span>
           <h2 className="mt-3 font-serif text-3xl text-[#243321] sm:text-5xl">회비 장부</h2>
           <p className="mt-3 max-w-2xl break-keep text-sm font-semibold leading-6 text-[#686b62]">
-            2026년 연회비와 신규회원 입회비 기준으로 청구액, 납부액, 미납액을 정리했습니다.
+            2026년 연회비 납부액, 미납액, 이번 라운딩 사용 비용과 결산 잔액을 정리했습니다.
           </p>
         </div>
 
@@ -69,13 +69,14 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
         ))}
       </div>
 
-      <div className="mb-7 grid gap-3 rounded-[1.4rem] border border-[#d6c5a8] bg-[#fffaf2]/80 p-4 sm:grid-cols-5">
+      <div className="mb-7 grid gap-3 rounded-[1.4rem] border border-[#d6c5a8] bg-[#fffaf2]/80 p-4 sm:grid-cols-3 lg:grid-cols-6">
         {[
           ['인당 회비', formatPlainAmount(clubFinanceSummary.perMemberDues)],
           ['입회비', formatPlainAmount(clubFinanceSummary.newMemberFee)],
-          ['회원수', `${clubFinanceSummary.memberCount}명`],
           ['신규회원수', `${clubFinanceSummary.newMemberCount}명`],
-          ['예상지출', formatPlainAmount(expectedExpense)],
+          ['25년 이월회비', formatPlainAmount(clubFinanceSummary.carriedBalance2025)],
+          ['26년 납부액', formatPlainAmount(totals.paidAmount)],
+          ['예상 연말잔액', formatPlainAmount(expectedYearEndBalance)],
         ].map(([label, value]) => (
           <div key={label} className="rounded-[0.95rem] bg-white/72 p-3">
             <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#847765]">{label}</p>
@@ -83,6 +84,35 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
           </div>
         ))}
       </div>
+
+      <section className="mb-7 rounded-[1.4rem] border border-[#d6c5a8] bg-white/86 p-4 shadow-sm sm:p-5">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#847765]">Round expense</p>
+            <h3 className="mt-2 text-xl font-bold text-[#172117]">이번 라운딩 사용 비용</h3>
+          </div>
+          <p className="rounded-full bg-[#172117] px-4 py-2 text-sm font-bold text-[#fffaf2]">
+            총 {formatPlainAmount(roundExpense)}
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {clubExpenseItems2026Q2.map((item) => (
+            <div key={item.no} className="flex items-center justify-between gap-3 rounded-[1rem] border border-[#d6c5a8] bg-[#fbf7ef] p-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#6d1f2a]">
+                  <ReceiptText size={17} />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-[#172117]">{item.title}</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-[#686b62]">{item.note}</p>
+                </div>
+              </div>
+              <p className="shrink-0 font-mono text-sm font-bold text-[#172117]">{formatPlainAmount(item.amount)}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="space-y-3 md:hidden">
         {membershipDues2026.map((row) => (
