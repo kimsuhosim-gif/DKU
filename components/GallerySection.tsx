@@ -126,7 +126,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
         </div>
       </div>
 
-      
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
