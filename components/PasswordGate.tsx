@@ -49,7 +49,6 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                     imageRendering: 'auto'
                 }}
             >
-                <div className="absolute inset-0 opacity-[0.2] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
                 <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-sage-950/90 via-transparent to-sage-950/30" />
             </div>
@@ -57,17 +56,17 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
             <motion.div
                 initial={{ opacity: 0, scale: 0.98, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="w-[82%] max-w-sm bg-black/25 backdrop-blur-3xl p-7 md:p-12 rounded-[3.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.5)] border border-white/10 relative z-10 text-center"
             >
                 <div className="mb-6 md:mb-12 flex flex-col items-center">
                     <div className="w-14 h-14 md:w-20 md:h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-5 shadow-inner border border-white/10">
-                        <Lock className="text-champagne-200" size={24} strokeWidth={1.5} />
+                        <img className="login-mascot" src="/images/dku-re09-bear-male-v2.png" alt="DKU 부동산학과 09학번 곰 마스코트" />
                     </div>
-                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-2 md:mb-3">Privilege Access Only</span>
+                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-2 md:mb-3">WELCOME TO OUR CLUB</span>
                     <h2 className="text-2xl md:text-4xl font-serif text-white italic">DKU-RE09 CLUB</h2>
                     <p className="mt-3 md:mt-4 text-[10px] md:text-xs text-white/60 leading-relaxed italic max-w-xs px-2">
-                        &quot;A private archive for the class of 2009.<br className="hidden md:block" /> Access is limited to verified members.&quot;
+                        좋은 사람들과 함께하는 라운드.<br/>모임 비밀번호를 입력해주세요.
                     </p>
                 </div>
 
@@ -75,7 +74,9 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                     <div className="relative group">
                         <input
                             type="password"
-                            placeholder="Enter Access Key"
+                            aria-label="모임 입장 비밀번호"
+                            autoComplete="current-password"
+                            placeholder="모임 입장 비밀번호"
                             value={password}
                             onChange={(e) => {
                                 setPassword(e.target.value);
@@ -93,7 +94,7 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                                     exit={{ opacity: 0 }}
                                     className="text-[10px] text-rose-500 font-bold mt-3 absolute w-full left-0"
                                 >
-                                    Invalid key. Please verify your identity.
+                                    비밀번호를 다시 확인해주세요.
                                 </motion.p>
                             )}
                         </AnimatePresence>
@@ -103,14 +104,14 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
                         type="submit"
                         className="w-full py-5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs transition-all duration-500 flex items-center justify-center group shadow-xl"
                     >
-                        <span>Confirm Identity</span>
+                        <span>클럽 입장하기</span>
                         <ChevronRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </form>
 
                 <div className="mt-10 md:mt-12 flex items-center justify-center space-x-2 text-white/30">
                     <ShieldCheck size={14} />
-                    <span className="text-[9px] uppercase tracking-widest font-bold">Secure Class-Only Environment</span>
+                    <span className="text-[9px] uppercase tracking-widest font-bold">DKU RE09 · 멤버 전용</span>
                 </div>
             </motion.div>
 

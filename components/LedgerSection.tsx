@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Download, Landmark, ReceiptText } from 'lucide-react';
 import { ACCOUNT_HOLDER, ACCOUNT_NUMBER, clubExpenseItems2026Q2, clubFinanceSummary, membershipDues2026 } from '../utils/golfData';
 
@@ -10,6 +10,11 @@ const formatAmount = (amount: number) => (amount === 0 ? '-' : `₩${amount.toLo
 const formatPlainAmount = (amount: number) => `₩${amount.toLocaleString()}`;
 
 const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
+  const [copyStatus, setCopyStatus] = useState('');
+  const copyAccount = async () => {
+    try { await navigator.clipboard.writeText(`카카오뱅크 ${ACCOUNT_NUMBER} ${ACCOUNT_HOLDER}`); setCopyStatus('계좌를 복사했어요.'); }
+    catch { setCopyStatus('계좌번호를 직접 선택해 복사해주세요.'); }
+  };
   const totals = membershipDues2026.reduce(
     (acc, row) => ({
       annualDues: acc.annualDues + row.annualDues,
@@ -27,7 +32,7 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
 
   const summaryCards = [
     { label: '납부액(이월포함)', value: formatPlainAmount(clubFinanceSummary.cashBeforeRoundExpense2026), tone: 'bg-white text-[#172117]' },
-    { label: '26년 미납액', value: formatPlainAmount(totals.unpaidAmount), tone: 'bg-[#f3e5df] text-[#6d1f2a]' },
+    { label: '26년 미납액', value: formatPlainAmount(totals.unpaidAmount), tone: 'bg-[#f3e5df] text-[#294e3c]' },
     { label: '이번 지출', value: formatPlainAmount(roundExpense), tone: 'bg-[#fff7df] text-[#6f512a]' },
     { label: '결산 잔액', value: formatPlainAmount(clubFinanceSummary.currentCash), tone: 'bg-[#172117] text-[#fffaf2]' },
     { label: '회원수', value: `${clubFinanceSummary.memberCount}명`, tone: 'bg-white text-[#172117]' },
@@ -57,6 +62,8 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
           <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#847765]">회비 계좌</p>
           <p className="text-sm font-bold text-[#172117]">카카오뱅크 {ACCOUNT_NUMBER}</p>
           <p className="mt-0.5 text-[11px] font-semibold text-[#686b62]">예금주 {ACCOUNT_HOLDER}</p>
+          <button type="button" className="button button-green" onClick={copyAccount}>계좌 복사</button>
+          <p role="status" className="muted">{copyStatus}</p>
         </div>
       </div>
 
@@ -100,7 +107,7 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
           {clubExpenseItems2026Q2.map((item) => (
             <div key={item.no} className="flex items-center justify-between gap-3 rounded-[1rem] border border-[#d6c5a8] bg-[#fbf7ef] p-4">
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#6d1f2a]">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#294e3c]">
                   <ReceiptText size={17} />
                 </span>
                 <div className="min-w-0">
@@ -141,7 +148,7 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
                 </div>
               ))}
             </div>
-            {row.note ? <p className="mt-3 rounded-[0.85rem] bg-[#f3e5df] px-3 py-2 text-xs font-semibold text-[#6d1f2a]">{row.note}</p> : null}
+            {row.note ? <p className="mt-3 rounded-[0.85rem] bg-[#f3e5df] px-3 py-2 text-xs font-semibold text-[#294e3c]">{row.note}</p> : null}
           </div>
         ))}
       </div>
@@ -174,7 +181,7 @@ const LedgerSection: React.FC<LedgerSectionProps> = ({ onBack }) => {
                 <td className={`px-3 py-2 text-right font-mono text-xs font-bold ${row.unpaidAmount > 0 ? 'bg-[#dceccd] text-[#172117]' : 'text-[#172117]'}`}>
                   {formatAmount(row.unpaidAmount)}
                 </td>
-                <td className="px-3 py-2 text-xs font-semibold text-[#6d1f2a]">{row.note ?? ''}</td>
+                <td className="px-3 py-2 text-xs font-semibold text-[#294e3c]">{row.note ?? ''}</td>
               </tr>
             ))}
             <tr className="bg-[#f6c8a8] font-bold text-[#172117]">

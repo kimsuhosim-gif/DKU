@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Users, Trophy, Calendar, MapPin, Search, X, Images, ChevronLeft, ChevronRight } from 'lucide-react';
 import { galleryPhotos } from '../utils/golfData';
@@ -22,6 +22,28 @@ interface GalleryAlbum {
 const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
   const [selectedAlbum, setSelectedAlbum] = useState<GalleryAlbum | null>(null);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!selectedAlbum) return;
+    const previousFocus = document.activeElement as HTMLElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialogRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedAlbum(null);
+      if (event.key === 'ArrowRight') setSelectedPhotoIndex(value => (value + 1) % selectedAlbum.photos.length);
+      if (event.key === 'ArrowLeft') setSelectedPhotoIndex(value => (value - 1 + selectedAlbum.photos.length) % selectedAlbum.photos.length);
+      if (event.key === 'Tab') {
+        const controls = dialogRef.current?.querySelectorAll<HTMLButtonElement>('button');
+        if (!controls?.length) return;
+        const first = controls[0], last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', onKey); previousFocus?.focus(); };
+  }, [selectedAlbum]);
 
   const albums = Array.from(
     galleryPhotos.reduce((map, photo) => {
@@ -89,7 +111,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
         className="group mb-8 flex items-center space-x-2 text-[11px] font-bold uppercase tracking-[0.22em] text-sage-400 transition-colors hover:text-sage-600 sm:mb-12"
       >
         <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-        <span>Exit Archive</span>
+        <span>기록으로 돌아가기</span>
       </button>
 
       <div className="mb-10 flex flex-col gap-6 sm:mb-16 md:flex-row md:items-end md:justify-between md:gap-10">
@@ -97,13 +119,14 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
           <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-sage-400">
             Round Albums
           </span>
-          <h2 className="font-serif text-3xl italic text-sage-600 sm:text-5xl md:text-6xl">라운딩 사진 보관함</h2>
+          <h2 className="font-serif text-3xl italic text-sage-600 sm:text-5xl md:text-6xl">우리의 사진첩</h2>
           <p className="mt-5 break-keep text-sm font-bold leading-relaxed tracking-normal text-sage-400 opacity-90 sm:mt-8">
             라운딩별로 사진을 묶었습니다. 앨범을 누르면 그날 사진을 여러 장 넘겨볼 수 있습니다.
           </p>
         </div>
       </div>
 
+      <div className="archive-tabs"><a href="#/records">라운드 기록</a><a href="#/ranking">전체 평균 랭킹</a><a href="#/gallery" aria-current="page">사진첩</a></div>
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -190,24 +213,28 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/86 p-3 backdrop-blur-md sm:p-8"
           >
             <motion.div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={selectedAlbum.location + ' 사진첩'}
               initial={{ scale: 0.94, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.94, y: 16 }}
               className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-[1.4rem] bg-[#fbfaf7] shadow-2xl sm:rounded-[2rem]"
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="flex items-start justify-between gap-4 border-b border-[#16171b]/8 px-4 py-4 sm:px-6">
+              <div className="flex items-start justify-between gap-4 border-b border-[#213a31]/8 px-4 py-4 sm:px-6">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#6d1f2a]">Round album</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#294e3c]">Round album</p>
                   <h3 className="mt-1 break-keep text-xl font-bold text-[#172117] sm:text-2xl">{selectedAlbum.location}</h3>
-                  <p className="mt-1 text-xs font-semibold text-[#6e665a]">
+                  <p className="mt-1 text-xs font-semibold text-[#687269]">
                     {selectedAlbum.date} · {selectedAlbum.photos.length}장
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={closeAlbum}
-                  className="shrink-0 rounded-full bg-[#16171b] p-2 text-white transition hover:bg-[#6d1f2a]"
+                  className="shrink-0 rounded-full bg-[#213a31] p-2 text-white transition hover:bg-[#294e3c]"
                   aria-label="앨범 닫기"
                 >
                   <X size={22} />
@@ -254,7 +281,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
                     type="button"
                     onClick={() => setSelectedPhotoIndex(index)}
                     className={`h-16 w-20 shrink-0 overflow-hidden rounded-xl border transition sm:h-20 sm:w-28 ${
-                      index === selectedPhotoIndex ? 'border-[#6d1f2a] ring-2 ring-[#6d1f2a]/20' : 'border-[#c8a86b]/20 opacity-70 hover:opacity-100'
+                      index === selectedPhotoIndex ? 'border-[#294e3c] ring-2 ring-[#294e3c]/20' : 'border-[#c8a86b]/20 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={photo.src} alt={`${selectedAlbum.location} ${index + 1}`} className="h-full w-full object-cover" />

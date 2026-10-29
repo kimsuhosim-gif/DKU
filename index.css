@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "A2Z";
   src: url("/fonts/a2z-thin.woff2") format("woff2");
@@ -72,19 +76,19 @@
 
 :root {
   color-scheme: light;
-  --bg: #f6f2eb;
+  --bg: #f5f3ed;
   --bg-soft: #fbfaf7;
   --surface: rgba(251, 250, 247, 0.9);
   --surface-strong: #ffffff;
   --line: rgba(22, 23, 27, 0.11);
-  --text: #16171b;
-  --muted: #6e665a;
-  --accent: #6d1f2a;
+  --text: #213a31;
+  --muted: #687269;
+  --accent: #294e3c;
   --accent-soft: #ece5da;
   --gold: #c8a86b;
-  --deep: #16171b;
-  --oxblood: #6d1f2a;
-  --petrol: #1d4d55;
+  --deep: #213a31;
+  --oxblood: #294e3c;
+  --petrol: #42634d;
   --font-a2z: "A2Z", "Outfit", sans-serif;
   --font-a2z: "A2Z", "에이투지체", "Outfit", sans-serif;
 }
@@ -102,7 +106,7 @@ body {
   min-width: 320px;
   background:
     linear-gradient(115deg, rgba(255, 255, 255, 0.82) 0%, rgba(246, 242, 235, 0.96) 46%, rgba(229, 235, 235, 0.88) 100%),
-    linear-gradient(180deg, #fbfaf7 0%, #f6f2eb 48%, #eceff0 100%);
+    linear-gradient(180deg, #fbfaf7 0%, #f5f3ed 48%, #e8ece2 100%);
   color: var(--text);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -195,7 +199,7 @@ button {
 .luxury-chip {
   background: rgba(255, 255, 255, 0.68);
   border: 1px solid rgba(200, 168, 107, 0.24);
-  color: #1d4d55;
+  color: #42634d;
 }
 
 ::-webkit-scrollbar {

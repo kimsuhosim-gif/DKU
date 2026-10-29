@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Award, Copy, Download, Image, RotateCcw, Sparkles, Trophy, Users } from 'lucide-react';
 import { members, nextRoundGroups, nextRoundParticipants, nextRoundPlan, nextSchedule, records } from '../utils/golfData';
 
@@ -236,7 +236,21 @@ const drawRoundPosterCard = async () => {
 };
 
 const RoundToolsSection: React.FC<RoundToolsSectionProps> = ({ onBack }) => {
-  const [scoreRows, setScoreRows] = useState<ScoreRow[]>(getInitialRows);
+  const [scoreRows, setScoreRows] = useState<ScoreRow[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('re09-score-draft-v1') || 'null');
+      const initial = getInitialRows();
+      if (saved?.round === nextSchedule.date && Array.isArray(saved.rows) && saved.rows.length === initial.length && saved.rows.every((row: ScoreRow, index: number) => row.name === initial[index].name && ['handicap','gross','front','back'].every(key => typeof row[key as keyof ScoreRow] === 'string'))) return saved.rows;
+    } catch { /* A missing or damaged draft must not block the tools. */ }
+    return getInitialRows();
+  });
+  const [draftStatus, setDraftStatus] = useState('');
+  useEffect(() => {
+    try {
+      localStorage.setItem('re09-score-draft-v1', JSON.stringify({round:nextSchedule.date, rows:scoreRows}));
+      setDraftStatus('이 브라우저에 자동 저장됨 · 다른 멤버에게는 공유되지 않습니다.');
+    } catch { setDraftStatus('자동 저장이 불가능합니다. 화면을 닫기 전에 결과를 저장해주세요.'); }
+  }, [scoreRows]);
   const [shareStatus, setShareStatus] = useState('이미지 준비 완료');
   const [posterStatus, setPosterStatus] = useState('포스터 준비 완료');
 
@@ -432,12 +446,13 @@ const RoundToolsSection: React.FC<RoundToolsSectionProps> = ({ onBack }) => {
   return (
     <div className="min-h-screen px-4 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-7xl">
+        <p role="status" className="mb-5 text-sm text-sage-500">{draftStatus}</p>
         <button
           onClick={onBack}
           className="mb-8 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[#4c5d47] transition hover:text-[#172117]"
         >
           <ArrowLeft size={16} />
-          홈으로
+          라운드 목록
         </button>
 
         <div className="grid gap-5 lg:grid-cols-[0.76fr_1.24fr]">
