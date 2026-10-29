@@ -8,7 +8,6 @@ import ClubhouseHome from './components/ClubhouseHome';
 import {readView,ViewState} from './utils/clubNavigation';
 export type {ViewState} from './utils/clubNavigation';
 const RoundHub=lazy(()=>import('./components/RoundHub'));
-const ArchiveHub=lazy(()=>import('./components/ArchiveHub'));
 const MoreSection=lazy(()=>import('./components/MoreSection'));
 const MoneyGameSection=lazy(()=>import('./components/MoneyGameSection'));
 const RoundToolsSection=lazy(()=>import('./components/RoundToolsSection'));
@@ -29,14 +28,14 @@ export default function App(){
  const back=()=>navigateTo('home');
  const content=()=>{switch(currentView){
  case 'rounds':return <RoundHub/>;
- case 'records':return <ArchiveHub/>;
+ case 'records':return <RoundHub/>;
  case 'more':return <MoreSection/>;
  case 'members':return <MemberSection onBack={back}/>;
  case 'ledger':return <LedgerSection onBack={back}/>;
  case 'weather':return <WeatherSection onBack={()=>navigateTo('rounds')}/>;
  case 'map':return <MapSection onBack={()=>navigateTo('rounds')}/>;
- case 'ranking':return <RankingSection onBack={()=>navigateTo('records')}/>;
- case 'gallery':return <GallerySection onBack={()=>navigateTo('records')}/>;
+ case 'ranking':return <RankingSection onBack={back}/>;
+ case 'gallery':return <GallerySection onBack={()=>navigateTo('more')}/>;
  case 'bets':return <MoneyGameSection onBack={()=>navigateTo('more')}/>;
  case 'tools':return <RoundToolsSection onBack={()=>navigateTo('rounds')}/>;
  default:return <ClubhouseHome/>;

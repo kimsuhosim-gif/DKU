@@ -1,2 +1,2 @@
 import React from 'react';
-export default function Footer(){return <footer className="club-footer"><div className="club-container footer-inner"><div className="footer-brand-lockup"><img src="/images/dku-re09-bear-male-v2.png" alt="DKU 부동산학과 09학번 곰 마스코트"/><div><strong>DKU RE09.</strong><p>좋은 사람들과, 오래도록 좋은 라운드.</p></div></div><span>단국대 09 · 골프 모임<br/>OUR DAYS ON THE FAIRWAY</span></div></footer>;}
+export default function Footer(){return <footer className="club-footer"><div className="club-container footer-inner"><div className="footer-brand-lockup"><img src="/images/dku-re09-bear-male-v2.png" alt="DKU 부동산학과 09학번 곰 마스코트"/><div><strong>DKU RE09.</strong><p>좋은 사람들과, 오래도록 좋은 라운드.</p></div></div><span>단국대 부동산학과 09 · 골프 모임<br/>OUR DAYS ON THE FAIRWAY</span></div></footer>;}

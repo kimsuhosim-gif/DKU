@@ -126,7 +126,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="archive-tabs"><a href="#/records">라운드 기록</a><a href="#/ranking">전체 평균 랭킹</a><a href="#/gallery" aria-current="page">사진첩</a></div>
+      
       <motion.div
         variants={containerVariants}
         initial="hidden"
