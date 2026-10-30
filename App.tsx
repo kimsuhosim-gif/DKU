@@ -7,7 +7,7 @@ import PasswordGate from './components/PasswordGate';
 import ClubhouseHome from './components/ClubhouseHome';
 import {readView,ViewState} from './utils/clubNavigation';
 export type {ViewState} from './utils/clubNavigation';
-const PuttingGame=lazy(()=>import('./components/PuttingGame'));
+const SmashGame=lazy(()=>import('./components/SmashGame'));
 const RoundHub=lazy(()=>import('./components/RoundHub'));
 const MoreSection=lazy(()=>import('./components/MoreSection'));
 const MoneyGameSection=lazy(()=>import('./components/MoneyGameSection'));
@@ -28,7 +28,7 @@ export default function App(){
  const navigateTo=(view:ViewState)=>{window.location.hash='/'+view;};
  const back=()=>navigateTo('home');
  const content=()=>{switch(currentView){
- case 'game':return <PuttingGame/>;
+ case 'game':return <SmashGame/>;
  case 'rounds':return <RoundHub/>;
  case 'records':return <RoundHub/>;
  case 'more':return <MoreSection/>;
