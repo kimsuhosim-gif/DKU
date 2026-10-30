@@ -1,80 +1,116 @@
-import React,{useEffect,useRef,useState} from 'react';
-import {ArrowLeft,ArrowRight,Flag,RotateCcw,Trophy,Download,Volume2,VolumeX} from 'lucide-react';
-import {COURSES,Ball,Point,stepBall,shotVelocity} from '../utils/puttingGame';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { ArrowLeft, ArrowRight, Volume2, VolumeX, RotateCcw, Trophy, Move, X, Download, Play, Target, Eye } from 'lucide-react';
+import { COURSES } from '../utils/puttingGame';
+import { GolfScene, ShotResult } from '../utils/golfScene';
 import './PuttingGame.css';
 
-type Phase='ready'|'moving'|'holed'|'capped'|'finished';
-type Mood='ready'|'swing'|'win'|'lose';
-const KEY='re09-putting-v1-best';
-function readBest():number|null{try{const n=Number(localStorage.getItem(KEY));return Number.isInteger(n)&&n>=5&&n<=50?n:null;}catch{return null;}}
-export default function PuttingGame(){
- const [hole,setHole]=useState(0),[strokes,setStrokes]=useState(0),[scores,setScores]=useState<number[]>([]);
- const [phase,setPhase]=useState<Phase>('ready'),[mood,setMood]=useState<Mood>('ready');
- const [angle,setAngle]=useState(0),[power,setPower]=useState(50),[drag,setDrag]=useState<Point|null>(null);
- const [position,setPosition]=useState<Point>(COURSES[0].start),[best,setBest]=useState(readBest);
- const [message,setMessage]=useState('효민이 출전! 공을 뒤로 당겼다가 놓아보세요.'),[sound,setSound]=useState(false),[confirmReset,setConfirmReset]=useState(false),[exporting,setExporting]=useState(false);
- const course=COURSES[hole],total=scores.reduce((s,n)=>s+n,0)+(phase==='finished'?0:strokes);
- const ball=useRef<Ball>({...COURSES[0].start,vx:0,vy:0});
- const frame=useRef(0),dragging=useRef<number|null>(null),svg=useRef<SVGSVGElement>(null),busy=useRef(false);
- const audio=useRef<AudioContext|null>(null),mounted=useRef(true),transitionButton=useRef<HTMLButtonElement>(null);
- useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;cancelAnimationFrame(frame.current);audio.current?.close();};},[]);
- useEffect(()=>{if(phase==='holed'||phase==='capped'||phase==='finished')transitionButton.current?.focus({preventScroll:true});},[phase]);
- function tone(success:boolean){if(!sound)return;try{const ctx=audio.current??new AudioContext();audio.current=ctx;void ctx.resume();const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(success?520:240,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(success?780:120,ctx.currentTime+.16);g.gain.setValueAtTime(.06,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.24);o.start();o.stop(ctx.currentTime+.25);}catch{/* Sound is optional. */}}
- function settle(kind:'water'|'stopped'|'holed',count:number,origin:Point){
-  busy.current=false;
-  if(kind==='holed'){setPosition({...course.cup});setMood('win');setPhase('holed');setMessage(count===1?'홀인원! 효민이 날아간다!!':`${count}타 만에 성공! 이 맛에 골프 치지!`);tone(true);return;}
-  const finalCount=Math.min(10,count+(kind==='water'?1:0));setStrokes(finalCount);
-  if(kind==='water'){ball.current={...origin,vx:0,vy:0};setPosition({...origin});}
-  setMood('lose');tone(false);
-  if(finalCount>=10){setPhase('capped');setMessage('이번 홀은 10타로 마무리. 다음 홀에서 만회하자!');}
-  else{setPhase('ready');setMessage(kind==='water'?'풍덩… 1벌타! 방금 친 자리에서 다시 해보자.':'으아아! 안 들어갔어! 다음 퍼팅으로 만회하자.');}
- }
- function shoot(a=angle,p=power){
-  if(busy.current||phase!=='ready')return;busy.current=true;dragging.current=null;setDrag(null);
-  const count=strokes+1,origin={x:ball.current.x,y:ball.current.y};setStrokes(count);setPhase('moving');setMood('swing');setMessage('공이 굴러가는 중…');
-  Object.assign(ball.current,shotVelocity(a,p));let previous=0,elapsed=0;
-  function tick(now:number){
-   if(!mounted.current)return;
-   const dt=previous?Math.min((now-previous)/1000,.04):1/60;previous=now;elapsed+=dt;
-   let result:ReturnType<typeof stepBall>='moving';const n=Math.ceil(dt/(1/120));
-   for(let i=0;i<n;i++){result=stepBall(ball.current,course,dt/n);if(result!=='moving')break;}
-   setPosition({x:ball.current.x,y:ball.current.y});
-   if(result!=='moving'){settle(result,count,origin);return;}
-   if(elapsed>12){ball.current.vx=0;ball.current.vy=0;settle('stopped',count,origin);return;}
-   frame.current=requestAnimationFrame(tick);
+type Phase = 'intro' | 'ready' | 'moving' | 'holed' | 'capped' | 'finished';
+const BEST_KEY = 're09-island-golf-best';
+function readBest(): number | null { try { const n = Number(localStorage.getItem(BEST_KEY)); return Number.isInteger(n) && n >= 5 && n <= 50 ? n : null; } catch { return null; } }
+const NAMES = ['THE FIRST GREEN', 'STONE GATE', 'SAND & SUN', 'BLUE LAGOON', 'THE FINAL APPROACH'];
+
+export default function PuttingGame() {
+  const host = useRef<HTMLDivElement>(null), engine = useRef<GolfScene | null>(null);
+  const resultHandler = useRef<(result: ShotResult) => void>(() => {});
+  const [phase, setPhase] = useState<Phase>('intro'), [hole, setHole] = useState(0), [strokes, setStrokes] = useState(0), [scores, setScores] = useState<number[]>([]);
+  const [angle, setAngle] = useState(0), [power, setPower] = useState(50), [best, setBest] = useState(readBest);
+  const [sound, setSound] = useState(false), [topView, setTopView] = useState(false), [ready, setReady] = useState(false), [error, setError] = useState('');
+  const [help, setHelp] = useState(false), [reset, setReset] = useState(false), [charging, setCharging] = useState(false), [exporting, setExporting] = useState(false);
+  const [message, setMessage] = useState('첫 티샷, 가볍게 시작해볼까?');
+  const chargingRef = useRef(false), chargeFrame = useRef(0), chargeStart = useRef(0), chargePower = useRef(50), ignoreClick = useRef(false);
+  const drag = useRef<{ x: number; y: number; id: number } | null>(null), aimRef = useRef({ angle: 0, power: 50 });
+  const nextButton = useRef<HTMLButtonElement>(null), reduced = useReducedMotion();
+  const total = scores.reduce((a, b) => a + b, 0) + (phase === 'finished' ? 0 : strokes), course = COURSES[hole];
+  const canShoot = phase === 'ready' && !help && !reset && !error;
+
+  resultHandler.current = result => {
+    if (result === 'holed') { setPhase('holed'); setMessage(strokes === 1 ? '들어갔다아아!! 효민이 날아간다!' : '이게 바로 클래스! 나이스 퍼팅!!'); return; }
+    const count = Math.min(10, strokes + (result === 'water' ? 1 : 0)); setStrokes(count);
+    setPhase(count >= 10 ? 'capped' : 'ready');
+    setMessage(count >= 10 ? '멘탈 잡자… 다음 홀에서 복수한다!' : result === 'water' ? '으아악! 물이다! 1벌타, 제자리에서 다시.' : '아아아 왜 안 들어가!! 다시 간다.');
+  };
+  useEffect(() => {
+    let scene: GolfScene | null = null;
+    try { scene = new GolfScene(host.current!, r => resultHandler.current(r), setError); engine.current = scene; setReady(true); }
+    catch { setError('이 브라우저에서 3D 화면을 열지 못했어요. Chrome 또는 Safari에서 하드웨어 가속을 켜고 다시 접속해 주세요.'); }
+    return () => { cancelAnimationFrame(chargeFrame.current); chargingRef.current = false; scene?.dispose(); engine.current = null; };
+  }, []);
+  useEffect(() => { aimRef.current = { angle, power }; engine.current?.setAim(angle, power); }, [angle, power]);
+  useEffect(() => { engine.current?.setActive(phase !== 'intro' && phase !== 'finished'); if (phase === 'holed' || phase === 'capped' || phase === 'finished') nextButton.current?.focus({ preventScroll: true }); }, [phase]);
+
+  function shoot(a = angle, p = power) {
+    if (!canShoot || !engine.current?.shoot(a, p)) return;
+    setStrokes(n => n + 1); setPhase('moving'); setMessage('좋아… 그대로 들어가라…!');
   }
-  frame.current=requestAnimationFrame(tick);
- }
- function localPoint(e:React.PointerEvent<SVGSVGElement>):Point{const matrix=svg.current!.getScreenCTM()!;const point=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());return{x:point.x,y:point.y};}
- function aim(p:Point){const dx=position.x-p.x,dy=position.y-p.y,d=Math.hypot(dx,dy);return{angle:Math.atan2(dx,-dy)*180/Math.PI,power:Math.min(100,d/1.1),distance:d};}
- function pointerDown(e:React.PointerEvent<SVGSVGElement>){if(phase!=='ready'||busy.current||dragging.current!==null||e.button!==0)return;const p=localPoint(e);if(Math.hypot(p.x-position.x,p.y-position.y)>30)return;e.preventDefault();dragging.current=e.pointerId;e.currentTarget.setPointerCapture(e.pointerId);setDrag(p);}
- function pointerMove(e:React.PointerEvent<SVGSVGElement>){if(dragging.current!==e.pointerId)return;const p=localPoint(e),v=aim(p);setDrag(p);setAngle(Math.round(v.angle));setPower(Math.max(1,Math.round(v.power)));}
- function pointerUp(e:React.PointerEvent<SVGSVGElement>){if(dragging.current!==e.pointerId)return;const v=aim(localPoint(e));dragging.current=null;setDrag(null);if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);if(v.distance>8)shoot(v.angle,v.power);}
- function cancelDrag(){dragging.current=null;setDrag(null);}
- function next(){const done=[...scores,strokes];setScores(done);if(hole===COURSES.length-1){setPhase('finished');const result=done.reduce((a,b)=>a+b,0);setMood('win');try{const old=readBest();if(old===null||result<old){localStorage.setItem(KEY,String(result));setBest(result);setMessage('완주! 이 기기의 최고 기록을 저장했어요.');}else setMessage('완주! 다음 도전에서는 기록을 더 줄여보자.');}catch{setMessage('완주! 브라우저 저장이 차단되어 기록은 저장하지 못했어요.');}return;}const index=hole+1;setHole(index);setStrokes(0);ball.current={...COURSES[index].start,vx:0,vy:0};setPosition({...COURSES[index].start});setAngle(0);setPower(50);setMood('ready');setPhase('ready');setMessage(COURSES[index].hint);}
- function restart(){cancelAnimationFrame(frame.current);busy.current=false;cancelDrag();setHole(0);setStrokes(0);setScores([]);setPhase('ready');setMood('ready');ball.current={...COURSES[0].start,vx:0,vy:0};setPosition({...COURSES[0].start});setPower(50);setAngle(0);setConfirmReset(false);setMessage('새로운 라운드! 이번엔 더 적은 타수로.');}
- async function saveResult(){setExporting(true);try{await document.fonts.ready;const img=new Image();img.src='/images/hyomin-golfer-reactions.png';await img.decode();const canvas=document.createElement('canvas');canvas.width=900;canvas.height=1100;const c=canvas.getContext('2d')!;c.fillStyle='#f5f3e8';c.fillRect(0,0,900,1100);c.fillStyle='#244b3b';c.fillRect(30,30,840,1040);c.fillStyle='#f5e3b1';c.textAlign='center';c.font='24px sans-serif';c.fillText('RE09 MINI PUTT · 효민이의 퍼팅 도전',450,95);c.drawImage(img,0,img.height/2,img.width/2,img.height/2,260,130,380,480);c.fillStyle='#fff8e8';c.font='bold 78px sans-serif';c.fillText(`${scores.reduce((s,n)=>s+n,0)}타`,450,720);c.font='25px sans-serif';c.fillText('5개 홀 완주 · 개인 플레이 기록',450,775);c.font='23px sans-serif';scores.forEach((s,i)=>c.fillText(`${i+1}H`,150+i*150,855));scores.forEach((s,i)=>c.fillText(`${s}타`,150+i*150,900));c.font='19px sans-serif';c.fillText('단국대 부동산학과 09 · GOOD GOLF, GOOD COMPANY',450,1000);const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('export'))));const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='RE09-효민이-퍼팅기록.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setMessage('결과 이미지 다운로드를 시작했어요.');}catch{setMessage('이미지를 저장하지 못했어요. 다시 눌러 주세요.');}finally{setExporting(false);}}
- const preview=shotVelocity(angle,power),length=Math.hypot(preview.vx,preview.vy),end={x:position.x+preview.vx/length*(35+power*.65),y:position.y+preview.vy/length*(35+power*.65)};
- return <div className="club-container inner-page putt-page"><a className="putt-back" href="#/more"><ArrowLeft size={16}/> 클럽 데스크</a><header className="putt-title"><div><span className="eyebrow">RE09 ARCADE / VOL. 01</span><h1>효민이의 퍼팅 도전<span>MINI PUTT</span></h1><p>퍼팅은 신중하게. 리액션은 누구보다 격하게.</p></div><span className="putt-best"><Trophy size={17}/> MY BEST <b>{best===null?'첫 도전':`${best}타`}</b></span></header>
- <div className="putt-layout"><section className="putt-stage" aria-label="퍼팅 게임"><div className="putt-scorebar"><span><Flag size={15}/> HOLE <b>{hole+1} / 5</b></span><span>PAR <b>{course.par}</b></span><span>이번 홀 <b>{strokes}타</b></span><span>합계 <b>{total}타</b></span></div>
- {phase==='finished'?<div className="putt-finish"><span className="eyebrow">ROUND COMPLETE</span><h2>효민이, 오늘도 해냈다!</h2><div className="putt-actor putt-win" role="img" aria-label="효민이의 격한 환호"/><strong>{total}<small>타</small></strong><p>5개 홀 · 기준 {COURSES.reduce((s,c)=>s+c.par,0)}타</p><button ref={transitionButton} className="button button-brass" onClick={restart}><RotateCcw size={18}/> 다시 도전</button><button className="putt-save" disabled={exporting} onClick={saveResult}><Download size={16}/>{exporting?'저장 중…':'결과 이미지 저장'}</button></div>:<>
- <div className="putt-course-heading"><strong>{course.name}</strong><span>{course.hint}</span></div>
- <div className="putt-board-wrap"><svg ref={svg} viewBox="0 0 360 500" className="putt-board" role="img" aria-label={`${hole+1}번 홀 퍼팅 코스. 아래 방향과 세기 조절로도 플레이할 수 있습니다.`} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={cancelDrag} onLostPointerCapture={cancelDrag}>
- <defs><pattern id="putt-grass" width="44" height="44" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#b9d5a2"/><path d="M0 0H44V22H0Z" fill="#c4deb0"/></pattern><radialGradient id="putt-ball"><stop stopColor="#fff"/><stop offset="1" stopColor="#dce5d4"/></radialGradient></defs>
- <rect x="5" y="5" width="350" height="490" rx="30" fill="#587e54"/><rect x="16" y="16" width="328" height="468" rx="22" fill="url(#putt-grass)" stroke="#e2e9bd" strokeWidth="3"/>
- {course.sand.map((r,i)=><g key={'sand'+i}><rect {...{x:r.x,y:r.y,width:r.w,height:r.h}} rx="16" fill="#eddaa4" stroke="#cdb87c" strokeWidth="3"/><text x={r.x+r.w/2} y={r.y+r.h/2} textAnchor="middle" fill="#8d7949" fontSize="10">BUNKER</text></g>)}
- {course.water.map((r,i)=><g key={'water'+i}><rect x={r.x} y={r.y} width={r.w} height={r.h} rx="0" fill="#82bdcb" stroke="#5292a2" strokeWidth="2"/><path d={`M${r.x+15} ${r.y+35}q10 -8 20 0t20 0t20 0 M${r.x+15} ${r.y+75}q10 -8 20 0t20 0t20 0`} fill="none" stroke="#c7e7e8" strokeWidth="2"/><text x={r.x+r.w/2} y={r.y+r.h-15} textAnchor="middle" fill="#285e6d" fontSize="10">WATER +1</text></g>)}
- {course.walls.map((r,i)=><rect key={i} x={r.x} y={r.y} width={r.w} height={r.h} rx="3" fill="#718575" stroke="#435a4a" strokeWidth="3"/>)}
- <circle cx={course.cup.x} cy={course.cup.y} r="19" fill="#e6edbc" opacity=".65"/><ellipse cx={course.cup.x} cy={course.cup.y} rx="11" ry="10" fill="#243d2d"/><path d={`M${course.cup.x} ${course.cup.y-3}v-42l24 8-24 8`} fill="#f4e8b7" stroke="#4b6844" strokeWidth="2"/>
- {phase==='ready'&&<g><circle cx={position.x} cy={position.y} r="23" fill="none" stroke="#fff9dd" strokeDasharray="3 5"/><line x1={position.x} y1={position.y} x2={end.x} y2={end.y} stroke="#37573c" strokeWidth="2" strokeDasharray="5 4"/>{drag&&<line x1={position.x} y1={position.y} x2={drag.x} y2={drag.y} stroke="#fff" opacity=".65"/>}</g>}
- {phase!=='holed'&&<g><ellipse cx={position.x+2} cy={position.y+4} rx="8" ry="5" fill="#35573840"/><circle cx={position.x} cy={position.y} r="7" fill="url(#putt-ball)" stroke="#62765c" strokeWidth="1"/></g>}
- </svg>
- {mood==='lose'&&phase==='ready'&&<div className="putt-miss-reaction"><div className="putt-actor putt-lose" role="img" aria-label="효민이 폭풍 좌절"/><span>으아아! 다시!</span></div>}
- {(phase==='holed'||phase==='capped')&&<div className="putt-hole-overlay"><span>{phase==='holed'?'NICE PUTT!':'다음 홀에서 만회하자!'}</span><div className={'putt-actor putt-overlay-actor putt-'+(phase==='holed'?'win':'lose')} role="img" aria-label={phase==='holed'?'효민이 대환호':'효민이 폭풍 좌절'}/><h2>{strokes}타 · {phase==='holed'?'홀 아웃':'타수 제한'}</h2><button className="button button-brass" ref={transitionButton} onClick={next}>{hole===4?'최종 결과':'다음 홀'}<ArrowRight size={18}/></button></div>}</div>
- <fieldset className="putt-controls" disabled={phase!=='ready'}><legend>방향·세기로도 퍼팅할 수 있어요</legend><label>방향 <b>{angle}°</b><input aria-label="퍼팅 방향" type="range" min="-180" max="180" value={angle} onChange={e=>setAngle(Number(e.target.value))}/></label><label>세기 <b>{power}%</b><input aria-label="퍼팅 세기" type="range" min="1" max="100" value={power} onChange={e=>setPower(Number(e.target.value))}/></label><button className="button button-green" onClick={()=>shoot()}>퍼팅! <ArrowRight size={17}/></button></fieldset></>}
- </section><aside className="putt-side"><div className="putt-player"><div className="putt-player-label"><span>PLAYER 01</span><span>DKU RE09</span></div><div className={'putt-actor putt-'+mood} role="img" aria-label={`김효민 캐릭터: ${{ready:'준비',swing:'퍼팅',win:'격한 환호',lose:'격한 좌절'}[mood]}`}/><div className="putt-player-name"><h2>김효민</h2><span>오늘은 내가 퍼팅왕</span></div><p className="putt-message" role="status">{message}</p></div>
- <div className="putt-scorecard"><span className="eyebrow">YOUR SCORECARD</span><div>{COURSES.map((c,i)=><span key={c.name} aria-current={hole===i?'step':undefined}><small>{i+1}H · PAR {c.par}</small><b>{scores[i]??(i===hole&&phase!=='finished'?strokes:'—')}</b></span>)}</div></div>
- <details className="putt-help"><summary>플레이 방법 & 규칙</summary><p>공을 누른 뒤 보내려는 방향의 반대로 당기고 놓으세요. 길게 당길수록 강하게 굴러갑니다. 점선은 방향 안내이며 실제 이동 거리는 아니에요.</p><p>아래 슬라이더와 퍼팅 버튼으로도 플레이할 수 있어요. 방향 0°는 위, 90°는 오른쪽입니다.</p><p>벽은 튕기고, 모래는 감속, 물은 1벌타 후 직전 위치로 복귀합니다. 홀당 최대 10타로 마무리합니다.</p><p>기록은 이 브라우저에만 저장되며, 실제 골프 랭킹에는 반영하지 않습니다.</p></details>
- <div className="putt-options"><button aria-pressed={sound} onClick={()=>{if(!sound){try{audio.current??=new AudioContext();void audio.current.resume();}catch{/* Sound is optional. */}}setSound(!sound);}}>{sound?<Volume2 size={16}/>:<VolumeX size={16}/>} 효과음 {sound?'켜짐':'꺼짐'}</button><button disabled={phase==='moving'} onClick={()=>setConfirmReset(true)}><RotateCcw size={16}/> 처음부터</button></div>{confirmReset&&<div className="putt-reset"><p>현재 진행을 지우고 새로 시작할까요?</p><button onClick={restart}>새 게임 시작</button><button onClick={()=>setConfirmReset(false)}>계속 플레이</button></div>}
- </aside></div></div>;
+  function cancelCharge() { cancelAnimationFrame(chargeFrame.current); chargingRef.current = false; setCharging(false); }
+  function beginCharge() {
+    if (!canShoot || chargingRef.current) return;
+    chargingRef.current = true; setCharging(true); chargeStart.current = performance.now(); chargePower.current = power;
+    const tick = (now: number) => { if (!chargingRef.current) return; const elapsed = now - chargeStart.current; if (elapsed > 160) { const p = Math.round(10 + (Math.sin((elapsed - 160) / 700 - Math.PI / 2) + 1) * 45); chargePower.current = p; setPower(p); } chargeFrame.current = requestAnimationFrame(tick); };
+    chargeFrame.current = requestAnimationFrame(tick);
+  }
+  function releaseCharge() { if (!chargingRef.current) return; const p = chargePower.current; cancelCharge(); ignoreClick.current = true; shoot(angle, p); }
+  function start() { setPhase('ready'); setMessage('방향을 맞추고 SHOT을 꾹 눌렀다 놓아봐!'); }
+  function next() {
+    const done = [...scores, strokes]; setScores(done);
+    if (hole === 4) {
+      setPhase('finished'); const score = done.reduce((a, b) => a + b, 0);
+      try { const old = readBest(); if (old === null || score < old) { localStorage.setItem(BEST_KEY, String(score)); setBest(score); } setMessage('오늘의 라운드 완주! 기록은 이 브라우저에 저장했어.'); }
+      catch { setMessage('완주! 브라우저 저장이 차단되어 기록은 저장하지 못했어.'); } return;
+    }
+    const index = hole + 1; engine.current?.loadCourse(index); setHole(index); setStrokes(0); setAngle(0); setPower(50); setPhase('ready'); setMessage(COURSES[index].hint);
+  }
+  function restart() { cancelCharge(); engine.current?.loadCourse(0); setHole(0); setStrokes(0); setScores([]); setAngle(0); setPower(50); setPhase('ready'); setReset(false); setMessage('리셋 완료. 이번에는 기록을 깨보자!'); }
+  function pointerDown(e: React.PointerEvent<HTMLDivElement>) { if (!canShoot || e.button !== 0) return; drag.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; e.currentTarget.setPointerCapture(e.pointerId); }
+  function pointerMove(e: React.PointerEvent<HTMLDivElement>) { const d = drag.current; if (!d || d.id !== e.pointerId || !canShoot) return; const a = engine.current!.aimFromDrag(e.clientX - d.x, e.clientY - d.y); aimRef.current = a; setAngle(Math.round(a.angle)); setPower(Math.max(1, Math.round(a.power))); }
+  function pointerUp(e: React.PointerEvent<HTMLDivElement>) { const d = drag.current; drag.current = null; if (d && d.id === e.pointerId && canShoot && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 15) shoot(aimRef.current.angle, aimRef.current.power); }
+  async function saveResult() {
+    setExporting(true);
+    try {
+      await document.fonts.ready; const c = document.createElement('canvas'); c.width = 900; c.height = 1100; const ctx = c.getContext('2d')!;
+      ctx.fillStyle = '#173c35'; ctx.fillRect(0, 0, 900, 1100); ctx.fillStyle = '#efdfad'; ctx.textAlign = 'center'; ctx.font = '24px sans-serif'; ctx.fillText('RE09 · ISLAND GOLF', 450, 95);
+      const image = new Image(); image.src = '/images/hyomin-golfer-reactions.png'; await image.decode(); ctx.drawImage(image, 0, image.height / 2, image.width / 2, image.height / 2, 285, 145, 330, 422);
+      ctx.fillStyle = '#fff9e8'; ctx.font = 'bold 86px sans-serif'; ctx.fillText(`${total}타`, 450, 700); ctx.font = '26px sans-serif'; ctx.fillText('효민이와 5홀 완주', 450, 760);
+      ctx.font = '22px sans-serif'; scores.forEach((s, i) => { ctx.fillText(`${i + 1}H`, 150 + i * 150, 840); ctx.fillText(`${s}타`, 150 + i * 150, 895); });
+      ctx.font = '19px sans-serif'; ctx.fillText('단국대 부동산학과 09 · 개인 플레이 기록', 450, 1000);
+      const blob = await new Promise<Blob>((resolve, reject) => c.toBlob(b => b ? resolve(b) : reject(Error('image')))); const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = 'RE09-island-golf.png'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000);
+    } catch { setMessage('이미지 저장에 실패했어. 다시 눌러줘.'); } finally { setExporting(false); }
+  }
+  const ended = phase === 'holed' || phase === 'capped';
+  return <section className={`island-game ${phase === 'intro' ? 'is-intro' : ''}`} aria-label="RE09 아일랜드 골프">
+    <div className="island-canvas" ref={host} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={() => { drag.current = null; }} onLostPointerCapture={() => { drag.current = null; }} />
+    <div className="island-vignette" />
+    <header className="island-header"><a href="#/more" aria-label="게임 나가기" className="island-icon"><ArrowLeft size={19} /></a><a href="#/more" className="island-brand">RE09<span>ISLAND GOLF</span></a><div className="island-header-actions"><button className="island-icon" aria-label={sound ? '효과음 끄기' : '효과음 켜기'} aria-pressed={sound} onClick={() => { engine.current?.setSound(!sound); setSound(!sound); }}>{sound ? <Volume2 size={18} /> : <VolumeX size={18} />}</button><button className="island-icon" aria-label="플레이 방법" onClick={() => { cancelCharge(); setHelp(true); }}>?</button></div></header>
+    {!ready && !error && <div className="island-loading" role="status"><span />섬으로 이동하는 중…</div>}
+    {error && <div className="island-modal-backdrop"><div className="island-modal" role="alert"><h2>3D 화면을 불러오지 못했어요</h2><p>{error}</p><button className="island-primary" onClick={() => location.reload()}>다시 불러오기</button><a href="#/more">클럽으로 돌아가기</a></div></div>}
+    <AnimatePresence>
+      {phase === 'intro' && ready && !error && <motion.div className="island-intro" initial={{ opacity: 0, y: reduced ? 0 : 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduced ? 0 : -15 }}>
+        <span className="island-kicker"><i /> THE RE09 GOLF CLUB</span><h1>작은 섬.<br />큰 <em>승부.</em></h1><p>효민이와 떠나는 5홀 골프 여행.<br />퍼팅은 섬세하게, 리액션은 거침없이.</p>
+        <button className="island-primary island-start" onClick={start}>라운드 시작 <Play size={18} fill="currentColor" /></button>
+        <div className="island-intro-meta"><span>5 HOLES</span><span>3D GOLF</span><span>HYOMIN EDITION</span></div>
+        <div className="island-intro-player"><span className="island-portrait" /><div><small>YOUR PLAYER</small><strong>김효민 <span>· RE09</span></strong></div><span className="island-best"><Trophy size={14} />{best ? `${best}타` : '첫 라운드'}</span></div>
+      </motion.div>}
+    </AnimatePresence>
+    {phase !== 'intro' && ready && !error && <>
+      <div className="island-hud"><div className="island-hole"><span>HOLE</span><strong>{String(hole + 1).padStart(2, '0')}<small> / 05</small></strong><p>{NAMES[hole]}</p></div><div className="island-score"><span>PAR <b>{course.par}</b></span><span>이번 홀 <b>{strokes}</b></span><span>합계 <b>{total}</b></span></div></div>
+      <div className="island-course-tools"><button className="island-icon" aria-label="카메라 시점 전환" aria-pressed={topView} onClick={() => setTopView(engine.current?.toggleView() ?? false)}><Eye size={18} /></button><button className="island-icon" aria-label="처음부터 다시" disabled={phase === 'moving'} onClick={() => { cancelCharge(); setReset(true); }}><RotateCcw size={17} /></button></div>
+      <div className="island-commentary" role="status"><span className={`island-portrait ${ended || phase === 'finished' ? phase === 'capped' ? 'is-lose' : 'is-win' : phase === 'ready' && strokes > 0 ? 'is-lose' : ''}`} /><p><b>HYOMIN</b>{message}</p></div>
+      {phase !== 'finished' && !ended && <div className="island-controls">
+        <div className="island-controls-top"><span><Move size={13} /> 화면을 당겼다 놓아도 퍼팅!</span><span>{phase === 'moving' ? 'ON THE MOVE' : charging ? 'RELEASE TO SHOT' : 'READY TO PUTT'}<i className={phase === 'moving' ? 'moving' : ''} /></span></div>
+        <div className="island-controls-main"><label className="island-direction"><span>방향 <b>{Math.round(angle)}°</b></span><input type="range" aria-label="퍼팅 방향" min="-180" max="180" value={angle} disabled={!canShoot || charging} onChange={e => setAngle(Number(e.target.value))} /><div><span>−180°</span><span>0° ↑</span><span>180°</span></div></label><label className="island-power"><span>파워 <b>{power}%</b></span><input type="range" aria-label="퍼팅 세기" min="1" max="100" value={power} disabled={!canShoot || charging} onChange={e => setPower(Number(e.target.value))} /><div className="island-power-track"><i style={{ width: `${power}%` }} /></div></label>
+        <button className={`island-shot ${charging ? 'is-charging' : ''}`} disabled={!canShoot} aria-label="퍼팅! 누르고 있다 놓으면 파워 조절" onPointerDown={e => { if (e.button !== 0) return; e.currentTarget.setPointerCapture(e.pointerId); beginCharge(); }} onPointerUp={() => releaseCharge()} onPointerCancel={cancelCharge} onLostPointerCapture={() => { if (chargingRef.current) cancelCharge(); }} onClick={() => { if (ignoreClick.current) { ignoreClick.current = false; return; } shoot(); }}><Target size={19} /><span>{phase === 'moving' ? 'ROLLING' : charging ? '놓으면 샷!' : 'SHOT'}<small>{phase === 'moving' ? '공을 지켜봐!' : '꾹 누르고 놓기'}</small></span></button></div>
+        <div className="island-hole-progress">{COURSES.map((c, i) => <span key={c.name} className={i === hole ? 'active' : scores[i] ? 'done' : ''}><i />{i + 1}<b>{scores[i] ? `${scores[i]}타` : ''}</b></span>)}</div>
+      </div>}
+      <AnimatePresence>{(ended || phase === 'finished') && <motion.div className="island-result" initial={{ opacity: 0, scale: reduced ? 1 : .9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
+        <span className="island-kicker">{phase === 'finished' ? 'ROUND COMPLETE' : phase === 'capped' ? 'KEEP YOUR HEAD UP' : strokes === 1 ? 'HOLE IN ONE!' : strokes < course.par ? 'BIRDIE!' : strokes === course.par ? 'NICE PAR!' : 'NICE PUTT!'}</span>
+        <h2>{phase === 'finished' ? '오늘도, 나이스 라운드.' : phase === 'capped' ? '다음 홀에서 복수다!' : strokes === 1 ? '이게 들어간다고?!' : '들어갔다아아!'}</h2><strong>{phase === 'finished' ? total : strokes}<small>타</small></strong>
+        <p>{phase === 'finished' ? `5홀 완주 · 기준 15타 · 최고 ${best ?? total}타` : phase === 'capped' ? '10타 제한 · 다음 홀로 이동해요' : `${course.name} · PAR ${course.par}`}</p>
+        {phase === 'finished' && <div className="island-final-scores">{scores.map((s, i) => <span key={i}><small>{i + 1}H</small>{s}</span>)}</div>}
+        <button ref={nextButton} className="island-primary" onClick={phase === 'finished' ? restart : next}>{phase === 'finished' ? '한 판 더!' : hole === 4 ? '최종 결과' : '다음 홀'}<ArrowRight size={18} /></button>
+        {phase === 'finished' && <button className="island-save" disabled={exporting} onClick={saveResult}><Download size={15} />{exporting ? '저장 중…' : '결과 이미지 저장'}</button>}
+      </motion.div>}</AnimatePresence>
+    </>}
+    {(help || reset) && <div className="island-modal-backdrop" onKeyDown={e => { if (e.key === 'Tab') { const items = Array.from((e.currentTarget as HTMLDivElement).querySelectorAll<HTMLElement>('button:not(:disabled),a[href]')); const first = items[0], last = items[items.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); } } if (e.key === 'Escape') { setHelp(false); setReset(false); } }}><div className="island-modal" role="dialog" aria-modal="true" aria-label={help ? '플레이 방법' : '새 라운드 시작'}><button autoFocus className="island-modal-close island-icon" aria-label="닫기" onClick={() => { setHelp(false); setReset(false); }}><X size={18} /></button><span className="island-kicker">HOW TO PLAY</span><h2>{help ? '감각을 믿고, 한 번에.' : '새로 시작할까?'}</h2>{help ? <><p><b>01. 방향을 맞춰요</b><br />점선이 출발 방향이에요. 슬라이더나 화면 드래그로 조준하세요. 화면은 공을 보내려는 방향의 반대로 당겨요.</p><p><b>02. 꾹 눌렀다 놓아요</b><br />SHOT을 누르면 파워가 오르내려요. 원하는 세기에서 놓으면 스윙! 짧게 누르거나 키보드 Enter로 선택한 파워를 사용해요.</p><p><b>03. 지형을 이용해요</b><br />벽은 반사, 모래는 감속, 물은 1벌타. 홀당 10타로 마무리해요. 점선은 거리 예측이 아니에요.</p><small>기록은 이 브라우저에만 저장돼요. 실제 모임 랭킹과 별개예요.</small></> : <><p>진행 중인 라운드는 지워지고 1번 홀부터 시작해요. 최고 기록은 유지돼요.</p><button className="island-primary" onClick={restart}>새 게임 시작</button></>}</div></div>}
+  </section>;
 }
