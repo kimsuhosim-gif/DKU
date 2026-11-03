@@ -1,7 +1,7 @@
 export type Upgrade='power'|'speed'|'haste'|'heal'|'range'|'coffee'|'chair'|'payday';
 export const UPGRADES=[
  {id:'power',name:'사직서에 실명 박기',desc:'임시저장 끝. 이번엔 진짜 낸다. · 사직서 피해 +8',icon:'✉'},
- {id:'haste',name:'아아 샷 추가',desc:'손이 떨리는 게 아니라 연사 중이다. · 공격 간격 15% 감소',icon:'☕'},
+ {id:'haste',name:'상여금 입금',desc:'입금 확인. 갑자기 일이 재밌어진다. · 공격 간격 15% 감소',icon:'₩'},
  {id:'speed',name:'마운자로',desc:'살은 빠지고 발은 빨라진다. · 이동속도 +18',icon:'⚡'},
  {id:'heal',name:'소주 한 잔',desc:'일단 한 잔 해. 내일의 내가 알아서 한다. · 체력 +35',icon:'🥃'},
  {id:'range',name:'전 직원 참조',desc:'제 사직서를 전사에 공유드립니다. · 사직서 사거리 +45',icon:'📨'},
