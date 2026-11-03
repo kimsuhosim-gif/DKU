@@ -1,6 +1,6 @@
 {
   "generator": "built-in image_gen",
-  "status": "generated and visually inspected; not yet wired into gameplay",
+  "status": "integrated: shirt action frames, three walking costumes, result poses; mobile browser verified",
   "identity": "Hyomin, adult Korean man, round face, black rectangular glasses, white 09 cap",
   "actions": {
     "src": "/images/pixel-hyomin-office-actions-v1.png",

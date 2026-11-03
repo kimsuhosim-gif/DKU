@@ -1,6 +1,6 @@
 # Hyomin motion and wardrobe generation prompts
 
-Generated with built-in image_gen. Existing pixel-hyomin.png used as identity reference. Both PNG outputs retain alpha. Asset generation only; current game sprite not replaced.
+Generated with built-in image_gen. Existing pixel-hyomin.png used as identity reference. Both PNG outputs retain alpha. Integrated into gameplay: shirt action frames, three walking costumes, and result poses.
 
 ## Motion atlas
 
