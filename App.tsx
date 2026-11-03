@@ -7,6 +7,7 @@ import PasswordGate from './components/PasswordGate';
 import ClubhouseHome from './components/ClubhouseHome';
 import {readView,ViewState} from './utils/clubNavigation';
 export type {ViewState} from './utils/clubNavigation';
+const CharacterStudio=lazy(()=>import('./components/CharacterStudio'));
 const SmashGame=lazy(()=>import('./components/SmashGame'));
 const RoundHub=lazy(()=>import('./components/RoundHub'));
 const MoreSection=lazy(()=>import('./components/MoreSection'));
@@ -28,6 +29,7 @@ export default function App(){
  const navigateTo=(view:ViewState)=>{window.location.hash='/'+view;};
  const back=()=>navigateTo('home');
  const content=()=>{switch(currentView){
+ case 'character':return <CharacterStudio/>;
  case 'game':return <SmashGame/>;
  case 'rounds':return <RoundHub/>;
  case 'records':return <RoundHub/>;
@@ -42,5 +44,5 @@ export default function App(){
  case 'tools':return <RoundToolsSection onBack={()=>navigateTo('rounds')}/>;
  default:return <ClubhouseHome/>;
  }};
- return <MotionConfig reducedMotion="user"><PasswordGate>{hash==='#/new-archive'?<Suspense fallback={<p>불러오는 중…</p>}><NewArchiveSite/></Suspense>:<div className="club-app"><a className="skip-link" href="#main-content" onClick={event=>{event.preventDefault();mainRef.current?.focus();}}>본문으로 건너뛰기</a>{currentView!=='game'&&<Navbar currentView={currentView}/>}<main id="main-content" tabIndex={-1} ref={mainRef}><Suspense fallback={<div className="club-container loading-panel" role="status">클럽 기록을 불러오고 있어요…</div>}><motion.div className={['ledger','gallery','bets','tools','map','weather'].includes(currentView)?'legacy-surface':undefined} key={hash} initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.12}}>{content()}</motion.div></Suspense></main>{currentView!=='game'&&<><Footer/><MobileDock currentView={currentView}/></>}</div>}</PasswordGate></MotionConfig>;
+ return <MotionConfig reducedMotion="user"><PasswordGate>{hash==='#/new-archive'?<Suspense fallback={<p>불러오는 중…</p>}><NewArchiveSite/></Suspense>:<div className="club-app"><a className="skip-link" href="#main-content" onClick={event=>{event.preventDefault();mainRef.current?.focus();}}>본문으로 건너뛰기</a>{!['game','character'].includes(currentView)&&<Navbar currentView={currentView}/>}<main id="main-content" tabIndex={-1} ref={mainRef}><Suspense fallback={<div className="club-container loading-panel" role="status">클럽 기록을 불러오고 있어요…</div>}><motion.div className={['ledger','gallery','bets','tools','map','weather'].includes(currentView)?'legacy-surface':undefined} key={hash} initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.12}}>{content()}</motion.div></Suspense></main>{!['game','character'].includes(currentView)&&<><Footer/><MobileDock currentView={currentView}/></>}</div>}</PasswordGate></MotionConfig>;
 }

@@ -1,4 +1,4 @@
-export const views = ['home','rounds','records','ledger','more','members','weather','map','ranking','gallery','bets','tools','game'] as const;
+export const views = ['home','rounds','records','ledger','more','members','weather','map','ranking','gallery','bets','tools','game','character'] as const;
 export type ViewState = typeof views[number];
 export const primaryNavigation: {label:string;view:ViewState}[] = [{label:'홈',view:'home'},{label:'라운드',view:'rounds'},{label:'랭킹',view:'ranking'},{label:'회비',view:'ledger'},{label:'더보기',view:'more'}];
 export function activeNavigation(view: ViewState): ViewState {
