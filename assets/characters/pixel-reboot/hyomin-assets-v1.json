@@ -1,0 +1,29 @@
+{
+  "generator": "built-in image_gen",
+  "status": "generated and visually inspected; not yet wired into gameplay",
+  "identity": "Hyomin, adult Korean man, round face, black rectangular glasses, white 09 cap",
+  "actions": {
+    "src": "/images/pixel-hyomin-office-actions-v1.png",
+    "width": 1024,
+    "height": 1536,
+    "columns": 4,
+    "rows": 6,
+    "cellWidth": 256,
+    "cellHeight": 256,
+    "outfit": "ivory rolled-sleeve shirt, loose teal tie, employee ID, navy trousers",
+    "animations": ["walk", "stamp_attack", "dodge", "drink", "victory", "hurt_to_despair"],
+    "notes": "Front-right view only. Last row is a hurt-to-despair sequence, not a looping hurt animation. Review foot pivot per frame before gameplay integration."
+  },
+  "wardrobe": {
+    "src": "/images/pixel-hyomin-wardrobe-v1.png",
+    "width": 1448,
+    "height": 1086,
+    "columns": 4,
+    "rows": 3,
+    "cellWidth": 362,
+    "cellHeight": 362,
+    "outfits": ["navy_commuter_suit", "overtime_shirt", "cream_after_work_bomber"],
+    "animation": "four-frame walk per row",
+    "notes": "Actual generated size differs from requested size. Sample using these actual dimensions. No back-view frames or costume-specific attack frames yet."
+  }
+}
