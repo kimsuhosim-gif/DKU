@@ -33,3 +33,7 @@ User chose a pixel action game where Hyomin fights monsters and grows stronger. 
 - Highest kill count persists locally; current run does not persist.
 - Built-in image generation produced original player atlas, enemy atlas and campus environment. No MiniMax purchase or external paid API was used.
 - Validation: `node scripts/check-pixel-survivor.mjs`, TypeScript check, production build, desktop and 390px mobile browser screenshots, actual movement/dash/pause and auto-attack checks.
+
+## Office combat revision
+
+The setting is now a nighttime office using `pixel-office.png`. The original campus artwork remains unused for rollback. Stapler projectiles replace books; coffee upgrades add periodic area bursts and chair upgrades add nearby defensive damage with orbiting chair visuals. Thirty-second waves add more enemies and ranged attacks; bat enemies show a directional warning before charging. Boss health is 1400 with radial projectile attacks. The office edition uses a separate local best-score key because difficulty changed. XP bar CSS width expression was corrected. Additional combat regression checks: `node scripts/check-office-combat.mjs`.
