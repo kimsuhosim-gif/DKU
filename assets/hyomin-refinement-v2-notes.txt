@@ -1,0 +1,19 @@
+Hyomin refinement v2 — 2026-11-04
+Reference: public/images/pixel-hyomin-original-v1.png (website-profile-based identity)
+Method: built-in image_gen edits; original face retained as visual reference.
+Selected assets: pixel-hyomin-mid-v2.png, pixel-hyomin-slim-v2.png (4x6); pixel-hyomin-transform-v1.png (4x3).
+Rejected transformation output: exec-a5d5eb6c-67fd-4786-8522-31abb085db2e.png (incorrect row count).
+Protected transformation: 1.8 seconds, four poses, world/healing timers frozen; reduced motion uses static thumbs-up.
+Attack: windup/release/follow-through normalized to attack interval; release at 40% progress, max haste regression tested.
+Boss balance: midboss crowd cap 30, final cap 16, spawn interval 1.1/1.35 s; nearby boss targeting; final HP 1800.
+Seeded automated simulation (12 runs, 360 s budget): five wins, six losses, one unfinished; not a human win-rate estimate.
+Browser deterministic run reached final boss kill and exit/won. Mobile start/move/pause and layout checked separately.
+
+midPromptV2:
+Edit this transparent 4-column 6-row game sprite sheet. Keep EXACT grid, cell positions, poses, character height, white cap, thick black rectangular glasses, face shape, cheek fullness, eyes, mouth, expression and head size of EVERY corresponding cell unchanged. Change ONLY body below neck: make the stocky man moderately slimmer, abdomen and waist visibly 22 percent narrower, upper arms and thighs 12 percent narrower, tailored jacket/shirt follows smaller waist, no prominent belly. Still solid broad shoulders, not skinny. Must be clearly halfway between stocky and slim. Same three outfits (navy business suit rows 1-2, white shirt rows 3-4, black bomber beige trousers rows 5-6), same 24 animation poses, same shoes. Never beautify or redraw face into a different person. Full actual alpha transparent background, no gray backdrop or grid, all sprites separated. Preserve polished illustrated pixel-game sprite style.
+
+slimPromptV2:
+Edit supplied game sprite sheet with strict identity preservation. Keep EXACT same 4 columns x 6 rows, each pose, height, head size, white cap, black rectangular glasses, round cheeks and jaw, eyes and mouth of all 24 corresponding frames. Change ONLY below neck to SLIM adult Hyomin: waist 35 percent narrower than original, no belly, fitted suit/shirt/jacket, slimmer arms and legs. Healthy slim man, no muscles, no face slimming, no handsome makeover. Same outfits: navy suit rows 1-2, white shirt rows 3-4, black bomber beige pants rows 5-6. Every head must be the original head, NOT an anime replacement. Same 24 poses and cell registration, preserve clear attack poses. Actual transparent alpha background, no gray background, no checkerboard, no text outside sprites. Full bodies and shoes fit each cell.
+
+transformPrompt:
+Create exactly TWELVE full-body animation sprites on a TRANSPARENT PNG sprite atlas with exactly FOUR columns and THREE rows, a 4:3 aspect ratio sheet (e.g. 1536x1152). Each cell square same size. ONLY 12 sprites, no extra rows. Use reference round-faced Korean adult Hyomin, white cap, black rectangular glasses, same facial features, short stocky proportions close to the original. Row1 NAVY SUIT with tie and lanyard. Row2 WHITE rolled-sleeve shirt with navy trousers and lanyard (no jacket). Row3 BLACK BOMBER jacket and BEIGE trousers. For EACH row columns 1/2/3/4 are: surprised pulls loose waistband outward / tightens belt with both hands / satisfied thumbs up / cheerful small jump. Body medium stocky, subtly looser clothing. Match reference illustration style and original facial identity. Full body including cap and shoes, centered with consistent feet baseline. Actual transparent alpha background, no background gray, no floor, no captions, no frame. STRICT FOUR COLUMNS THREE ROWS.
