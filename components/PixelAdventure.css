@@ -7,3 +7,5 @@
 .px-panel{max-height:calc(100% - 12px);overflow-y:auto}.px-outfits{display:flex;gap:6px;margin:12px 0}.px-outfits button{flex:1;padding:9px 3px;border:1px solid #bcc7b6;border-radius:8px;font-size:10px;background:#e2e7d9;color:#345046}.px-outfits button[aria-pressed=true]{background:#304e40;color:#fff2d6;border-color:#304e40}.px-outfits+small{margin:0 0 14px}.px-result-pose{width:110px;height:110px;margin:8px auto;background-image:url(/images/pixel-hyomin-adult-v1.png);background-size:400% 600%;image-rendering:pixelated}
 
 .px-body-progress{position:absolute;left:14px;top:116px;font-size:9px;color:#d3efd8;background:#142a32d9;border:1px solid #82a89a44;border-radius:6px;padding:5px 8px;pointer-events:none}.px-body-progress span{margin-left:8px;color:#b9c4b6;font-size:8px}.px-boss{top:151px}@media(max-width:600px){.px-body-progress{left:8px;top:107px;font-size:8px}.px-body-progress span{font-size:7px}.px-boss{top:142px}}
+
+.px-nav .px-sound{flex-shrink:0}.px-pad:active{border-color:#eef4cb;background:#264b44a8}@media(max-width:420px){.px-build{display:none}.px-nav .px-sound{margin-left:auto}}

@@ -1,0 +1,17 @@
+Hyomin polish v3 — 2026-11-04
+Selected assets: public/images/pixel-hyomin-original-v2.png; public/images/pixel-hyomin-transform-v2.png.
+Original face identity retained from original-v1 reference, starting torso broadened for clearer stage contrast.
+Transformation expressions reduced; 160ms blend at scene entry/exit. Reduced-motion mode uses static pose.
+Distance-driven 1/2/3/2 walking cycle, subtle movement lean and hit border feedback.
+Local Web Audio synthesized cues: steps, throws, impacts, hurt, dash, glass, upgrades, transformation, boss, victory. No external services.
+Sound unlock only on gesture, mute remembered, rate limited voices, audio graph disposed on unmount.
+Joystick: center-anchored immediate pointerdown, 6px dead zone, progressive analog range, 36px max, pointer identity guarded.
+Verified: typecheck/build, combat tests, audio lifecycle tests, browser audio graph active, mute survives reload, joystick down/release, layouts 320/390/430px, deterministic browser combat to won.
+Limit: browser-sized mobile checks, not physical iOS/Android hardware testing. Audio graph/cue dispatch verified, not subjective listening comparison.
+Accessibility reference: https://motion.dev/docs/react-accessibility
+
+Original-body edit prompt:
+Precisely edit the attached 4 column x 6 row 24-frame character sprite sheet. Preserve exact layout, poses, head size, full ROUND face with cheeks, cap, glasses, expression, and identity of every corresponding frame. Change ONLY BODY below neck to a clearly STOCKY heavier original Hyomin: round protruding belly 20 percent wider, thicker waist, heavier upper arms and thighs. Office shirt stretched across belly, suit jacket fuller at waist. NOT grotesque or extreme, a believable chubby office worker. Keep same height, same foot placements, three outfits and all 24 poses. No new art style, do not chibify, do not change face. Need visibly heavier starting silhouette to contrast existing slimmer states. Actual transparent alpha background. Exact four columns six rows, 1024x1536. No captions or borders.
+
+Transformation edit prompt:
+Edit FIRST image (12-frame transformation sprite sheet), use SECOND image as strict rendering style and face reference. Keep EXACT first image 4-column x 3-row layout and twelve poses: pulling waistband, tightening belt, thumbs-up, small jump. Keep navy suit first row, white shirt second row, black bomber/beige trousers third row. Change rendering to match SECOND image's mature Korean office worker, less cute cartoon/chibi, less oversized head: same face as second, thick black rectangular glasses, narrow eyes, broad cheeks, white cap. Preserve full-body proportions and consistent foot baseline. Calm satisfied smile instead of exaggerated giant anime mouth, eyebrows subtle, no sparkle/emotion symbols. Slightly stocky medium body. Consistent dark contours and restrained shading exactly like second image. All 12 figures fully within equal square cells. Transparent alpha background, no labels/no boxes. FOUR columns THREE rows, 4:3 wide sheet.

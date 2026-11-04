@@ -1,0 +1,7 @@
+import fs from 'node:fs';import ts from 'typescript';import assert from 'node:assert/strict';
+const source=ts.transpileModule(fs.readFileSync(new URL('../utils/pixelAudio.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
+let starts=0,closed=0,contexts=0;
+const param=()=>({value:0,setValueAtTime(){},exponentialRampToValueAtTime(){},setTargetAtTime(){}});
+globalThis.AudioContext=class{constructor(){contexts++;}state='suspended';currentTime=0;destination={};createGain(){return {gain:param(),connect(){},disconnect(){}};}createOscillator(){return {frequency:param(),connect(){},disconnect(){},start(){starts++;},stop(){}};}async resume(){this.state='running';}async close(){this.state='closed';closed++;}};
+const {PixelAudio}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const audio=new PixelAudio();audio.play('throw');assert.equal(contexts,0,'no audio before user gesture');await audio.unlock();assert.equal(contexts,1);audio.play('hit');const first=starts;audio.play('hit');assert.equal(starts,first,'rapid hits must be throttled');audio.setEnabled(false);audio.play('win');assert.equal(starts,first,'muting suppresses scheduled sounds');audio.setEnabled(true);audio.context.currentTime=1;audio.play('win');assert.equal(starts,first+4);audio.dispose();assert.equal(closed,1);audio.play('throw');assert.equal(starts,first+4);console.log('PASS: audio gesture gate, cue rate limit, mute/unmute and disposal.');
