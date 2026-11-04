@@ -9,7 +9,7 @@ import {readView,ViewState} from './utils/clubNavigation';
 export type {ViewState} from './utils/clubNavigation';
 const PixelAdventure=lazy(()=>import('./components/PixelAdventure'));
 const CharacterStudio=lazy(()=>import('./components/CharacterStudio'));
-const SmashGame=lazy(()=>import('./components/SmashGame2D'));
+const SmashGame=lazy(()=>import('./components/RooftopBrawl'));
 const RoundHub=lazy(()=>import('./components/RoundHub'));
 const MoreSection=lazy(()=>import('./components/MoreSection'));
 const MoneyGameSection=lazy(()=>import('./components/MoneyGameSection'));
