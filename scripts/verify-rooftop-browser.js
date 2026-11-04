@@ -9,10 +9,9 @@ async (page) => {
   await page.getByRole('button',{name:'대전 시작',exact:true}).click();
   await page.locator('.roof[data-phase=playing]').waitFor();
   const read=()=>page.locator('canvas').evaluate(canvas=>{
-   const gl=canvas.getContext('webgl2');
-   if(!gl)throw Error('WebGL not available');
-   const data=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);
-   gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,data);
+   const ctx=canvas.getContext('2d');
+   if(!ctx)throw Error('Canvas2D not available');
+   const {data}=ctx.getImageData(0,0,canvas.width,canvas.height);
    let hash=0;const colors=new Set();for(let i=0;i<data.length;i+=400){hash=(hash*31+data[i]+data[i+1])>>>0;colors.add(`${data[i]},${data[i+1]},${data[i+2]}`);}
    return {hash,colors:colors.size};
   });

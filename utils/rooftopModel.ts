@@ -1,10 +1,10 @@
 export const CAST=[
- {id:'hyomin',name:'김효민',color:'#88b79b',detail:'흰 모자 · 사각 안경',image:'/images/rooftop-hyomin-v1.png'},
- {id:'jaeyeop',name:'정재엽',color:'#e0bc79',detail:'둥근 앞머리 · 베이지 재킷',image:'/images/rooftop-jaeyeop-v1.png'},
- {id:'seongtae',name:'김성태',color:'#9daff0',detail:'가르마 머리 · 네이비 점퍼',image:'/images/rooftop-seongtae-v1.png'},
- {id:'manjong',name:'유만종',color:'#6fbdb6',detail:'베이지 모자 · 청록 점퍼',image:'/images/rooftop-manjong-v1.png'},
- {id:'yeonseong',name:'신연성',color:'#df9396',detail:'흰 모자 · 와인색 재킷',image:'/images/rooftop-yeonseong-v1.png'},
- {id:'moseongjin',name:'모성진',color:'#e4c15b',detail:'크림 모자 · 노랑 포인트',image:'/images/rooftop-moseongjin-v1.png'},
+ {id:'hyomin',name:'김효민',color:'#88b79b',detail:'흰 모자 · 사각 안경',image:'/images/rooftop-hyomin-v2.png'},
+ {id:'jaeyeop',name:'정재엽',color:'#e0bc79',detail:'둥근 앞머리 · 베이지 재킷',image:'/images/rooftop-jaeyeop-v2.png'},
+ {id:'seongtae',name:'김성태',color:'#9daff0',detail:'가르마 머리 · 네이비 점퍼',image:'/images/rooftop-seongtae-v2.png'},
+ {id:'manjong',name:'유만종',color:'#6fbdb6',detail:'베이지 모자 · 청록 점퍼',image:'/images/rooftop-manjong-v2.png'},
+ {id:'yeonseong',name:'신연성',color:'#df9396',detail:'흰 모자 · 와인색 재킷',image:'/images/rooftop-yeonseong-v2.png'},
+ {id:'moseongjin',name:'모성진',color:'#e4c15b',detail:'크림 모자 · 노랑 포인트',image:'/images/rooftop-moseongjin-v2.png'},
 ] as const;
 export const WEAPONS=[
  {name:'아이언 09',kind:'club',color:'#54d8c0',reach:125,damage:14,force:245,cool:.34},
@@ -15,9 +15,9 @@ export const WEAPONS=[
  {name:'골든 팬',kind:'pan',color:'#e3b949',reach:95,damage:20,force:310,cool:.49},
 ] as const;
 export const ARENA={x:600,y:380,shrinkAt:60};
-export const OBSTACLES=[{x:-290,y:-140,r:46},{x:290,y:140,r:46},{x:-320,y:190,r:38},{x:320,y:-190,r:38}];
+export const OBSTACLES:{x:number;y:number;r:number}[]=[];
 export type Action='push'|'grab'|'dash'|'jump'|'guard';
-export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;damage:number;stamina:number;alive:boolean;fall:number;hang:number;escape:number;cool:number;dash:number;stun:number;pose:number;poseTime:number;carrying:number;heldBy:number;hold:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number};
+export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;damage:number;stamina:number;alive:boolean;fall:number;hang:number;escape:number;cool:number;dash:number;stun:number;pose:number;poseTime:number;carrying:number;heldBy:number;hold:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;windup:number};
 export type Event={kind:'hit'|'throw'|'dash'|'fall'|'save'|'round';x:number;y:number;text:string};
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
@@ -30,22 +30,24 @@ export class RooftopMatch{
  constructor(private random:()=>number=Math.random){}
  get bounds(){const shrink=Math.max(0,this.time-ARENA.shrinkAt);return{x:Math.max(90,ARENA.x-shrink*8),y:Math.max(70,ARENA.y-shrink*5)};}
  start(selected=0){this.selected=Math.max(0,Math.min(5,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
- private make(cast:number,i:number,wins:number):Fighter{const points=[[-390,240],[390,-240],[-390,-240],[390,240]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),damage:0,stamina:100,alive:true,fall:0,hang:0,escape:0,cool:0,dash:0,stun:0,pose:0,poseTime:0,carrying:-1,heldBy:-1,hold:0,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0};}
+ private make(cast:number,i:number,wins:number):Fighter{const points=[[-390,240],[390,-240],[-390,-240],[390,240]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),damage:0,stamina:100,alive:true,fall:0,hang:0,escape:0,cool:0,dash:0,stun:0,pose:0,poseTime:0,carrying:-1,heldBy:-1,hold:0,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0,windup:0};}
  nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
  pause(){if(this.phase==='paused')this.phase=this.resumePhase;else if(this.phase==='playing'||this.phase==='countdown'){this.resumePhase=this.phase;this.phase='paused';}this.stick={x:0,y:0};}
  private event(kind:Event['kind'],p:Fighter,text:string){this.events.push({kind,x:p.x,y:p.y,text});}
- action(i:number,action:Action){const p=this.fighters[i];if(this.phase!=='playing'||!p?.alive)return;
+ action(i:number,action:Action,impact=false){const p=this.fighters[i];if(this.phase!=='playing'||!p?.alive)return;
+  if(impact&&(p.hang>0||p.heldBy>=0||p.carrying>=0||p.stun>0))return;
   if(p.hang>0){if(action==='push'&&p.cool<=0){p.escape++;p.cool=.15;if(p.escape>=3){const b=this.bounds;p.x=Math.max(-b.x+35,Math.min(b.x-35,p.x));p.y=Math.max(-b.y+35,Math.min(b.y-35,p.y));p.hang=0;p.stun=.3;p.damage=Math.max(0,p.damage-15);this.event('save',p,'살았다!');}}return;}
   if(p.heldBy>=0){if(action==='dash'&&p.stamina>=30){const holder=this.fighters[p.heldBy];holder.carrying=-1;holder.stun=.45;p.heldBy=-1;p.stamina-=30;p.stun=.1;this.event('save',p,'놓으라고!');}return;}
-  if(p.stun>0||p.cool>0)return;
+  if(p.stun>0||(!impact&&p.cool>0))return;
   if(action==='guard'){if(p.stamina<12||p.jump>0||p.carrying>=0)return;p.stamina-=12;p.guard=.65;p.cool=.7;return;}
   if(action==='jump'){if(p.stamina<16||p.jump>0||p.carrying>=0)return;p.stamina-=16;p.jump=.65;return;}
   if(p.carrying>=0){const target=this.fighters[p.carrying];target.heldBy=-1;target.stun=.5;target.vx=Math.cos(p.angle)*430*(1+target.damage/100);target.vy=Math.sin(p.angle)*430*(1+target.damage/100);target.damage=Math.min(100,target.damage+18);target.lastBy=i;p.carrying=-1;p.cool=.6;p.pose=3;p.poseTime=.3;this.event('throw',target,'잘 가라!');return;}
   if(action==='dash'){if(p.stamina<30)return;p.stamina-=30;p.dash=.22;p.cool=.45;p.vx=Math.cos(p.angle)*430;p.vy=Math.sin(p.angle)*430;this.event('dash',p,'');return;}
   const weapon=WEAPONS[p.cast];
-  if(action==='push'&&i===0){const aim=this.fighters.filter(q=>q!==p&&q.alive&&!q.hang&&q.heldBy<0&&dist(p,q)<weapon.reach+35).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(aim)p.angle=Math.atan2(aim.y-p.y,aim.x-p.x);}
-  if(action==='push'){p.combo=p.comboTime>0?(p.combo%3)+1:1;p.comboTime=.85;}
-  p.cool=action==='push'?weapon.cool*(p.combo===3?1.5:1):.65;p.pose=action==='push'?3:4;p.poseTime=.25;
+  if(action==='push'&&!impact&&i===0){const aim=this.fighters.filter(q=>q!==p&&q.alive&&!q.hang&&q.heldBy<0&&dist(p,q)<weapon.reach+35).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(aim)p.angle=Math.atan2(aim.y-p.y,aim.x-p.x);}
+  if(action==='push'&&!impact){p.combo=p.comboTime>0?(p.combo%3)+1:1;p.comboTime=.85;}
+  if(!impact){p.cool=action==='push'?Math.max(.42,weapon.cool*(p.combo===3?1.5:1)):.65;p.pose=action==='push'?3:4;p.poseTime=.42;}
+  if(action==='push'&&!impact){p.windup=.12;return;}
   const target=this.fighters.map((q,j)=>({q,j})).filter(({q,j})=>j!==i&&q.alive&&!q.hang&&q.heldBy<0&&q.carrying<0&&clearStrike(p,q)&&dist(p,q)<(action==='push'?weapon.reach:76)).sort((a,b)=>dist(p,a.q)-dist(p,b.q)).find(({q})=>Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.15);
   if(!target)return;const {q,j}=target;
   if(q.jump>.12&&p.jump<=0)return;
@@ -56,6 +58,7 @@ export class RooftopMatch{
  update(dt:number){dt=Math.min(.05,Math.max(0,dt));if(this.phase==='countdown'){this.countdown-=dt;if(this.countdown<=0)this.phase='playing';return;}if(this.phase!=='playing')return;this.time+=dt;const b=this.bounds;
   for(let i=0;i<this.fighters.length;i++){const p=this.fighters[i];if(!p.alive){p.fall+=dt;continue;}p.cool=Math.max(0,p.cool-dt);p.stun=Math.max(0,p.stun-dt);p.poseTime=Math.max(0,p.poseTime-dt);p.stamina=Math.min(100,p.stamina+dt*13);p.damage=Math.max(0,p.damage-dt*1.5);p.dash=Math.max(0,p.dash-dt);
    p.jump=Math.max(0,p.jump-dt);p.guard=Math.max(0,p.guard-dt);p.comboTime=Math.max(0,p.comboTime-dt);
+   if(p.windup>0){p.windup=Math.max(0,p.windup-dt);if(p.windup<=0&&!p.stun)this.action(i,'push',true);}
    if(p.hang>0){p.hang-=dt;if(i>0&&p.cool<=0&&this.random()<dt*2.8)this.action(i,'push');if(p.hang<=0&&p.escape<3)this.eliminate(i);continue;}
    if(p.heldBy>=0){const holder=this.fighters[p.heldBy];if(!holder.alive){p.heldBy=-1;continue;}p.x=holder.x+Math.cos(holder.angle)*25;p.y=holder.y+Math.sin(holder.angle)*25;if(i>0&&this.random()<dt*.7)this.action(i,'dash');continue;}
    let input=i===0?this.stick:{x:0,y:0};
@@ -63,7 +66,7 @@ export class RooftopMatch{
  if(along>0&&along<130&&Math.abs((o.x-p.x)*dy-(o.y-p.y)*dx)/len<o.r+35){const side=(i%2?1:-1);tx=p.x-dy/len*120*side;ty=p.y+dx/len*120*side;break;}}
  const a=Math.atan2(ty-p.y,tx-p.x);input={x:Math.cos(a),y:Math.sin(a)};p.ai-=dt;if(p.ai<=0){p.ai=.25+this.random()*.4;p.angle=Math.atan2(target.y-p.y,target.x-p.x);if(p.carrying>=0){p.angle=Math.atan2(p.y,p.x);this.action(i,'grab');}else if(dist(p,target)<WEAPONS[p.cast].reach-6)this.action(i,dist(p,target)<72&&this.random()<.22?'grab':'push');else if(dist(p,target)>145&&!danger&&this.random()<.18)this.action(i,'dash');}}}
    if(p.carrying>=0){p.hold-=dt;if(p.hold<=0){p.cool=0;this.action(i,'grab');}}
-   const n=Math.hypot(input.x,input.y);if(p.stun<=0&&p.dash<=0){if(n>.1)p.angle=Math.atan2(input.y,input.x);const speed=p.guard>0?80:p.carrying>=0?125:215;const grip=Math.min(1,dt*14);p.vx+=(input.x/Math.max(1,n)*speed-p.vx)*grip;p.vy+=(input.y/Math.max(1,n)*speed-p.vy)*grip;}else{const drag=Math.exp(-dt*(p.dash>0?.5:3.5));p.vx*=drag;p.vy*=drag;}
+   const n=Math.hypot(input.x,input.y);if(p.stun<=0&&p.dash<=0){if(n>.1&&p.poseTime<=0)p.angle=Math.atan2(input.y,input.x);const speed=p.poseTime>0?85:p.guard>0?80:p.carrying>=0?125:215;const grip=Math.min(1,dt*14);p.vx+=(input.x/Math.max(1,n)*speed-p.vx)*grip;p.vy+=(input.y/Math.max(1,n)*speed-p.vy)*grip;}else{const drag=Math.exp(-dt*(p.dash>0?.5:3.5));p.vx*=drag;p.vy*=drag;}
    p.x+=p.vx*dt;p.y+=p.vy*dt;p.gait+=Math.hypot(p.vx,p.vy)*dt/22;
    for(const obstacle of OBSTACLES){const d=Math.hypot(p.x-obstacle.x,p.y-obstacle.y);if(p.jump<=0&&d<obstacle.r+18){const a=Math.atan2(p.y-obstacle.y,p.x-obstacle.x);p.x=obstacle.x+Math.cos(a)*(obstacle.r+18);p.y=obstacle.y+Math.sin(a)*(obstacle.r+18);}}
    if(p.jump<=0&&(Math.abs(p.x)>b.x+10||Math.abs(p.y)>b.y+10)){if(p.damage<75&&p.escape===0&&this.time<80){p.x=Math.max(-b.x-6,Math.min(b.x+6,p.x));p.y=Math.max(-b.y-6,Math.min(b.y+6,p.y));p.hang=1.4;p.vx=0;p.vy=0;p.cool=0;this.release(i);this.event('hit',p,i===0?'복귀!':'EDGE!');}else this.eliminate(i);}

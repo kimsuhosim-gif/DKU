@@ -14,7 +14,7 @@ export default function RooftopBrawl(){
   try{
    const game=new RooftopGame(canvas.current!,()=>{if(!disposed)render(n=>n+1);});engine.current=game;
    game.ready.then(()=>{if(!disposed)setLoaded(true);}).catch(()=>{if(!disposed)setError('캐릭터를 불러오지 못했어요.');});
-  }catch{setError('이 브라우저에서 3D 화면을 열지 못했어요.');}
+  }catch{setError('게임 화면을 불러오지 못했어요. 새로고침해 주세요.');}
   return()=>{disposed=true;engine.current?.dispose();engine.current=null;};
  },[]);
  const game=engine.current,m=game?.model,phase=m?.phase??'ready',player=m?.fighters[0],active=phase==='playing';
@@ -35,7 +35,7 @@ export default function RooftopBrawl(){
    <button title="일시정지" aria-label={phase==='paused'?'계속하기':'일시정지'} disabled={!['playing','paused','countdown'].includes(phase)} onClick={()=>{game?.pause();focus();}}>{phase==='paused'?<Play size={18}/>:<Pause size={18}/>}</button>
   </header>
   <div className="roof-stage">
-   <canvas ref={canvas} aria-label="입체 옥상 난투 경기장"/>
+   <canvas ref={canvas} aria-label="2D 옥상 난투 경기장"/>
    {phase!=='ready'&&<div className="roof-score">{m?.fighters.map((p,i)=><div key={p.cast} className={`${!p.alive?'out':''} ${i===0?'is-player':''}`} style={{'--fighter':CAST[p.cast].color} as CSSProperties}>
     <div className="roof-face" style={{backgroundImage:`url(${CAST[p.cast].image})`}}/>
     <div className="roof-score-info"><span>{i===0?'YOU':'CPU'} <b>{CAST[p.cast].name}</b></span><strong>{p.alive?`${Math.round(p.damage)}%`:'OUT'}</strong><i>{'●'.repeat(p.wins)}{'○'.repeat(Math.max(0,2-p.wins))}</i></div>
