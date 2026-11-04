@@ -3,3 +3,8 @@ node_modules
 *.zip
 ChatGPT Image *.png
 생성된 이미지 1.png
+.playwright/
+.playwright-cli/
+output/
+*.local
+assets/characters/
