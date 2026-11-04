@@ -1,5 +1,8 @@
 .roof{height:100dvh;min-height:540px;background:#e9efeb;color:#16373d;display:flex;flex-direction:column;overflow:hidden;outline:none;letter-spacing:0;font-family:inherit}
 .roof *{box-sizing:border-box;letter-spacing:0}
+.roof-score-info .roof-hp{grid-column:1/-1;width:100%;height:7px;accent-color:#319e78;border:0;appearance:none;background:#d4dcd7}
+.roof-hp::-webkit-progress-bar{background:#d4dcd7}.roof-hp::-webkit-progress-value{background:#319e78;transition:width .12s linear}.roof-hp::-moz-progress-bar{background:#319e78}
+.roof-actions .action-heavy{background:#f7d6a6;border-color:#c59650;color:#58351b}
 .roof-minimap{position:absolute;right:18px;bottom:20px;width:132px;height:84px;border:2px solid #efbd49;background:#25474edb;pointer-events:none;overflow:hidden}
 .roof-minimap b{position:absolute;width:7px;height:7px;border-radius:50%;transform:translate(-50%,-50%)}
 .roof-minimap i{position:absolute;width:8px;height:8px;background:#9db7bc;transform:translate(-50%,-50%)}

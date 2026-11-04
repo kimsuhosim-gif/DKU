@@ -1,6 +1,6 @@
 import {useEffect,useRef,useState,CSSProperties} from 'react';
-import {ArrowLeft,Pause,Play,Volume2,VolumeX,Shield,ArrowUp,Hand,Zap,Swords,Trophy,RotateCcw} from 'lucide-react';
-import {CAST,stickVector,Action,WEAPONS,ARENA,OBSTACLES} from '../utils/rooftopModel';
+import {ArrowLeft,Pause,Play,Volume2,VolumeX,Shield,ArrowUp,Flame,Zap,Swords,Trophy,RotateCcw} from 'lucide-react';
+import {CAST,stickVector,Action,WEAPONS,ARENA,MAX_HP} from '../utils/rooftopModel';
 import {RooftopGame} from '../utils/rooftopRenderer';
 import './RooftopBrawl.css';
 
@@ -25,7 +25,7 @@ export default function RooftopBrawl(){
  useEffect(()=>{if(phase!=='playing'){pad.current=null;setKnob({x:0,y:0});if(engine.current)engine.current.model.stick={x:0,y:0};}},[phase]);
  function move(e:{pointerId:number;clientX:number;clientY:number}){const p=pad.current;if(!p||p.id!==e.pointerId)return;const v=stickVector(e.clientX-p.x,e.clientY-p.y);setKnob({x:v.x*28,y:v.y*28});if(game)game.model.stick=v;}
  function act(action:Action){game?.act(action);focus();}
- const actions=[{id:'guard',label:'방어',key:'I',Icon:Shield,cost:12},{id:'jump',label:'점프',key:'SPACE',Icon:ArrowUp,cost:16},{id:'grab',label:player&&player.carrying>=0?'던지기':'잡기',key:'K',Icon:Hand,cost:0},{id:'dash',label:player&&player.heldBy>=0?'탈출':'돌진',key:'L',Icon:Zap,cost:30},{id:'push',label:'공격',key:'J',Icon:Swords,cost:0}] as const;
+ const actions=[{id:'guard',label:'방어',key:'I',Icon:Shield,cost:12},{id:'jump',label:'점프',key:'SPACE',Icon:ArrowUp,cost:16},{id:'heavy',label:'강공격',key:'K',Icon:Flame,cost:24},{id:'dash',label:'회피',key:'L',Icon:Zap,cost:25},{id:'push',label:'공격',key:'J',Icon:Swords,cost:0}] as const;
  return <section className="roof" data-phase={phase} ref={root} tabIndex={-1} aria-label="RE09 옥상 난투">
   <header className="roof-nav">
    <a href="#/more" aria-label="클럽으로" title="클럽으로"><ArrowLeft size={20}/></a>
@@ -38,7 +38,7 @@ export default function RooftopBrawl(){
    <canvas ref={canvas} aria-label="2D 옥상 난투 경기장"/>
    {phase!=='ready'&&<div className="roof-score">{m?.fighters.map((p,i)=><div key={p.cast} className={`${!p.alive?'out':''} ${i===0?'is-player':''}`} style={{'--fighter':CAST[p.cast].color} as CSSProperties}>
     <div className="roof-face" style={{backgroundImage:`url(${CAST[p.cast].image})`}}/>
-    <div className="roof-score-info"><span>{i===0?'YOU':'CPU'} <b>{CAST[p.cast].name}</b></span><strong>{p.alive?`${Math.round(p.damage)}%`:'OUT'}</strong><i>{'●'.repeat(p.wins)}{'○'.repeat(Math.max(0,2-p.wins))}</i></div>
+    <div className="roof-score-info"><span>{i===0?'YOU':'CPU'} <b>{CAST[p.cast].name}</b></span><strong>{p.alive?`${Math.ceil(p.hp)}`:'OUT'}</strong><progress className="roof-hp" aria-label={`${CAST[p.cast].name} 체력`} max={MAX_HP} value={p.hp}/><i>{'●'.repeat(p.wins)}{'○'.repeat(Math.max(0,2-p.wins))}</i></div>
    </div>)}</div>}
    {phase==='ready'&&<div className="roof-lobby">
     <div className="roof-lobby-title"><span>DKU RE09 / ARCADE CLUB</span><h1>옥상 난투<span>ROOFTOP RUMBLE</span></h1></div>
@@ -48,8 +48,8 @@ export default function RooftopBrawl(){
      {error&&<p role="alert">{error}</p>}
     </div>
    </div>}
-   {phase!=='ready'&&<div className="roof-round"><span>ROUND <b>{String(m?.round??1).padStart(2,'0')}</b></span><strong>{(m?.time??0)>ARENA.shrinkAt?'SUDDEN DEATH':`${Math.max(0,ARENA.shrinkAt-Math.floor(m?.time??0))}`}</strong><span>{m?.fighters.filter(p=>p.alive).length} ALIVE</span></div>}
-   {phase!=='ready'&&<div className="roof-minimap" aria-label="경기장 미니맵">{OBSTACLES.map((o,i)=><i key={i} style={{left:`${50+o.x/12}%`,top:`${50+o.y/7.6}%`}}/>)}{m?.fighters.filter(p=>p.alive).map(p=><b key={p.cast} style={{left:`${50+p.x/12}%`,top:`${50+p.y/7.6}%`,background:p===player?'#fff':CAST[p.cast].color,outline:p===player?'2px solid #e65d3c':'none'}}/>)}</div>}
+   {phase!=='ready'&&<div className="roof-round"><span>ROUND <b>{String(m?.round??1).padStart(2,'0')}</b></span><strong>{`${Math.max(0,ARENA.roundTime-Math.floor(m?.time??0))}`}</strong><span>{m?.fighters.filter(p=>p.alive).length} ALIVE</span></div>}
+   {phase!=='ready'&&<div className="roof-minimap" aria-label="경기장 미니맵">{m?.fighters.filter(p=>p.alive).map(p=><b key={p.cast} style={{left:`${50+p.x/12}%`,top:`${50+p.y/7.6}%`,background:p===player?'#fff':CAST[p.cast].color,outline:p===player?'2px solid #e65d3c':'none'}}/>)}</div>}
    {phase==='countdown'&&<div className="roof-count" aria-live="polite"><span>ROUND {m?.round}</span><b>{Math.ceil(m?.countdown??3)}</b></div>}
    {(phase==='paused'||ended)&&<div className="roof-overlay"><div role="dialog" aria-modal="true" aria-label={ended?'경기 결과':'일시정지'} onKeyDown={e=>{if(e.key==='Escape'&&phase==='paused'){e.preventDefault();game?.pause();focus();}if(e.key==='Tab'){const buttons=(e.currentTarget as HTMLDivElement).querySelectorAll<HTMLButtonElement>('button');const first=buttons[0],last=buttons[buttons.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}}>
     {ended?<Trophy size={38}/>:<Pause size={32}/>}<span>{phase==='finished'?'MATCH FINISHED':ended?'ROUND FINISHED':'TIME OUT'}</span>
@@ -60,7 +60,7 @@ export default function RooftopBrawl(){
   </div>
   {phase!=='ready'&&<div className="roof-controls">
    <button className="roof-pad" aria-label="이동 조이스틱" disabled={!active||!player?.alive} onPointerDown={e=>{if(pad.current)return;const r=e.currentTarget.getBoundingClientRect();pad.current={id:e.pointerId,x:r.left+r.width/2,y:r.top+r.height/2};e.currentTarget.setPointerCapture(e.pointerId);move(e);}} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}><span>W A S D</span><i style={{transform:`translate(${knob.x}px,${knob.y}px)`}}/></button>
-   <div className="roof-energy"><span>{player?.hang?'EDGE':player?.alive?'ENERGY':'KNOCK OUT'}</span><progress max={100} value={player?.stamina??0}/></div>
+   <div className="roof-energy"><span>{player?.alive?'ENERGY':'KNOCK OUT'}</span><progress max={100} value={player?.stamina??0}/></div>
    <div className="roof-actions">{actions.map(({id,label,key,Icon,cost})=><button key={id} className={`action-${id}`} aria-label={label} title={`${label} (${key})`} disabled={!active||!player?.alive||(player?.stamina??0)<cost} onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);if(id==='push')game?.holdAttack(true);else act(id);}} onPointerUp={()=>{if(id==='push')game?.holdAttack(false);}} onPointerCancel={()=>game?.holdAttack(false)} onLostPointerCapture={()=>{if(id==='push')game?.holdAttack(false);}} onClick={e=>{if(e.detail===0)act(id);}}><Icon size={22}/><b>{label}</b><small>{key}</small></button>)}</div>
   </div>}
  </section>;

@@ -14,66 +14,72 @@ export const WEAPONS=[
  {name:'레드 랜스',kind:'spear',color:'#f1789c',reach:165,damage:13,force:235,cool:.46},
  {name:'골든 팬',kind:'pan',color:'#e3b949',reach:95,damage:20,force:310,cool:.49},
 ] as const;
-export const ARENA={x:600,y:380,shrinkAt:60};
+export const ARENA={x:600,y:380,roundTime:120};
 export const OBSTACLES:{x:number;y:number;r:number}[]=[];
-export type Action='push'|'grab'|'dash'|'jump'|'guard';
-export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;damage:number;stamina:number;alive:boolean;fall:number;hang:number;escape:number;cool:number;dash:number;stun:number;pose:number;poseTime:number;carrying:number;heldBy:number;hold:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;windup:number};
-export type Event={kind:'hit'|'throw'|'dash'|'fall'|'save'|'round';x:number;y:number;text:string};
+export const MAX_HP=180;
+export type Action='push'|'heavy'|'dash'|'jump'|'guard';
+export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number};
+export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round';x:number;y:number;text:string};
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
-const clearStrike=(a:Fighter,b:Fighter)=>OBSTACLES.every(o=>{
- const dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((o.x-a.x)*dx+(o.y-a.y)*dy)/(dx*dx+dy*dy||1)));
- return Math.hypot(a.x+t*dx-o.x,a.y+t*dy-o.y)>o.r;
-});
 export class RooftopMatch{
  fighters:Fighter[]=[];events:Event[]=[];phase:'ready'|'countdown'|'playing'|'paused'|'round'|'finished'='ready';round=1;time=0;countdown=2.4;winner=-1;selected=0;stick={x:0,y:0};private resumePhase:'countdown'|'playing'='playing';
  constructor(private random:()=>number=Math.random){}
- get bounds(){const shrink=Math.max(0,this.time-ARENA.shrinkAt);return{x:Math.max(90,ARENA.x-shrink*8),y:Math.max(70,ARENA.y-shrink*5)};}
+ get bounds(){return{x:ARENA.x,y:ARENA.y};}
  start(selected=0){this.selected=Math.max(0,Math.min(5,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
- private make(cast:number,i:number,wins:number):Fighter{const points=[[-390,240],[390,-240],[-390,-240],[390,240]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),damage:0,stamina:100,alive:true,fall:0,hang:0,escape:0,cool:0,dash:0,stun:0,pose:0,poseTime:0,carrying:-1,heldBy:-1,hold:0,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0,windup:0};}
+ private make(cast:number,i:number,wins:number):Fighter{const points=[[-320,170],[320,-170],[-320,-170],[320,170]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),hp:MAX_HP,stamina:100,alive:true,fall:0,cool:0,dash:0,stun:0,down:0,invulnerable:0,poseTime:0,attackDuration:0,windup:0,attackKind:'push',attackStep:1,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0};}
  nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
  pause(){if(this.phase==='paused')this.phase=this.resumePhase;else if(this.phase==='playing'||this.phase==='countdown'){this.resumePhase=this.phase;this.phase='paused';}this.stick={x:0,y:0};}
  private event(kind:Event['kind'],p:Fighter,text:string){this.events.push({kind,x:p.x,y:p.y,text});}
- action(i:number,action:Action,impact=false){const p=this.fighters[i];if(this.phase!=='playing'||!p?.alive)return;
-  if(impact&&(p.hang>0||p.heldBy>=0||p.carrying>=0||p.stun>0))return;
-  if(p.hang>0){if(action==='push'&&p.cool<=0){p.escape++;p.cool=.15;if(p.escape>=3){const b=this.bounds;p.x=Math.max(-b.x+35,Math.min(b.x-35,p.x));p.y=Math.max(-b.y+35,Math.min(b.y-35,p.y));p.hang=0;p.stun=.3;p.damage=Math.max(0,p.damage-15);this.event('save',p,'살았다!');}}return;}
-  if(p.heldBy>=0){if(action==='dash'&&p.stamina>=30){const holder=this.fighters[p.heldBy];holder.carrying=-1;holder.stun=.45;p.heldBy=-1;p.stamina-=30;p.stun=.1;this.event('save',p,'놓으라고!');}return;}
-  if(p.stun>0||(!impact&&p.cool>0))return;
-  if(action==='guard'){if(p.stamina<12||p.jump>0||p.carrying>=0)return;p.stamina-=12;p.guard=.65;p.cool=.7;return;}
-  if(action==='jump'){if(p.stamina<16||p.jump>0||p.carrying>=0)return;p.stamina-=16;p.jump=.65;return;}
-  if(p.carrying>=0){const target=this.fighters[p.carrying];target.heldBy=-1;target.stun=.5;target.vx=Math.cos(p.angle)*430*(1+target.damage/100);target.vy=Math.sin(p.angle)*430*(1+target.damage/100);target.damage=Math.min(100,target.damage+18);target.lastBy=i;p.carrying=-1;p.cool=.6;p.pose=3;p.poseTime=.3;this.event('throw',target,'잘 가라!');return;}
-  if(action==='dash'){if(p.stamina<30)return;p.stamina-=30;p.dash=.22;p.cool=.45;p.vx=Math.cos(p.angle)*430;p.vy=Math.sin(p.angle)*430;this.event('dash',p,'');return;}
-  const weapon=WEAPONS[p.cast];
-  if(action==='push'&&!impact&&i===0){const aim=this.fighters.filter(q=>q!==p&&q.alive&&!q.hang&&q.heldBy<0&&dist(p,q)<weapon.reach+35).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(aim)p.angle=Math.atan2(aim.y-p.y,aim.x-p.x);}
-  if(action==='push'&&!impact){p.combo=p.comboTime>0?(p.combo%3)+1:1;p.comboTime=.85;}
-  if(!impact){p.cool=action==='push'?Math.max(.42,weapon.cool*(p.combo===3?1.5:1)):.65;p.pose=action==='push'?3:4;p.poseTime=.42;}
-  if(action==='push'&&!impact){p.windup=.12;return;}
-  const target=this.fighters.map((q,j)=>({q,j})).filter(({q,j})=>j!==i&&q.alive&&!q.hang&&q.heldBy<0&&q.carrying<0&&clearStrike(p,q)&&dist(p,q)<(action==='push'?weapon.reach:76)).sort((a,b)=>dist(p,a.q)-dist(p,b.q)).find(({q})=>Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.15);
-  if(!target)return;const {q,j}=target;
-  if(q.jump>.12&&p.jump<=0)return;
-  if(action==='push'&&q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-10);this.event('save',q,'BLOCK');return;}
-  if(action==='grab'&&p.stamina>=18){p.stamina-=18;p.carrying=j;p.hold=.8;q.heldBy=i;q.vx=0;q.vy=0;q.pose=5;this.event('hit',q,'잡았다!');}
-  else if(action==='push'){q.damage=Math.min(100,q.damage+weapon.damage*(p.combo===3?1.6:1));const force=weapon.force*(p.combo===3?1.45:1)*(1+q.damage/80);q.vx=Math.cos(p.angle)*force;q.vy=Math.sin(p.angle)*force;q.stun=.28;q.lastBy=i;q.pose=5;q.poseTime=.3;this.event('hit',q,p.combo===3?'SMASH!':`${p.combo} HIT`);}
+ action(i:number,action:Action){
+  const p=this.fighters[i];if(this.phase!=='playing'||!p?.alive||p.down>0||p.stun>0)return;
+  // Dodge cancels recovery, but not the startup or active strike.
+  if(action==='dash'&&p.stamina>=25&&p.windup<=0&&p.dash<=0){p.stamina-=25;p.dash=.25;p.invulnerable=.24;p.cool=.32;p.poseTime=0;p.guard=0;p.combo=0;p.comboTime=0;const n=i===0?Math.hypot(this.stick.x,this.stick.y):0;if(n>.1)p.angle=Math.atan2(this.stick.y,this.stick.x);p.vx=Math.cos(p.angle)*470;p.vy=Math.sin(p.angle)*470;this.event('dash',p,'');return;}
+  if(p.cool>0||p.poseTime>0||p.dash>0)return;
+  if(action==='guard'){if(p.stamina<12||p.jump>0)return;p.stamina-=12;p.guard=.55;p.cool=.22;return;}
+  if(action==='jump'){if(p.stamina<16||p.jump>0)return;p.stamina-=16;p.jump=.65;return;}
+  if(action!=='push'&&action!=='heavy')return;if(action==='heavy'&&p.stamina<24)return;
+  const weapon=WEAPONS[p.cast],aim=this.fighters.filter(q=>q!==p&&q.alive&&q.down<=0&&dist(p,q)<weapon.reach+50).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(aim)p.angle=Math.atan2(aim.y-p.y,aim.x-p.x);
+  p.guard=0;p.attackKind=action;p.attackStep=action==='heavy'?1:p.comboTime>0?p.combo%3+1:1;
+  p.attackDuration=action==='heavy'?Math.max(.65,weapon.cool*1.8):Math.max(.32,weapon.cool);
+  p.poseTime=p.attackDuration;p.windup=p.attackDuration*.5;p.cool=p.attackDuration;
+  if(action==='heavy'){p.stamina-=24;p.combo=0;p.comboTime=0;}
  }
- update(dt:number){dt=Math.min(.05,Math.max(0,dt));if(this.phase==='countdown'){this.countdown-=dt;if(this.countdown<=0)this.phase='playing';return;}if(this.phase!=='playing')return;this.time+=dt;const b=this.bounds;
-  for(let i=0;i<this.fighters.length;i++){const p=this.fighters[i];if(!p.alive){p.fall+=dt;continue;}p.cool=Math.max(0,p.cool-dt);p.stun=Math.max(0,p.stun-dt);p.poseTime=Math.max(0,p.poseTime-dt);p.stamina=Math.min(100,p.stamina+dt*13);p.damage=Math.max(0,p.damage-dt*1.5);p.dash=Math.max(0,p.dash-dt);
-   p.jump=Math.max(0,p.jump-dt);p.guard=Math.max(0,p.guard-dt);p.comboTime=Math.max(0,p.comboTime-dt);
-   if(p.windup>0){p.windup=Math.max(0,p.windup-dt);if(p.windup<=0&&!p.stun)this.action(i,'push',true);}
-   if(p.hang>0){p.hang-=dt;if(i>0&&p.cool<=0&&this.random()<dt*2.8)this.action(i,'push');if(p.hang<=0&&p.escape<3)this.eliminate(i);continue;}
-   if(p.heldBy>=0){const holder=this.fighters[p.heldBy];if(!holder.alive){p.heldBy=-1;continue;}p.x=holder.x+Math.cos(holder.angle)*25;p.y=holder.y+Math.sin(holder.angle)*25;if(i>0&&this.random()<dt*.7)this.action(i,'dash');continue;}
+ private strike(i:number){
+  const p=this.fighters[i];if(!p.alive||p.stun>0||p.down>0)return;
+  const w=WEAPONS[p.cast],heavy=p.attackKind==='heavy',finisher=!heavy&&p.attackStep===3;
+  const target=this.fighters.map((q,j)=>({q,j})).filter(({q,j})=>j!==i&&q.alive&&q.down<=0&&q.invulnerable<=0&&Math.abs(q.y-p.y)<55&&dist(p,q)<w.reach+(heavy?18:0)&&Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.35&&!(q.jump>.12&&p.jump<=0)).sort((a,b)=>dist(p,a.q)-dist(p,b.q))[0];
+  if(!target){p.combo=0;p.comboTime=0;return;}const {q,j}=target;
+  if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-(heavy?36:15));if(!heavy&&q.stamina>0){p.combo=0;p.comboTime=0;this.event('save',q,'BLOCK');return;}q.guard=0;this.event('save',q,'GUARD BREAK');}
+  const damage=Math.round(w.damage*(heavy?1.8:finisher?1.35:.8));q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.guard=0;q.combo=0;q.comboTime=0;
+  const force=heavy?w.force*.7:finisher?w.force*.48:48;q.vx=Math.cos(p.angle)*force;q.vy=Math.sin(p.angle)*force;q.stun=heavy?.42:finisher?.3:.14;q.invulnerable=heavy?.78:.16;q.down=heavy?.55:0;
+  if(!heavy){p.combo=p.attackStep;p.comboTime=1.1;}this.event(heavy||finisher?'heavy':'hit',q,heavy?`-${damage} POWER`:`-${damage}  ${p.attackStep} HIT`);if(q.hp<=0)this.eliminate(j);
+ }
+ private finish(winner:number){this.winner=winner;if(winner>=0)this.fighters[winner].wins++;this.phase=winner>=0&&this.fighters[winner].wins>=2?'finished':'round';this.stick={x:0,y:0};this.event('round',this.fighters[Math.max(0,winner)],winner<0?'무승부':`${CAST[this.fighters[winner].cast].name} 승리`);}
+ update(dt:number){
+  dt=Math.min(.05,Math.max(0,dt));if(this.phase==='countdown'){this.countdown-=dt;if(this.countdown<=0)this.phase='playing';return;}if(this.phase!=='playing')return;this.time+=dt;
+  for(let i=0;i<this.fighters.length;i++){
+   const p=this.fighters[i];if(!p.alive){p.fall+=dt;continue;}
+   for(const key of ['cool','stun','down','invulnerable','poseTime','dash','jump','guard','comboTime'] as const)p[key]=Math.max(0,p[key]-dt);
+   p.stamina=Math.min(100,p.stamina+dt*(p.guard>0?3:15));
+   if(p.windup>0){p.windup=Math.max(0,p.windup-dt);if(p.windup<=0)this.strike(i);}
    let input=i===0?this.stick:{x:0,y:0};
-   if(i>0){const target=this.fighters.filter(q=>q!==p&&q.alive&&q.heldBy<0).sort((a,c)=>dist(p,a)-dist(p,c))[0];if(target){let tx=target.x,ty=target.y;const danger=Math.abs(p.x)>b.x-55||Math.abs(p.y)>b.y-45;if(p.carrying>=0){tx=Math.sign(p.x||1)*(b.x+40);ty=p.y;}else if(danger&&p.stun<=0){tx=0;ty=0;}for(const o of OBSTACLES){const dx=tx-p.x,dy=ty-p.y,len=Math.hypot(dx,dy)||1,along=((o.x-p.x)*dx+(o.y-p.y)*dy)/len;
- if(along>0&&along<130&&Math.abs((o.x-p.x)*dy-(o.y-p.y)*dx)/len<o.r+35){const side=(i%2?1:-1);tx=p.x-dy/len*120*side;ty=p.y+dx/len*120*side;break;}}
- const a=Math.atan2(ty-p.y,tx-p.x);input={x:Math.cos(a),y:Math.sin(a)};p.ai-=dt;if(p.ai<=0){p.ai=.25+this.random()*.4;p.angle=Math.atan2(target.y-p.y,target.x-p.x);if(p.carrying>=0){p.angle=Math.atan2(p.y,p.x);this.action(i,'grab');}else if(dist(p,target)<WEAPONS[p.cast].reach-6)this.action(i,dist(p,target)<72&&this.random()<.22?'grab':'push');else if(dist(p,target)>145&&!danger&&this.random()<.18)this.action(i,'dash');}}}
-   if(p.carrying>=0){p.hold-=dt;if(p.hold<=0){p.cool=0;this.action(i,'grab');}}
-   const n=Math.hypot(input.x,input.y);if(p.stun<=0&&p.dash<=0){if(n>.1&&p.poseTime<=0)p.angle=Math.atan2(input.y,input.x);const speed=p.poseTime>0?85:p.guard>0?80:p.carrying>=0?125:215;const grip=Math.min(1,dt*14);p.vx+=(input.x/Math.max(1,n)*speed-p.vx)*grip;p.vy+=(input.y/Math.max(1,n)*speed-p.vy)*grip;}else{const drag=Math.exp(-dt*(p.dash>0?.5:3.5));p.vx*=drag;p.vy*=drag;}
-   p.x+=p.vx*dt;p.y+=p.vy*dt;p.gait+=Math.hypot(p.vx,p.vy)*dt/22;
-   for(const obstacle of OBSTACLES){const d=Math.hypot(p.x-obstacle.x,p.y-obstacle.y);if(p.jump<=0&&d<obstacle.r+18){const a=Math.atan2(p.y-obstacle.y,p.x-obstacle.x);p.x=obstacle.x+Math.cos(a)*(obstacle.r+18);p.y=obstacle.y+Math.sin(a)*(obstacle.r+18);}}
-   if(p.jump<=0&&(Math.abs(p.x)>b.x+10||Math.abs(p.y)>b.y+10)){if(p.damage<75&&p.escape===0&&this.time<80){p.x=Math.max(-b.x-6,Math.min(b.x+6,p.x));p.y=Math.max(-b.y-6,Math.min(b.y+6,p.y));p.hang=1.4;p.vx=0;p.vy=0;p.cool=0;this.release(i);this.event('hit',p,i===0?'복귀!':'EDGE!');}else this.eliminate(i);}
+   if(i>0){const target=this.fighters.filter(q=>q!==p&&q.alive).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(target){
+    const d=dist(p,target),a=Math.atan2(target.y-p.y,target.x-p.x),reach=WEAPONS[p.cast].reach,advance=d>reach*.8?1:d<55?-.45:0;input={x:Math.cos(a)*advance,y:Math.abs(target.y-p.y)>25?Math.sign(target.y-p.y)*.8:Math.sin(a)*advance};p.ai-=dt;
+    if(p.ai<=0){p.ai=.18+this.random()*.3;if(p.poseTime<=0)p.angle=a;
+     if(target.windup>0&&d<WEAPONS[target.cast].reach+15&&this.random()<.5){if(target.attackKind==='heavy'){p.angle=a+Math.PI;this.action(i,'dash');}else this.action(i,'guard');}
+     else if(d<reach+5&&Math.abs(target.y-p.y)<50&&target.down<=0)this.action(i,this.random()<.24?'heavy':'push');
+    }
+   }}
+   const n=Math.hypot(input.x,input.y);if(p.stun<=0&&p.down<=0&&p.dash<=0){if(n>.1&&p.poseTime<=0&&p.guard<=0)p.angle=Math.atan2(input.y,input.x);const speed=p.poseTime>0?35:p.guard>0?65:225,grip=Math.min(1,dt*16);p.vx+=(input.x/Math.max(1,n)*speed-p.vx)*grip;p.vy+=(input.y/Math.max(1,n)*speed-p.vy)*grip;}
+   else{const drag=Math.exp(-dt*(p.dash>0?1:9));p.vx*=drag;p.vy*=drag;}
+   p.x+=p.vx*dt;p.y+=p.vy*dt;p.gait+=Math.hypot(p.vx,p.vy)*dt/18;
+   p.x=Math.max(-ARENA.x+25,Math.min(ARENA.x-25,p.x));p.y=Math.max(-ARENA.y+20,Math.min(ARENA.y-20,p.y));
   }
-  for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){const p=this.fighters[i],q=this.fighters[j];if(!p.alive||!q.alive||p.hang||q.hang||p.heldBy>=0||q.heldBy>=0)continue;const d=dist(p,q);if(d<36){const a=d<.01?i:Math.atan2(q.y-p.y,q.x-p.x),overlap=(36-d)/2;p.x-=Math.cos(a)*overlap;p.y-=Math.sin(a)*overlap;q.x+=Math.cos(a)*overlap;q.y+=Math.sin(a)*overlap;if(p.dash>0||q.dash>0){const attacker=p.dash>0?p:q,victim=p.dash>0?q:p,dir=attacker===p?a:a+Math.PI;victim.vx=Math.cos(dir)*360;victim.vy=Math.sin(dir)*360;victim.stun=.35;victim.damage=Math.min(100,victim.damage+14);victim.lastBy=attacker===p?i:j;attacker.dash=0;attacker.stun=.12;this.event('hit',victim,'몸통 박치기!');}}}
-  const alive=this.fighters.map((p,i)=>p.alive?i:-1).filter(i=>i>=0);if(alive.length<=1){this.winner=alive[0]??-1;if(this.winner>=0)this.fighters[this.winner].wins++;this.phase=this.winner>=0&&this.fighters[this.winner].wins>=2?'finished':'round';this.stick={x:0,y:0};this.event('round',this.fighters[this.winner>=0?this.winner:0],this.winner===0?'옥상 접수!':this.winner<0?'동반 퇴근!':`${CAST[this.fighters[this.winner].cast].name} 승리`);}
+  for(let i=0;i<this.fighters.length;i++)for(let j=i+1;j<this.fighters.length;j++){const p=this.fighters[i],q=this.fighters[j];if(!p.alive||!q.alive||p.down>0||q.down>0||p.dash>0||q.dash>0)continue;const d=dist(p,q);if(d<52){const a=d<.01?i:Math.atan2(q.y-p.y,q.x-p.x),overlap=(52-d)/2;p.x-=Math.cos(a)*overlap;p.y-=Math.sin(a)*overlap;q.x+=Math.cos(a)*overlap;q.y+=Math.sin(a)*overlap;}}
+  for(const p of this.fighters){p.x=Math.max(-ARENA.x+25,Math.min(ARENA.x-25,p.x));p.y=Math.max(-ARENA.y+20,Math.min(ARENA.y-20,p.y));}
+  const alive=this.fighters.map((p,i)=>p.alive?i:-1).filter(i=>i>=0);if(alive.length<=1)this.finish(alive[0]??-1);
+  else if(this.time>=ARENA.roundTime){const sorted=alive.sort((a,b)=>this.fighters[b].hp-this.fighters[a].hp);this.finish(this.fighters[sorted[0]].hp===this.fighters[sorted[1]].hp?-1:sorted[0]);}
  }
- private release(i:number){const p=this.fighters[i];if(p.carrying>=0){this.fighters[p.carrying].heldBy=-1;p.carrying=-1;}if(p.heldBy>=0){this.fighters[p.heldBy].carrying=-1;p.heldBy=-1;}}
- private eliminate(i:number){const p=this.fighters[i];this.release(i);p.alive=false;p.hang=0;p.fall=0;this.event('fall',p,i===0?'먼저 내려갈게…':`${CAST[p.cast].name} 퇴장!`);}
+ private eliminate(i:number){const p=this.fighters[i];p.alive=false;p.hp=0;p.fall=0;p.windup=0;p.poseTime=0;this.event('fall',p,'K.O.');}
 }
