@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import {CAST,RooftopMatch,Action} from './rooftopModel';
+import {CAST,RooftopMatch,Action,ARENA} from './rooftopModel';
+import {buildArena,makeWeapon} from './rooftopArt';
 import {PixelAudio} from './pixelAudio';
-type Actor={sprite:THREE.Sprite;texture:THREE.Texture;ring:THREE.Mesh;shadow:THREE.Mesh;guard:THREE.Mesh};
+type Actor={weapon:THREE.Group;sprite:THREE.Sprite;texture:THREE.Texture;ring:THREE.Mesh;shadow:THREE.Mesh;guard:THREE.Mesh};
 type Burst={mesh:THREE.Sprite;life:number};
 
 export class RooftopGame {
@@ -16,6 +17,8 @@ export class RooftopGame {
  private width=1;private height=1;private disposed=false;
  private reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  private focus=new THREE.Vector3();
+ private heldAttack=false;private queued:Action|null=null;private queueTime=0;
+ holdAttack(value:boolean){this.heldAttack=value;if(value)this.act('push');}
  constructor(private canvas:HTMLCanvasElement,private changed:()=>void){
   this.renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true});
   this.renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));this.renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -38,6 +41,11 @@ export class RooftopGame {
    if(this.disposed)return;
    const dt=Math.min(.035,(now-last)/1000);last=now;
    if(this.keys.size)this.model.stick={x:Number(this.keys.has('d')||this.keys.has('arrowright'))-Number(this.keys.has('a')||this.keys.has('arrowleft')),y:Number(this.keys.has('s')||this.keys.has('arrowdown'))-Number(this.keys.has('w')||this.keys.has('arrowup'))};
+   if(this.model.phase==='playing'){
+    this.queueTime=Math.max(0,this.queueTime-dt);
+    const p=this.model.fighters[0];
+    if(p&&p.cool<=0&&p.stun<=0){if(this.queued&&this.queueTime>0){this.model.action(0,this.queued);this.queued=null;}else if(this.heldAttack)this.model.action(0,'push');}
+   }
    if(this.model.phase!=='paused'){
     if(this.freeze>0)this.freeze=Math.max(0,this.freeze-dt);else this.model.update(dt);
     if(this.model.phase==='round'||this.model.phase==='finished')for(const p of this.model.fighters)if(!p.alive)p.fall+=dt;
@@ -59,21 +67,14 @@ export class RooftopGame {
  }
  private buildStage(){
   this.scene.add(this.arena,this.boundary);
-  this.box(720,46,460,'#465b64',0,-24,0,this.arena);this.box(700,6,440,'#d9dfd8',0,0,0,this.arena);
-  const grid=new THREE.GridHelper(700,14,'#9aaea9','#bdcbc3');grid.scale.z=440/700;grid.position.y=3.2;this.arena.add(grid);
-  this.box(250,2,4,'#f4bd37',0,4,0,this.arena);this.box(4,2,150,'#f4bd37',0,4,0,this.arena);
-  for(const z of [-218,218])this.box(700,5,9,'#edb63a',0,5,z,this.arena);
-  for(const x of [-348,348])this.box(9,5,440,'#edb63a',x,5,0,this.arena);
-  for(let x=-330;x<350;x+=35){this.box(18,2,10,'#263c45',x,8,218,this.arena);this.box(18,2,10,'#263c45',x,8,-218,this.arena);}
-  for(const x of [-348,348])for(const z of [-218,218]){this.box(10,45,10,'#435d66',x,24,z,this.arena);this.box(14,6,14,'#f9ce68',x,48,z,this.arena);}
-  for(const [x,z] of [[-100,-35],[120,45]]){this.box(50,37,50,'#71918f',x,20,z,this.arena);this.box(54,5,54,'#a8c0ba',x,41,z,this.arena);for(let k=0;k<5;k++)this.box(35,2,3,'#456261',x,44,z-16+k*8,this.arena);}
-  for(const z of [-1,1])this.box(700,2,4,'#f65f54',0,10,z*220,this.boundary);
-  for(const x of [-1,1])this.box(4,2,440,'#f65f54',x*350,10,0,this.boundary);
+  buildArena(this.arena);
+  for(const z of [-1,1])this.box(1200,2,4,'#f65f54',0,10,z*ARENA.y,this.boundary);
+  for(const x of [-1,1])this.box(4,2,760,'#f65f54',x*ARENA.x,10,0,this.boundary);
   // Deterministic skyline: the arena stays visually stable across rounds.
   const windows=new THREE.InstancedMesh(new THREE.BoxGeometry(10,16,1),new THREE.MeshStandardMaterial({roughness:1}),420);
   let windowIndex=0;const matrix=new THREE.Matrix4();
   for(let i=0;i<28;i++){
-   const x=(i%14-6.5)*125,z=i<14?-650:-1000,h=180+(i*73)%350;
+   const x=(i%14-6.5)*125,z=i<14?-1000:-1400,h=180+(i*73)%350;
    this.box(85,h,100,i%3?'#718e9b':'#8fa6ae',x,h/2-200,z);this.box(90,6,105,'#b5c7ca',x,h-197,z);
    for(let row=0;row<5;row++)for(let col=0;col<3;col++){
     matrix.makeTranslation(x-25+col*25,h-230-row*30,z+51);windows.setMatrixAt(windowIndex,matrix);windows.setColorAt(windowIndex,new THREE.Color((i+row+col)%4?'#bed6d5':'#f9e5ab'));windowIndex++;
@@ -84,14 +85,15 @@ export class RooftopGame {
  }
  private ring(radius:number,color:string,opacity=1){const mesh=new THREE.Mesh(new THREE.RingGeometry(radius-2,radius,48),new THREE.MeshBasicMaterial({color,transparent:true,opacity,side:THREE.DoubleSide,depthWrite:false}));mesh.rotation.x=-Math.PI/2;this.scene.add(mesh);return mesh;}
  private syncActors(){
-  for(const a of this.actors){this.scene.remove(a.sprite,a.ring,a.shadow,a.guard);a.texture.dispose();a.sprite.material.dispose();for(const mesh of [a.ring,a.shadow,a.guard]){mesh.geometry.dispose();(mesh.material as THREE.Material).dispose();}}
+  for(const a of this.actors){this.scene.remove(a.sprite,a.ring,a.shadow,a.guard,a.weapon);a.weapon.traverse(o=>{const m=o as THREE.Mesh;if(m.geometry)m.geometry.dispose();if(m.material)(m.material as THREE.Material).dispose();});a.texture.dispose();a.sprite.material.dispose();for(const mesh of [a.ring,a.shadow,a.guard]){mesh.geometry.dispose();(mesh.material as THREE.Material).dispose();}}
   this.actors=[];if(!this.textures.length)return;
   for(const [i,p] of this.model.fighters.entries()){
    const texture=this.textures[p.cast].clone();texture.repeat.set(.25,.5);texture.needsUpdate=true;
    const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,alphaTest:.12,depthWrite:false}));sprite.center.set(.5,.06);this.scene.add(sprite);
    const ring=this.ring(27,i===0?'#ffe18a':CAST[p.cast].color);
    const shadow=new THREE.Mesh(new THREE.CircleGeometry(25,32),new THREE.MeshBasicMaterial({color:'#152d35',transparent:true,opacity:.24,depthWrite:false}));shadow.rotation.x=-Math.PI/2;this.scene.add(shadow);
-   this.actors.push({sprite,texture,ring,shadow,guard:this.ring(35,'#7ff5ef',.8)});
+   const weapon=makeWeapon(p.cast);this.scene.add(weapon);
+   this.actors.push({sprite,texture,ring,shadow,weapon,guard:this.ring(35,'#7ff5ef',.8)});
   }
  }
  private burst(text:string,x:number,z:number,color:string){
@@ -102,14 +104,14 @@ export class RooftopGame {
  }
  private resize(){const r=this.canvas.getBoundingClientRect();this.width=Math.max(1,r.width);this.height=Math.max(1,r.height);this.renderer.setSize(this.width,this.height,false);}
  private draw(dt:number){
-  const b=this.model.bounds;this.boundary.scale.set(b.x/350,1,b.y/220);this.boundary.visible=this.model.time>35;
+  const b=this.model.bounds;this.boundary.scale.set(b.x/ARENA.x,1,b.y/ARENA.y);this.boundary.visible=this.model.time>ARENA.shrinkAt;
   const ratio=this.width/this.height,portrait=ratio<1;
-  const living=this.model.fighters.filter(p=>p.alive);
-  const minX=Math.min(-180,...living.map(p=>p.x)),maxX=Math.max(180,...living.map(p=>p.x));
-  const x=portrait?(minX+maxX)/2:0;
-  this.focus.lerp(new THREE.Vector3(x,25,30),Math.min(1,dt*5));const span=portrait?Math.max(650,maxX-minX+200):Math.max(890,620*ratio);
+  const player=this.model.fighters[0],follow=portrait&&this.model.phase!=='ready'&&player?.alive;
+  const target=new THREE.Vector3(follow?player.x:0,20,follow?player.y:20);
+  this.focus.lerp(target,Math.min(1,dt*7));
+  const span=portrait?650:Math.max(1390,850*ratio);
   this.camera.left=-span/2;this.camera.right=span/2;this.camera.top=span/ratio/2;this.camera.bottom=-span/ratio/2;
-  this.camera.position.set(this.focus.x+this.shake*Math.sin(this.clock*95),660,this.focus.z+850);this.camera.lookAt(this.focus);this.camera.updateProjectionMatrix();
+  this.camera.position.set(this.focus.x+this.shake*Math.sin(this.clock*95),1000,this.focus.z+800);this.camera.lookAt(this.focus);this.camera.updateProjectionMatrix();
   this.actors.forEach((a,i)=>{
    const p=this.model.fighters[i];if(!p)return;const moving=Math.hypot(p.vx,p.vy)>16;
    let frame=!p.alive?6:p.hang||p.heldBy>=0||p.stun>0?5:p.poseTime>0?p.pose:moving?[1,0,2,0][Math.floor(p.gait)%4]:0;
@@ -118,16 +120,19 @@ export class RooftopGame {
    const jump=p.jump>0?Math.sin(p.jump/.65*Math.PI)*95:0,bob=this.reduced?0:moving?Math.sin(p.gait*Math.PI)*2:Math.sin(this.clock*3+i)*1.3,lift=p.heldBy>=0?65:p.hang?-45:0,fall=p.alive?0:p.fall;
    a.sprite.position.set(p.x,8+jump+lift+bob-fall*260,p.y);const impact=p.poseTime>0&&p.pose===3?Math.sin(p.poseTime/.25*Math.PI):0;a.sprite.scale.set(165+impact*8,165-impact*5,1);
    a.sprite.material.rotation=this.reduced?0:!p.alive?fall*2:p.dash>0?(left?.12:-.12):0;a.sprite.material.opacity=Math.max(0,1-fall);a.sprite.visible=fall<1;a.sprite.material.color.set(p.stun>.15?'#ffcec2':'#ffffff');
+   const swing=p.poseTime>0&&p.pose===3?Math.sin((1-p.poseTime/.25)*Math.PI)*1.8-.8:0;
+   a.weapon.position.set(p.x,70+jump+lift,p.y);a.weapon.rotation.y=-p.angle+swing;a.weapon.visible=p.alive&&p.heldBy<0&&!p.hang;
+   const trail=a.weapon.getObjectByName('swing') as THREE.Mesh;trail.visible=p.poseTime>0&&p.pose===3;trail.position.y=-45;
    a.ring.position.set(p.x,5,p.y);a.ring.visible=p.alive;a.shadow.position.set(p.x,4,p.y);a.shadow.scale.setScalar(1-jump/180);a.shadow.visible=p.alive;a.guard.position.set(p.x,8,p.y);a.guard.visible=p.alive&&p.guard>0;
   });this.renderer.render(this.scene,this.camera);
  }
- private down=(e:KeyboardEvent)=>{if(/INPUT|TEXTAREA|BUTTON|A/.test((e.target as HTMLElement)?.tagName))return;const key=e.key.toLowerCase();if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)){e.preventDefault();this.keys.add(key);return;}const actions:Record<string,Action>={j:'push',k:'grab',l:'dash',' ':'jump',i:'guard'};if(actions[key]||key==='escape'){e.preventDefault();if(e.repeat)return;if(key==='escape')this.pause();else this.act(actions[key]);}};
- private up=(e:KeyboardEvent)=>{if(this.keys.delete(e.key.toLowerCase())&&!this.keys.size)this.model.stick={x:0,y:0};};
+ private down=(e:KeyboardEvent)=>{if(/INPUT|TEXTAREA|BUTTON|A/.test((e.target as HTMLElement)?.tagName))return;const key=e.key.toLowerCase();if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)){e.preventDefault();this.keys.add(key);return;}const actions:Record<string,Action>={j:'push',k:'grab',l:'dash',' ':'jump',i:'guard'};if(actions[key]||key==='escape'){e.preventDefault();if(e.repeat)return;if(key==='escape')this.pause();else if(key==='j')this.holdAttack(true);else this.act(actions[key]);}};
+ private up=(e:KeyboardEvent)=>{if(e.key.toLowerCase()==='j')this.holdAttack(false);if(this.keys.delete(e.key.toLowerCase())&&!this.keys.size)this.model.stick={x:0,y:0};};
  private blur=()=>{if(this.model.phase==='playing'||this.model.phase==='countdown')this.pause();};
  private visibility=()=>{if(document.hidden)this.blur();};
- start(selected:number){void this.audio.unlock();this.keys.clear();this.freeze=0;this.model.start(selected);this.syncActors();this.changed();}
- preview(selected:number){this.model.start(selected);this.model.phase='ready';this.syncActors();this.changed();}
- pause(){this.keys.clear();this.model.pause();this.changed();}
- act(action:Action){void this.audio.unlock();this.model.action(0,action);this.changed();}
+ start(selected:number){void this.audio.unlock();this.keys.clear();this.heldAttack=false;this.queued=null;this.freeze=0;this.model.start(selected);this.syncActors();this.changed();}
+ preview(selected:number){this.heldAttack=false;this.queued=null;this.model.start(selected);this.model.phase='ready';this.syncActors();this.changed();}
+ pause(){this.keys.clear();this.heldAttack=false;this.queued=null;this.model.pause();this.changed();}
+ act(action:Action){void this.audio.unlock();if(this.model.phase==='playing'){const p=this.model.fighters[0];if(p?.cool>0||p?.stun>0){this.queued=action;this.queueTime=.22;}else this.model.action(0,action);}this.changed();}
  dispose(){this.disposed=true;cancelAnimationFrame(this.raf);this.observer.disconnect();this.audio.dispose();window.removeEventListener('keydown',this.down);window.removeEventListener('keyup',this.up);window.removeEventListener('blur',this.blur);document.removeEventListener('visibilitychange',this.visibility);this.scene.traverse(object=>{const mesh=object as THREE.Mesh;if(mesh.geometry)mesh.geometry.dispose();if(mesh.material)for(const m of Array.isArray(mesh.material)?mesh.material:[mesh.material]){(m as THREE.MeshBasicMaterial).map?.dispose();m.dispose();}});this.textures.forEach(t=>t.dispose());this.renderer.dispose();}
 }
