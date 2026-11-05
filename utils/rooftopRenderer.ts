@@ -72,7 +72,7 @@ export class RooftopGame {
   const progress=special&&p.cast===3?Math.max(0,Math.min(1,.5+(elapsed-pulse)/.24)):attackProgress(p);
   const frame=this.frame(p),heavy=p.alive&&p.stun<=0&&p.down<=0&&p.poseTime>0&&(p.attackKind==='heavy'||special)&&!(p.cast===5&&p.specialLeft>0)&&progress>=0&&progress<1,animated=frame<20,firing=heavy&&special&&p.cast===6,image=firing?this.rifleMotion:heavy?this.heavyMotion[p.cast]:animated?this.motion[p.cast]:this.images[p.cast];if(!image||p.fall>1.4)return;const c=this.ctx,pos=this.point(p.x,p.y),left=Math.cos(p.angle)<0;
   const jump=p.jump>0?Math.sin(p.jump/.65*Math.PI)*90:0,lift=0;
-  const height=actorHeight(p.y,scale),drawHeight=height*(heavy?1.48:1),width=drawHeight*(animated||heavy||p.cast===6?1:.75);
+  const height=actorHeight(p.y,scale),drawHeight=height*(heavy?1.48:p.cast===6&&animated&&p.poseTime>0&&!special?1.22:1),width=drawHeight*(animated||heavy||p.cast===6?1:.75);
   if(p.alive){c.save();c.fillStyle='#081a22';c.globalAlpha=.35;c.beginPath();c.ellipse(pos.x,pos.y+2,34-jump*.12,10,0,0,Math.PI*2);c.fill();
    c.globalAlpha=index===0?.9:.5;c.strokeStyle=p.momentum>0?'#ffad4f':index===0?'#fff3a6':CAST[p.cast].color;c.lineWidth=index===0?3:2;c.beginPath();c.ellipse(pos.x,pos.y+1,37,12,0,0,Math.PI*2);c.stroke();c.restore();}
   c.save();c.translate(pos.x,pos.y-jump-lift);if(left)c.scale(-1,1);
