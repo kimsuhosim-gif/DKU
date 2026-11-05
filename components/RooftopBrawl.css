@@ -100,10 +100,27 @@
 @media(max-height:550px) and (orientation:landscape){.roof-objective{top:44px;font-size:10px;padding:4px 9px}.roof-mode-picker button{min-height:30px;padding:4px}.roof-mode-picker{margin-bottom:4px}.roof-rules{margin-bottom:5px;font-size:9px}.roof-results{margin:4px 0}.roof-results li{padding:3px}}
 .roof-overlay{overflow-y:auto;place-items:safe center}.roof-overlay>div{max-height:100%;overflow-y:auto}
 
-/* Keep awakening separate from the six combat buttons and reachable by the movement thumb. */
-.roof-movement{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.roof-awaken{min-width:100px;min-height:44px;border:1px solid #72522a;border-radius:10px;background:#292e3c;color:#ffdf8a;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;touch-action:manipulation}
-.roof-awaken:disabled{opacity:.6}.roof-awaken.is-active{opacity:1;border-color:#ffa73e;background:#4a3024}
-.roof-awaken progress{width:80px;height:5px;accent-color:#ffba52}.roof-awaken:focus-visible{outline:3px solid #ea8727;outline-offset:2px}
-@media(max-width:700px){.roof-movement{flex-direction:column;gap:5px}.roof-movement .roof-pad{width:78px;height:78px}.roof-awaken{min-width:88px;min-height:38px;font-size:9px;padding:3px}.roof-awaken progress{width:68px;height:4px}.roof-controls{gap:6px}.roof-special-meter{max-width:180px}}
-@media(max-height:550px) and (orientation:landscape){.roof-movement{flex-direction:row;gap:6px}.roof-movement .roof-pad{width:60px;height:60px}.roof-awaken{min-width:74px;min-height:44px;font-size:9px}.roof-awaken progress{width:62px}.roof-controls{gap:6px;padding-left:8px;padding-right:8px}.roof-actions{gap:4px}.roof-actions button,.roof-actions .action-push{width:50px}.roof-special-meter{display:none}}
+/* Thumb controls: left hand moves, right hand owns every combat action. */
+.roof-movement{display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.roof-actions .roof-awaken{min-width:100px;min-height:54px;width:110px;background:#30354a;color:#ffe39e;border-color:#9a7637;gap:5px;touch-action:none}
+.roof-actions .roof-awaken b{font-size:12px}.roof-awaken progress{width:85%;height:5px;accent-color:#ffd05d}
+.roof-actions .roof-awaken:disabled{opacity:.65}.roof-actions .roof-awaken.is-active{opacity:1;background:#6b4123;border-color:#ffc569}
+.roof-actions .roof-awaken.is-ready{background:#ffd56a;color:#402b0a;border-color:#9b6422;box-shadow:0 0 0 2px #fff0bd inset}
+.roof-controls button{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.roof-controls button:focus-visible{outline:3px solid #ee982f;outline-offset:2px}
+@media(max-width:1100px){.roof-controls{gap:10px;padding-left:12px;padding-right:12px}.roof-energy{width:60px}.roof-special-meter{width:85px}.roof-actions{gap:6px}.roof-actions button{width:58px}.roof-actions .roof-awaken{width:100px}}
+@media(max-width:900px){
+ .roof-controls{display:grid;grid-template-columns:clamp(92px,28vw,112px) minmax(0,1fr);gap:12px;height:calc(222px + env(safe-area-inset-bottom));padding:26px 10px calc(12px + env(safe-area-inset-bottom));position:relative}
+ .roof-movement{align-self:center}.roof-movement .roof-pad{width:100%;height:auto;aspect-ratio:1;min-height:92px;max-height:112px}.roof-pad i{width:48px;height:48px}.roof-pad span{font-size:10px}
+ .roof-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"awaken awaken special" "guard jump heavy" "dash push push";gap:8px;width:100%;margin:0;padding:0;align-self:center}
+ .roof-actions button,.roof-actions .action-push,.roof-actions .roof-awaken{width:100%;min-width:0;height:56px;min-height:56px;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:5px;border-radius:14px;border-bottom-width:3px}
+ .roof-actions b,.roof-actions .roof-awaken b{font-size:12px}.roof-actions svg{width:21px;height:21px}.roof-actions small{display:none}
+ .roof-actions .roof-awaken{grid-area:awaken;flex-direction:column}.action-special{grid-area:special}.action-guard{grid-area:guard}.action-jump{grid-area:jump}.action-heavy{grid-area:heavy}.action-dash{grid-area:dash}.roof-actions .action-push{grid-area:push;flex-direction:row;gap:10px}.roof-actions .action-push b{font-size:16px}
+ .roof-energy{position:absolute;display:flex;flex-direction:row;align-items:center;left:10px;right:auto;top:8px;width:110px;font-size:8px;visibility:visible}.roof-energy progress{width:48px}.roof-special-meter{position:absolute;display:flex;flex-direction:row;align-items:center;right:10px;top:8px;max-width:180px;width:auto;font-size:8px}.roof-special-meter progress{width:42px}
+}
+@media(max-height:550px) and (orientation:landscape){
+ .roof-controls{display:grid;grid-template-columns:80px minmax(0,1fr);position:relative;bottom:auto;left:auto;right:auto;height:calc(134px + env(safe-area-inset-bottom));padding:8px max(12px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));gap:16px;background:#edf3eb;pointer-events:auto}
+ .roof-movement .roof-pad{width:80px;height:80px;min-height:80px}.roof-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"guard jump heavy awaken" "dash push push special";gap:8px;width:100%;margin:0;padding:0}
+ .roof-actions button,.roof-actions .action-push,.roof-actions .roof-awaken{width:100%;min-width:0;height:52px;min-height:52px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:7px;padding:5px;border-radius:12px}
+ .roof-actions .roof-awaken{grid-area:awaken;flex-direction:column;gap:3px}.action-special{grid-area:special}.action-guard{grid-area:guard}.action-jump{grid-area:jump}.action-heavy{grid-area:heavy}.action-dash{grid-area:dash}.roof-actions .action-push{grid-area:push}.roof-actions b{font-size:12px}.roof-actions small{display:none}.roof-energy,.roof-special-meter{display:none}
+}

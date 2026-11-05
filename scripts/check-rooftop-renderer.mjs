@@ -24,6 +24,12 @@ assert.equal(game.model.fighters[0].poseTime,0,'Hitstop must buffer input rather
 tick(15);assert.equal(game.model.fighters[0].poseTime,0);assert(game.queued,'Queued input survives hitstop');
 tick(8);assert(game.model.fighters[0].poseTime>0,'Buffered attack executes after hitstop');
 game.model.fighters[0].poseTime=0;game.model.fighters[0].cool=0;game.model.fighters[0].down=.10;game.model.fighters[0].stun=0;game.freeze=0;game.act('heavy');assert.equal(game.queued,'heavy','Get-up recovery accepts buffered input');tick(13);assert.equal(game.model.fighters[0].attackKind,'heavy');assert(game.model.fighters[0].poseTime>0);
+// Touch awakening must survive the longest normal heavy recovery and stop held attacks.
+game.start(6,'crown');tick(245);const awakeningPlayer=game.model.fighters[0];
+Object.assign(awakeningPlayer,{awakening:100,cool:.85,poseTime:.85,attackDuration:1,windup:0,stun:0,down:0});
+game.heldAttack=true;game.act('awaken');assert.equal(game.heldAttack,false);assert.equal(game.queued,'awaken');tick(90);
+assert(awakeningPlayer.awakened>9,'Awakening tap survives heavy recovery');assert.equal(awakeningPlayer.awakening,0);assert.equal(game.queued,null);
+console.log('P0 PASS: awakening tap cancels held attack and buffers through 850ms recovery.');
 game.preview(0);assert.equal(game.freeze,0);assert.equal(game.superCue,null);assert.equal(game.shake,0);
 // Regression: pose changes must not change Jaeho's canvas/body scale.
 for(const cast of [2,5,6]){
