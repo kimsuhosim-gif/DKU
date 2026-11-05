@@ -660,6 +660,13 @@ export interface NextSchedule {
   note: string;
 }
 
+export const nextMeeting: NextSchedule = {
+  title: '망년회',
+  date: '2026.12.08 (화) · 18:30',
+  location: '돼봉삼겹살 신논현점',
+  note: '',
+};
+
 export const nextSchedule: NextSchedule = {
   title: '2회 정기 라운딩 결과',
   date: '2026.06.13 (토) · 06:14 티오프',
