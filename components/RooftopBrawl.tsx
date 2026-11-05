@@ -47,6 +47,7 @@ export default function RooftopBrawl(){
      <div className="roof-roster">{CAST.map((p,i)=><button key={p.id} aria-label={p.name} aria-pressed={selected===i} onClick={()=>{setSelected(i);game?.preview(i);}} style={{'--fighter':p.color} as CSSProperties}><div className="roof-portrait" style={{backgroundImage:`url(${p.image})`}}/><strong>{p.name}</strong><span>{WEAPONS[i].name}</span></button>)}</div>
      <div className="roof-enter"><div><b>{CAST[selected].name}</b><span>{WEAPONS[selected].name} · 사거리 {attackReach(selected)}</span></div><button disabled={!loaded||!!error} onClick={start}><Play size={18} fill="currentColor"/>{error?'실행 불가':loaded?'대전 시작':'준비 중'}</button></div>
      <p className="roof-special-help"><b>U · {SPECIALS[selected].name}</b> {SPECIALS[selected].description} · 첫 라운드부터 사용 가능</p>
+     <p className="roof-special-help">방향키로 조준 · L 회피 후 공격은 강화 반격 · J 2타 적중 후 K로 빠른 마무리</p>
      {error&&<p role="alert">{error}</p>}
     </div>
    </div>}
@@ -63,7 +64,7 @@ export default function RooftopBrawl(){
   </div>
   {phase!=='ready'&&<div className="roof-controls">
    <button className="roof-pad" aria-label="이동 조이스틱" disabled={!active||!player?.alive} onPointerDown={e=>{if(pad.current)return;const r=e.currentTarget.getBoundingClientRect();pad.current={id:e.pointerId,x:r.left+r.width/2,y:r.top+r.height/2};e.currentTarget.setPointerCapture(e.pointerId);move(e);}} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}><span>W A S D</span><i style={{transform:`translate(${knob.x}px,${knob.y}px)`}}/></button>
-   <div className="roof-energy"><span>{player?.alive?'ENERGY':'KNOCK OUT'}</span><progress max={100} value={player?.stamina??0}/></div>
+   <div className="roof-energy"><span>{!player?.alive?'KNOCK OUT':player.momentum>0?'반격 찬스!':player.combo>=2&&player.comboTime>0?'K · 강공격 연결!':'ENERGY'}</span><progress max={100} value={player?.stamina??0}/></div>
    <div className="roof-special-meter"><span>{player&&player.meter>=100&&player.specialCooldown<=0?'필살기 준비 완료':`필살기 ${Math.floor(player?.meter??0)}%`}</span><progress aria-label="필살기 게이지" max={100} value={player?.meter??0}/></div>
    <div className="roof-actions">{actions.map(({id,label,key,Icon,cost})=><button key={id} className={`action-${id}`} aria-label={label} title={id==='special'?`${SPECIALS[selected].name} (U)`: `${label} (${key})`} disabled={!active||!player?.alive||(player?.stamina??0)<cost||(id==='special'&&((player?.meter??0)<100||(player?.specialCooldown??0)>0))} onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);if(id==='push')game?.holdAttack(true);else act(id);}} onPointerUp={()=>{if(id==='push')game?.holdAttack(false);}} onPointerCancel={()=>game?.holdAttack(false)} onLostPointerCapture={()=>{if(id==='push')game?.holdAttack(false);}} onClick={e=>{if(e.detail===0)act(id);}}><Icon size={22}/><b>{label}</b><small>{key}</small></button>)}</div>
   </div>}
