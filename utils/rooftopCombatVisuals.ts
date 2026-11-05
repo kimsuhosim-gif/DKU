@@ -49,7 +49,7 @@ export function contactEffect(c:CanvasRenderingContext2D,cast:number,age:number,
  }
  // Bright contact core + dark edge remain readable on the painted roof.
  c.beginPath();for(let i=0;i<16;i++){const a=i*Math.PI/8,rr=i%2?r*.36:r*(i%4===0?1.2:.8);const x=Math.cos(a)*rr,y=Math.sin(a)*rr*(cast===4?.45:1);if(i===0)c.moveTo(x,y);else c.lineTo(x,y);}c.closePath();
- c.fillStyle='#fffbea';c.strokeStyle='#172933';c.lineWidth=5;c.stroke();c.fill();
+ c.fillStyle=age<.07?'#fffbea':color;c.strokeStyle='#172933';c.lineWidth=5;c.stroke();c.fill();
  c.strokeStyle=color;c.lineWidth=heavy?5:3;
  // Distinct material cues: fist compression, piercing cross, metallic shock rings.
  if(cast===3){c.beginPath();c.ellipse(-r*.25,0,r*1.25,r*.8,0,0,Math.PI*2);c.stroke();}
@@ -79,4 +79,15 @@ export function specialEffect(c:CanvasRenderingContext2D,cast:number,age:number,
   c.lineWidth=7;for(let i=0;i<2;i++){const r=40+(reduced?.3:t)*100+i*18;c.beginPath();c.ellipse(70,0,r,r,0,0,Math.PI*2);c.stroke();}
   c.strokeStyle='#fff8cb';c.lineWidth=4;c.beginPath();c.moveTo(20,25);c.quadraticCurveTo(160,-90,200,0);c.lineTo(178,-10);c.stroke();
  }c.restore();
+}
+
+/** Foot-anchored procedural follow-through; gameplay hit timing stays at 0.5. */
+export function motionOffset(cast:number,t:number,heavy:boolean){
+ const wind=t<.42?Math.sin(t/.42*Math.PI):0;
+ const hit=t>=.42?Math.sin(Math.min(1,(t-.42)/.58)*Math.PI):0;
+ const power=heavy?1:.55;
+ return {x:(-wind*5+hit*[12,16,5,18,23,11][cast])*power,
+  y:hit*(cast===3?-8:cast===2?4:-2)*power,
+  tilt:(-wind*.025+hit*[.035,.065,.035,-.04,.06,.055][cast])*power,
+  squash:cast===2?hit*.035*power:0};
 }
