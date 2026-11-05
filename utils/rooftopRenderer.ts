@@ -1,7 +1,8 @@
 import {CAST,RooftopMatch,Action,ARENA,MAX_HP,WEAPONS,Fighter} from './rooftopModel';
 import {PixelAudio} from './pixelAudio';
+import {IMPACTS,ImpactKind} from './rooftopEffects';
 
-type Burst={x:number;y:number;life:number;text:string;hit:boolean;color:string};
+type Burst={x:number;y:number;life:number;text:string;hit:boolean;color:string;effect?:ImpactKind};
 const load=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error(`Asset failed: ${src}`));i.src=src;});
 
 /** Painted stage and hand-drawn animation frames. No mesh or detached weapon. */
@@ -12,10 +13,12 @@ export class RooftopGame {
  private width=1;private height=1;private dpr=1;private clock=0;private notify=0;private freeze=0;private shake=0;
  private cameraX=768;private heldAttack=false;private queued:Action|null=null;private queueTime=0;private bursts:Burst[]=[];
  private reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ private effects:Partial<Record<ImpactKind,HTMLImageElement>>={};
  constructor(private canvas:HTMLCanvasElement,private changed:()=>void){
   const context=canvas.getContext('2d',{alpha:false});if(!context)throw Error('Canvas unavailable');this.ctx=context;
   this.model.start(0);this.model.phase='ready';
-  this.ready=Promise.all([load('/images/rooftop-painted-stage-v2.png'),...CAST.map(p=>load(p.image)),...CAST.map(p=>load(`/images/rooftop-${p.id}-motion-v3.png`))]).then(([stage,...actors])=>{if(!this.disposed){this.stage=stage;this.images=actors.slice(0,6);this.motion=actors.slice(6);}});
+  const effectsReady=Promise.all((Object.keys(IMPACTS) as ImpactKind[]).map(async kind=>{try{const image=await load(`/images/rooftop-fx/${kind}.png`);if(!this.disposed)this.effects[kind]=image;}catch{/* Optional art: retain the original hit cue if loading fails. */}}));
+  this.ready=Promise.all([load('/images/rooftop-painted-stage-v2.png'),...CAST.map(p=>load(p.image)),...CAST.map(p=>load(`/images/rooftop-${p.id}-motion-v3.png`))]).then(async ([stage,...actors])=>{if(!this.disposed){this.stage=stage;this.images=actors.slice(0,6);this.motion=actors.slice(6);}await effectsReady;});
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(canvas);this.resize();
   window.addEventListener('keydown',this.down);window.addEventListener('keyup',this.up);window.addEventListener('blur',this.blur);document.addEventListener('visibilitychange',this.visibility);
   let last=performance.now();
@@ -34,7 +37,9 @@ export class RooftopGame {
    for(const e of this.model.events.splice(0)){
     this.audio.play(e.kind==='fall'?'hurt':e.kind==='round'?'win':e.kind==='save'?'upgrade':e.kind==='dash'?'dash':e.kind==='heavy'?'throw':'hit');
     const hit=e.kind==='hit'||e.kind==='heavy';if(hit){this.freeze=e.kind==='heavy'?.075:.025;this.shake=this.reduced?0:e.kind==='heavy'?5:1.5;}
-    if(e.kind!=='round')this.bursts.push({x:e.x,y:e.y,life:.65,text:e.text,hit,color:hit?'#ffe8a8':'#8bf1dc'});
+    const effect:ImpactKind|undefined=e.kind==='heavy'?'crit-hit':e.kind==='hit'?'hit-spark':e.kind==='save'?(e.text==='BLOCK'?'shield-block':'crit-hit'):undefined;
+    if(e.kind!=='round')this.bursts.push({x:e.x,y:e.y,life:.65,text:e.text,hit,color:e.text==='GUARD BREAK'?'#ffad80':hit?'#ffe8a8':'#8bf1dc',effect});
+    if(this.bursts.length>24)this.bursts.splice(0,this.bursts.length-24);
    }
    this.draw(dt);this.notify+=dt;if(this.notify>.08){this.notify=0;this.changed();}this.raf=requestAnimationFrame(loop);
   };this.raf=requestAnimationFrame(loop);
@@ -76,7 +81,9 @@ export class RooftopGame {
 
   this.model.fighters.map((p,i)=>({p,i})).sort((a,b)=>a.p.y-b.p.y).forEach(({p,i})=>this.actor(p,i,scale));
   for(const b of this.bursts){const pos=this.point(b.x,b.y),age=.65-b.life;c.save();c.translate(pos.x,pos.y-100);c.globalAlpha=Math.min(1,b.life*4);
-   if(b.hit&&age<.22){c.strokeStyle='#fff7cd';c.lineWidth=4;for(let i=0;i<8;i++){const a=i*Math.PI/4,r=15+age*180;c.beginPath();c.moveTo(Math.cos(a)*r,Math.sin(a)*r*.65);c.lineTo(Math.cos(a)*(r+18),Math.sin(a)*(r+18)*.65);c.stroke();}}
+   const image=b.effect?this.effects[b.effect]:undefined,fx=b.effect?IMPACTS[b.effect]:undefined;
+   if(image&&fx&&!this.reduced&&age<fx.duration){const frame=Math.min(fx.frames-1,Math.floor(age/fx.duration*fx.frames));c.imageSmoothingEnabled=false;c.drawImage(image,frame%fx.columns*fx.width,Math.floor(frame/fx.columns)*fx.height,fx.width,fx.height,-fx.pivot[0]*fx.scale,-fx.pivot[1]*fx.scale,fx.width*fx.scale,fx.height*fx.scale);}
+   else if(b.hit&&age<.22&&(!image||this.reduced)){c.strokeStyle='#fff7cd';c.lineWidth=4;for(let i=0;i<8;i++){const a=i*Math.PI/4,r=this.reduced?20:15+age*180;c.beginPath();c.moveTo(Math.cos(a)*r,Math.sin(a)*r*.65);c.lineTo(Math.cos(a)*(r+18),Math.sin(a)*(r+18)*.65);c.stroke();}}
    if(b.text){c.font='900 22px sans-serif';c.textAlign='center';c.lineWidth=5;c.strokeStyle='#1b2532';c.strokeText(b.text,0,-50-age*45);c.fillStyle=b.color;c.fillText(b.text,0,-50-age*45);}c.restore();
   }c.restore();
  }
