@@ -11,5 +11,6 @@ document.getElementById('superhit').onclick=()=>{playing=false;specialPlaying=fa
 document.getElementById('special').onclick=()=>{playing=false;specialPlaying=false;for(const g of games){g.superCue=null;g.bursts=[];const p=g.model.fighters[0];Object.assign(p,{poseTime:.5,attackDuration:1,attackKind:'special',guard:0,specialLeft:0});g.specialBursts=[{x:p.x,y:p.y,cast:p.cast,angle:0,life:.45}];}};
 document.getElementById('specialRun').onclick=()=>{specialPlaying=!specialPlaying;playing=false;t=0;};
 document.getElementById('animate').onclick=()=>{playing=!playing;t=0;};
+const beats=[.12,.30,.44,.54,.65,.74,.84,.94];for(let i=0;i<8;i++){const b=document.createElement('button');b.textContent=`프레임 ${i+1}`;b.onclick=()=>{playing=false;specialPlaying=false;show('attack',beats[i]);};document.querySelector('header').append(b);}
 let last=performance.now();function loop(now){const dt=(now-last)/1000;last=now;if(specialPlaying){t=(t+dt)%1.4;for(const g of games){const p=g.model.fighters[0];Object.assign(p,{poseTime:Math.max(.01,1-t),attackDuration:1,attackKind:'special',specialLeft:0});g.specialBursts=t<.65?[{x:p.x,y:p.y,cast:p.cast,angle:0,life:.65-t}]:[];}}if(playing){t=(t+dt)%1.4;show(t<1?'attack':'ready',Math.min(.99,t));}requestAnimationFrame(loop);}requestAnimationFrame(loop);show('ready');
 </script></html>

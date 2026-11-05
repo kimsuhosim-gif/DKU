@@ -1,0 +1,92 @@
+{
+  "content": "4 existing anchors + 4 model-drawn in-betweens per character; 8-frame sequence, not a full 14-frame set",
+  "coordinateSpace": "screen",
+  "weaponOwnership": "same reference grip; both hands anchored for iron/bat/hammer/spear; pan original hand, opposite empty; boxer two gloves",
+  "normalization": "one shared scale and translation per character; no pose warping",
+  "sheets": [
+    {
+      "id": "hyomin",
+      "source": "exec-74e9b1d5-b87b-4489-bf92-3adf3a2fefd3.png",
+      "frames": 8,
+      "cell": 256,
+      "sharedScale": 0.68343,
+      "sourceFeet": [
+        641,
+        641,
+        641,
+        641
+      ],
+      "bytes": 273875
+    },
+    {
+      "id": "jaeyeop",
+      "source": "exec-7f56f255-50e2-4bc5-b2e8-8e8fef87784e.png",
+      "frames": 8,
+      "cell": 256,
+      "sharedScale": 0.66538,
+      "sourceFeet": [
+        630,
+        629,
+        630,
+        630
+      ],
+      "bytes": 283437
+    },
+    {
+      "id": "seongtae",
+      "source": "exec-e0f8df64-241b-4b44-9b29-99b1bb080b16.png",
+      "frames": 8,
+      "cell": 256,
+      "sharedScale": 0.60282,
+      "sourceFeet": [
+        662,
+        663,
+        663,
+        663
+      ],
+      "bytes": 251984
+    },
+    {
+      "id": "manjong",
+      "source": "exec-f24a89e9-b01f-49fe-a970-0985a94aa41c.png",
+      "frames": 8,
+      "cell": 256,
+      "sharedScale": 0.61714,
+      "sourceFeet": [
+        657,
+        658,
+        658,
+        658
+      ],
+      "bytes": 268867
+    },
+    {
+      "id": "yeonseong",
+      "source": "exec-bf078245-dd58-4638-8308-9962e42f0317.png",
+      "frames": 8,
+      "cell": 256,
+      "sharedScale": 0.82033,
+      "sourceFeet": [
+        501,
+        501,
+        502,
+        501
+      ],
+      "bytes": 283780
+    },
+    {
+      "id": "moseongjin",
+      "source": "exec-48eefb0d-2d36-4a87-83b3-06bae0ae2ef1.png",
+      "frames": 8,
+      "cell": 256,
+      "sharedScale": 0.61284,
+      "sourceFeet": [
+        648,
+        647,
+        649,
+        649
+      ],
+      "bytes": 328964
+    }
+  ]
+}

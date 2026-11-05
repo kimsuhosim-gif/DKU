@@ -22,16 +22,16 @@ export class RooftopGame {
  constructor(private canvas:HTMLCanvasElement,private changed:()=>void){
   const context=canvas.getContext('2d',{alpha:false});if(!context)throw Error('Canvas unavailable');this.ctx=context;
   this.model.start(0);this.model.phase='ready';
-  this.ready=Promise.all([load('/images/rooftop-painted-stage-v2.png'),...CAST.map(p=>load(p.image)),...CAST.map(p=>load(`/images/rooftop-${p.id}-motion-${p.id==='seongtae'?'v4':'v3'}.png`)),...CAST.map(p=>load(`/images/rooftop-${p.id}-heavy-v4.png`))]).then(([stage,...actors])=>{if(!this.disposed){this.stage=stage;this.images=actors.slice(0,6);this.motion=actors.slice(6,12);this.heavyMotion=actors.slice(12);}});
+  this.ready=Promise.all([load('/images/rooftop-painted-stage-v2.png'),...CAST.map(p=>load(p.image)),...CAST.map(p=>load(`/images/rooftop-${p.id}-motion-${p.id==='seongtae'?'v4':'v3'}.png`)),...CAST.map(p=>load(`/images/rooftop-${p.id}-heavy-v5.png`))]).then(([stage,...actors])=>{if(!this.disposed){this.stage=stage;this.images=actors.slice(0,6);this.motion=actors.slice(6,12);this.heavyMotion=actors.slice(12);}});
   const artworkReady=this.ready;this.ready=Promise.all([artworkReady,loadSpecialFx()]).then(()=>{});
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(canvas);this.resize();
   window.addEventListener('keydown',this.down);window.addEventListener('keyup',this.up);window.addEventListener('blur',this.blur);document.addEventListener('visibilitychange',this.visibility);
   let last=performance.now();
   const loop=(now:number)=>{if(this.disposed)return;const dt=Math.min(.035,(now-last)/1000);last=now;
    if(this.keys.size)this.model.stick={x:Number(this.keys.has('d')||this.keys.has('arrowright'))-Number(this.keys.has('a')||this.keys.has('arrowleft')),y:Number(this.keys.has('s')||this.keys.has('arrowdown'))-Number(this.keys.has('w')||this.keys.has('arrowup'))};
-   if(this.model.phase==='playing'){
+   if(this.model.phase==='playing'&&this.freeze<=0){
     this.queueTime=Math.max(0,this.queueTime-dt);const p=this.model.fighters[0];
-    if(p&&p.cool<=0&&p.stun<=0){if(this.queued&&this.queueTime>0){this.model.action(0,this.queued);this.queued=null;}else if(this.heldAttack)this.model.action(0,'push');}
+    if(p?.alive&&p.cool<=0&&p.stun<=0&&p.down<=0&&p.poseTime<=0&&p.dash<=0){if(this.queued&&this.queueTime>0){this.model.action(0,this.queued);this.queued=null;}else if(this.heldAttack)this.model.action(0,'push');}
    }
    if(this.model.phase!=='paused'){
     if(this.freeze>0)this.freeze=Math.max(0,this.freeze-dt);else this.model.update(dt);
@@ -69,7 +69,7 @@ export class RooftopGame {
   const special=p.attackKind==='special'&&p.poseTime>0;
   const elapsed=p.attackDuration-p.poseTime,pulse=SPECIALS[3].pulses.find(t=>t>=elapsed-.075)??SPECIALS[3].pulses[4];
   const progress=special&&p.cast===3?Math.max(0,Math.min(1,.5+(elapsed-pulse)/.24)):attackProgress(p);
-  const frame=this.frame(p),heavy=p.alive&&p.stun<=0&&p.down<=0&&p.poseTime>0&&(p.attackKind==='heavy'||special)&&!(p.cast===5&&p.specialLeft>0)&&progress>.10&&progress<.96,animated=frame<20,image=heavy?this.heavyMotion[p.cast]:animated?this.motion[p.cast]:this.images[p.cast];if(!image||p.fall>1.4)return;const c=this.ctx,pos=this.point(p.x,p.y),left=Math.cos(p.angle)<0;
+  const frame=this.frame(p),heavy=p.alive&&p.stun<=0&&p.down<=0&&p.poseTime>0&&(p.attackKind==='heavy'||special)&&!(p.cast===5&&p.specialLeft>0)&&progress>=0&&progress<1,animated=frame<20,image=heavy?this.heavyMotion[p.cast]:animated?this.motion[p.cast]:this.images[p.cast];if(!image||p.fall>1.4)return;const c=this.ctx,pos=this.point(p.x,p.y),left=Math.cos(p.angle)<0;
   const jump=p.jump>0?Math.sin(p.jump/.65*Math.PI)*90:0,lift=0;
   const height=actorHeight(p.y,scale),drawHeight=height*(heavy?1.48:1),width=drawHeight*(animated||heavy?1:.75);
   if(p.alive){c.save();c.fillStyle='#081a22';c.globalAlpha=.35;c.beginPath();c.ellipse(pos.x,pos.y+2,34-jump*.12,10,0,0,Math.PI*2);c.fill();
@@ -81,7 +81,7 @@ export class RooftopGame {
   const bob=this.reduced?0:Math.hypot(p.vx,p.vy)>20?Math.sin(p.gait*Math.PI)*3:Math.sin(this.clock*3+index)*1.2;
   if(p.down>0||!p.alive){c.translate(0,-18);c.rotate(-1.15);c.scale(.8,.8);}else if(!this.reduced&&p.stun>0){c.translate(-Math.min(16,p.stun*60),-4);c.rotate(-.16);}else if(!this.reduced&&p.dash>0)c.rotate(-.15);
   c.globalAlpha=p.alive?1:Math.max(0,1-p.fall);
-  const cell=heavy?heavyCell(progress):animated?frame:frame-20,sw=image.width/4,sh=heavy?image.height:image.height/(animated?4:2),sx=cell%4*sw,sy=heavy?0:Math.floor(cell/4)*sh;
+  const cell=heavy?heavyCell(progress):animated?frame:frame-20,sw=image.width/(heavy?8:4),sh=heavy?image.height:image.height/(animated?4:2),sx=(heavy?cell:cell%4)*sw,sy=heavy?0:Math.floor(cell/4)*sh;
   if(!this.reduced&&(p.dash>0||(special&&progress>.38&&progress<.82))){for(let k=3;k>0;k--){c.globalAlpha=.24/k;c.drawImage(image,sx,sy,sw,sh,-width/2-k*24,-drawHeight*(heavy?.9375:.94)+bob,width,drawHeight);}c.globalAlpha=1;}
   c.drawImage(image,sx,sy,sw,sh,-width/2,-drawHeight*(heavy?.9375:.94)+bob,width,drawHeight);
   c.restore();
@@ -118,6 +118,6 @@ export class RooftopGame {
  start(selected:number){void this.audio.unlock();this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected);this.changed();}
  preview(selected:number){this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected);this.model.phase='ready';this.changed();}
  pause(){this.keys.clear();this.heldAttack=false;this.queued=null;this.model.pause();this.changed();}
- act(action:Action){if(this.keys.size)this.model.stick={x:Number(this.keys.has('d')||this.keys.has('arrowright'))-Number(this.keys.has('a')||this.keys.has('arrowleft')),y:Number(this.keys.has('s')||this.keys.has('arrowdown'))-Number(this.keys.has('w')||this.keys.has('arrowup'))};void this.audio.unlock();if(this.model.phase==='playing'){const p=this.model.fighters[0];if(action==='dash'&&p&&p.windup<=0&&p.stun<=0){this.model.action(0,action);}else if(p?.cool>0||p?.stun>0){this.queued=action;this.queueTime=.28;}else this.model.action(0,action);}this.changed();}
+ act(action:Action){if(this.keys.size)this.model.stick={x:Number(this.keys.has('d')||this.keys.has('arrowright'))-Number(this.keys.has('a')||this.keys.has('arrowleft')),y:Number(this.keys.has('s')||this.keys.has('arrowdown'))-Number(this.keys.has('w')||this.keys.has('arrowup'))};void this.audio.unlock();if(this.model.phase==='playing'){const p=this.model.fighters[0];if(this.freeze>0){this.queued=action;this.queueTime=.28;}else if(action==='dash'&&p&&p.windup<=0&&p.stun<=0&&p.down<=0){this.model.action(0,action);}else if(p?.cool>0||p?.stun>0||p?.down>0||p?.poseTime>0||p?.dash>0){this.queued=action;this.queueTime=.28;}else this.model.action(0,action);}this.changed();}
  dispose(){this.disposed=true;cancelAnimationFrame(this.raf);this.observer.disconnect();this.audio.dispose();window.removeEventListener('keydown',this.down);window.removeEventListener('keyup',this.up);window.removeEventListener('blur',this.blur);document.removeEventListener('visibilitychange',this.visibility);this.images=[];this.motion=[];this.stage=null;}
 }

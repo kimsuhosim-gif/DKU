@@ -16,7 +16,9 @@ export function attackCell(p:Pick<Fighter,'poseTime'|'attackDuration'|'cast'|'at
  const t=attackProgress(p),beat=t<.22?0:t<.5?1:t<.64?2:t<.8?3:4;
  return LIGHT_POSES[p.cast][Math.max(0,Math.min(2,p.attackStep-1))][beat];
 }
-export function heavyCell(t:number){return t<.5?0:t<.64?1:t<.82?2:3;}
+// Eight drawn poses; preserve exact contact at 50% while giving acceleration and recovery their own cels.
+export const HEAVY_BEATS=[0,.26,.40,.50,.61,.70,.80,.90] as const;
+export function heavyCell(t:number){let cell=0;for(let i=1;i<HEAVY_BEATS.length;i++)if(t>=HEAVY_BEATS[i])cell=i;return cell;}
 export const actorHeight=(y:number,scale:number)=>Math.min(285,Math.max(225,150/scale))*(.94+(y+380)/760*.10);
 
 /** Separate, lightweight weapon paths, drawn only during the active strike. */
