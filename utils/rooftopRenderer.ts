@@ -1,3 +1,4 @@
+import {loadSpecialFx,drawChargeFx,drawSpecialFx} from './rooftopSpecialFx';
 import {CAST,RooftopMatch,Action,ARENA,MAX_HP,WEAPONS,Fighter,SPECIALS} from './rooftopModel';
 import {PixelAudio} from './pixelAudio';
 import {actorHeight,attackCell,attackProgress,heavyCell,weaponTrail,contactEffect,specialEffect,motionOffset} from './rooftopCombatVisuals';
@@ -20,6 +21,7 @@ export class RooftopGame {
   const context=canvas.getContext('2d',{alpha:false});if(!context)throw Error('Canvas unavailable');this.ctx=context;
   this.model.start(0);this.model.phase='ready';
   this.ready=Promise.all([load('/images/rooftop-painted-stage-v2.png'),...CAST.map(p=>load(p.image)),...CAST.map(p=>load(`/images/rooftop-${p.id}-motion-${p.id==='seongtae'?'v4':'v3'}.png`)),...CAST.map(p=>load(`/images/rooftop-${p.id}-heavy-v4.png`))]).then(([stage,...actors])=>{if(!this.disposed){this.stage=stage;this.images=actors.slice(0,6);this.motion=actors.slice(6,12);this.heavyMotion=actors.slice(12);}});
+  const artworkReady=this.ready;this.ready=Promise.all([artworkReady,loadSpecialFx()]).then(()=>{});
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(canvas);this.resize();
   window.addEventListener('keydown',this.down);window.addEventListener('keyup',this.up);window.addEventListener('blur',this.blur);document.addEventListener('visibilitychange',this.visibility);
   let last=performance.now();
@@ -94,8 +96,9 @@ export class RooftopGame {
   for(const b of this.dust){const pos=this.point(b.x,b.y),t=1-b.life/.28;c.save();c.translate(pos.x,pos.y);c.globalAlpha=(1-t)*.65;c.strokeStyle='#f5e4ba';c.lineWidth=3;c.beginPath();c.ellipse(0,0,25+t*38,8+t*12,0,0,Math.PI*2);c.stroke();for(let k=0;k<4;k++){const a=k*Math.PI/2;c.fillStyle='#d5d6bd';c.beginPath();c.ellipse(Math.cos(a)*(22+t*40),Math.sin(a)*(8+t*14),5*(1-t),3*(1-t),0,0,Math.PI*2);c.fill();}c.restore();}
   // Telegraphs stay on the floor, behind actors, so an enemy special is readable.
   for(const p of this.model.fighters)if(p.alive&&p.specialLeft>0){const pos=this.point(p.x,p.y),s=SPECIALS[p.cast],elapsed=s.duration-p.specialLeft;c.save();c.translate(pos.x,pos.y);c.strokeStyle=WEAPONS[p.cast].color;c.globalAlpha=.6;c.lineWidth=4;c.setLineDash([12,9]);c.beginPath();if(p.cast===2)c.ellipse(0,0,s.range,s.range*.6,0,0,Math.PI*2);else{const dx=Math.cos(p.angle)*s.range,dy=Math.sin(p.angle)*s.range*.6;c.moveTo(0,0);c.lineTo(dx,dy);}c.stroke();c.setLineDash([]);c.lineWidth=5;c.beginPath();c.ellipse(0,0,48,19,0,0,Math.PI*2*Math.min(1,elapsed/.6));c.stroke();c.restore();}
+  for(const p of this.model.fighters)if(p.alive&&p.specialLeft>0){const s=SPECIALS[p.cast],elapsed=s.duration-p.specialLeft,windup=s.pulses[0]??s.duration;if(elapsed<windup){const pos=this.point(p.x,p.y),h=actorHeight(p.y,scale);c.save();c.translate(pos.x+Math.cos(p.angle)*42,pos.y-h*.46);drawChargeFx(c,elapsed/windup,this.reduced);c.restore();}}
   this.model.fighters.map((p,i)=>({p,i})).sort((a,b)=>a.p.y-b.p.y).forEach(({p,i})=>this.actor(p,i,scale));
-  for(const b of this.specialBursts){const pos=this.point(b.x,b.y);c.save();c.translate(pos.x,pos.y-(b.cast===2?0:actorHeight(b.y,scale)*.46));if(b.cast!==2)c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);c.restore();}
+  for(const b of this.specialBursts){const pos=this.point(b.x,b.y);c.save();c.translate(pos.x,pos.y-(b.cast===2?0:actorHeight(b.y,scale)*.46));if(b.cast!==2)c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));if(b.cast===2)specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);if(!drawSpecialFx(c,b.cast,.65-b.life,this.reduced))specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);c.restore();}
   for(const b of this.bursts){const pos=this.point(b.x,b.y),age=.65-b.life,jump=b.jump>0?Math.sin(b.jump/.65*Math.PI)*90:0;c.save();c.translate(pos.x,pos.y-actorHeight(b.targetY,scale)*(b.cast===2&&b.heavy?.22:b.cast===3&&b.heavy?.70:.46)-jump);
    c.save();c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));const fxScale=Math.max(.85,Math.min(1.7,.75/scale));c.scale(fxScale,fxScale);if(b.hit||b.block||b.broken)contactEffect(c,b.cast,age,b.heavy,b.block,b.broken,b.color,this.reduced);c.restore();
    if(b.text){c.globalAlpha=Math.min(1,b.life*4);const font=Math.max(22,Math.min(38,(this.width<700?18:15)/scale));c.font=`900 ${font}px sans-serif`;c.textAlign='center';c.lineWidth=5;c.strokeStyle='#14232c';const y=-55-(this.reduced?0:age*35);const label=this.width<700?b.text.replace('POWER','강타').replace('BREAK!','반격').replace('HIT','타').replace('RUSH','연타'):b.text;c.strokeText(label,0,y);c.fillStyle=b.block?'#adffff':'#fff7db';c.fillText(label,0,y);}c.restore();
