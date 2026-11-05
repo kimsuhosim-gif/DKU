@@ -31,18 +31,24 @@ export const SPECIALS=[
  {name:'반품 불가',description:'받아치기 자세 · 맞으면 반격',duration:1.20,pulses:[],range:240,damage:46,force:520},
  {name:'옥상 3점사',description:'조준 후 전방 3연사',duration:1.2,pulses:[.48,.65,.82],range:520,damage:12,force:28},
 ] as const;
+export type GameMode='brawl'|'crown';
+export const CROWN_RULES={duration:90,doubleAt:70,respawn:2.5};
 export type Action='push'|'heavy'|'dash'|'jump'|'guard'|'special';
 export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy'|'special';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;meter:number;specialLeft:number;specialPulse:number;specialCooldown:number;momentum:number;empowered:boolean};
-export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean;range?:number};
+export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact'|'crown'|'respawn';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean;range?:number};
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
 export class RooftopMatch{
  fighters:Fighter[]=[];events:Event[]=[];phase:'ready'|'countdown'|'playing'|'paused'|'round'|'finished'='ready';round=1;time=0;countdown=2.4;winner=-1;selected=0;stick={x:0,y:0};private resumePhase:'countdown'|'playing'='playing';
+ private routes:{x:number;y:number;until:number}[]=[];
+ mode:GameMode='brawl';scores=[0,0,0,0];respawns=[0,0,0,0];crown={owner:-1,x:0,y:0,lock:0,previous:-1,ban:0};
+ get duration(){return this.mode==='crown'?CROWN_RULES.duration:ARENA.roundTime;}
+ get doublePoints(){return this.mode==='crown'&&this.time>=CROWN_RULES.doubleAt;}
  constructor(private random:()=>number=Math.random){}
  get bounds(){return{x:ARENA.x,y:ARENA.y};}
- start(selected=0){this.selected=Math.max(0,Math.min(CAST.length-1,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
+ start(selected=0,mode:GameMode=this.mode){this.mode=mode;this.selected=Math.max(0,Math.min(CAST.length-1,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
  private make(cast:number,i:number,wins:number):Fighter{const points=[[-320,170],[320,-170],[-320,-170],[320,170]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),hp:MAX_HP,stamina:100,alive:true,fall:0,cool:0,dash:0,stun:0,down:0,invulnerable:0,poseTime:0,attackDuration:0,windup:0,attackKind:'push',attackStep:1,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0,meter:100,specialLeft:0,specialPulse:0,specialCooldown:0,momentum:0,empowered:false};}
- nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
+ nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.routes=[];this.scores=[0,0,0,0];this.respawns=[0,0,0,0];this.crown={owner:-1,x:0,y:0,lock:0,previous:-1,ban:0};this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
  pause(){if(this.phase==='paused')this.phase=this.resumePhase;else if(this.phase==='playing'||this.phase==='countdown'){this.resumePhase=this.phase;this.phase='paused';}this.stick={x:0,y:0};}
  private aim(i:number,range:number,lane:number){
   const p=this.fighters[i],manual=i===0&&Math.hypot(this.stick.x,this.stick.y)>.1;
@@ -83,6 +89,7 @@ export class RooftopMatch{
   const damage=Math.round(w.damage*(heavy?1.8:finisher?1.35:.8)*(p.empowered?1.3:1));q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.guard=0;q.combo=0;q.comboTime=0;q.specialLeft=0;q.momentum=0;
   p.meter=Math.min(100,p.meter+damage*.85);q.meter=Math.min(100,q.meter+damage*.45);
   const force=heavy?w.force*.7:finisher?w.force*.48:48;q.vx=Math.cos(p.angle)*force;q.vy=Math.sin(p.angle)*force;q.stun=heavy?.42:finisher?.3:.14;q.invulnerable=heavy?.78:.16;q.down=heavy?.55:0;
+  if(heavy||finisher)this.dropCrown(j,p.angle);
   if(!heavy){p.combo=p.attackStep;p.comboTime=1.1;}this.event(heavy||finisher?'heavy':'hit',q,p.empowered?`-${damage} BREAK!`:heavy?`-${damage} POWER`:`-${damage}  ${p.attackStep} HIT`,p);if(q.hp<=0)this.eliminate(j);
  }
  private counter(defender:number,attacker:number){
@@ -98,6 +105,7 @@ export class RooftopMatch{
   q.meter=Math.min(100,q.meter+damage*.45);
   const angle=p.cast===2?Math.atan2(q.y-p.y,q.x-p.x):p.angle;
   q.vx=Math.cos(angle)*force;q.vy=Math.sin(angle)*force;q.stun=final?.38:.10;q.down=final?.36:0;q.invulnerable=final?.5:.08;
+  if(final)this.dropCrown(j,angle);
   this.event(final?'heavy':'hit',q,`-${damage}${p.cast===3&&!final?' RUSH':''}`,p,true);
   if(q.hp<=0)this.eliminate(j);
  }
@@ -146,11 +154,11 @@ export class RooftopMatch{
    if(!overlap)break;
   }
  }
- private finish(winner:number){this.winner=winner;if(winner>=0)this.fighters[winner].wins++;this.phase=winner>=0&&this.fighters[winner].wins>=2?'finished':'round';this.stick={x:0,y:0};this.event('round',this.fighters[Math.max(0,winner)],winner<0?'무승부':`${CAST[this.fighters[winner].cast].name} 승리`);}
+ private finish(winner:number){this.winner=winner;if(winner>=0)this.fighters[winner].wins++;this.phase=this.mode==='crown'||winner>=0&&this.fighters[winner].wins>=2?'finished':'round';this.stick={x:0,y:0};this.event('round',this.fighters[Math.max(0,winner)],winner<0?'무승부':`${CAST[this.fighters[winner].cast].name} 승리`);}
  update(dt:number){
-  dt=Math.min(.05,Math.max(0,dt));if(this.phase==='countdown'){this.countdown-=dt;if(this.countdown<=0)this.phase='playing';return;}if(this.phase!=='playing')return;this.time+=dt;
+  dt=Math.min(.05,Math.max(0,dt));if(this.phase==='countdown'){this.countdown-=dt;if(this.countdown<=0)this.phase='playing';return;}if(this.phase!=='playing')return;dt=Math.min(dt,Math.max(0,this.duration-this.time));const previousTime=this.time;this.time+=dt;
   for(let i=0;i<this.fighters.length;i++){
-   const p=this.fighters[i];if(!p.alive){p.fall+=dt;continue;}
+   const p=this.fighters[i];if(!p.alive){p.fall+=dt;if(this.mode==='crown'){this.respawns[i]=Math.max(0,this.respawns[i]-dt);if(this.respawns[i]<=0)this.respawn(i);}continue;}
    for(const key of ['cool','stun','down','invulnerable','poseTime','dash','jump','guard','comboTime','specialCooldown','momentum'] as const)p[key]=Math.max(0,p[key]-dt);
    p.stamina=Math.min(100,p.stamina+dt*(p.guard>0?3:15));
    p.meter=Math.min(100,p.meter+dt*2);
@@ -162,7 +170,7 @@ export class RooftopMatch{
    }
    if(p.windup>0){p.windup=Math.max(0,p.windup-dt);if(p.windup<=0)this.strike(i);}
    let input=i===0?this.stick:{x:0,y:0};
-   if(i>0){const target=this.fighters.filter(q=>q!==p&&q.alive).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(target){
+   if(i>0){const target=this.mode==='crown'&&this.crown.owner>=0&&this.crown.owner!==i?this.fighters[this.crown.owner]:this.fighters.filter(q=>q!==p&&q.alive).sort((a,b)=>dist(p,a)-dist(p,b))[0];if(target){
     const d=dist(p,target),a=Math.atan2(target.y-p.y,target.x-p.x),reach=attackReach(p.cast),advance=d>reach*.86?1:0;input={x:Math.cos(a)*advance,y:Math.abs(target.y-p.y)>25?Math.sign(target.y-p.y)*.8:Math.sin(a)*advance};
     if(Math.abs(target.y-p.y)>45&&Math.abs(target.x-p.x)<BODY.x+18)input.x=p.x<target.x?-1:p.x>target.x?1:i%2?1:-1;
     p.ai-=dt;
@@ -172,15 +180,64 @@ export class RooftopMatch{
      else if(d<reach+5&&Math.abs(target.y-p.y)<50&&target.down<=0)this.action(i,this.random()<.24?'heavy':'push');
     }
    }}
-   const n=Math.hypot(input.x,input.y);if(p.stun<=0&&p.down<=0&&p.dash<=0){if(n>.1&&p.specialLeft<=0&&(p.poseTime<=0||p.windup<=0||p.windup>p.attackDuration*.32))p.angle=Math.atan2(input.y,input.x);const speed=p.poseTime>0?(p.windup>0?65:150):p.guard>0?110:260,grip=Math.min(1,dt*24);if(input.x*p.vx<0)p.vx=0;if(input.y*p.vy<0)p.vy=0;p.vx+=(input.x/Math.max(1,n)*speed-p.vx)*grip;p.vy+=(input.y/Math.max(1,n)*speed-p.vy)*grip;}
+   if(i>0&&this.mode==='crown'){
+    let goal:{x:number;y:number}=this.crown;
+    if(this.crown.owner===i){
+     const threats=this.fighters.filter(q=>q!==p&&q.alive),routes=[[-440,-260],[0,-280],[440,-260],[-440,260],[0,280],[440,260]];
+     const best=routes.sort((a,b)=>Math.min(...threats.map(q=>Math.hypot(b[0]-q.x,b[1]-q.y)))-Math.min(...threats.map(q=>Math.hypot(a[0]-q.x,a[1]-q.y))))[0];goal={x:best[0],y:best[1]};
+    }else if(this.crown.owner>=0){const q=this.fighters[this.crown.owner];goal={x:q.x+(p.x<q.x?-150:150),y:q.y};}
+    input=p.poseTime>0?{x:0,y:0}:this.navigate(i,goal);
+   }
+   const n=Math.hypot(input.x,input.y);if(p.stun<=0&&p.down<=0&&p.dash<=0){if(n>.1&&p.specialLeft<=0&&(p.poseTime<=0||p.windup<=0||p.windup>p.attackDuration*.32))p.angle=Math.atan2(input.y,input.x);const speed=p.poseTime>0?(p.windup>0?65:150):p.guard>0?110:this.mode==='crown'&&this.crown.owner===i?225:260,grip=Math.min(1,dt*24);if(input.x*p.vx<0)p.vx=0;if(input.y*p.vy<0)p.vy=0;p.vx+=(input.x/Math.max(1,n)*speed-p.vx)*grip;p.vy+=(input.y/Math.max(1,n)*speed-p.vy)*grip;}
    else{const drag=Math.exp(-dt*(p.dash>0?1:9));p.vx*=drag;p.vy*=drag;}
    if(p.cast===4&&p.specialLeft>0&&p.stun<=0){const elapsed=SPECIALS[4].duration-p.specialLeft;if(elapsed>.18&&elapsed<.58){p.vx=Math.cos(p.angle)*400;p.vy=Math.sin(p.angle)*400;}}
    p.x+=p.vx*dt;p.y+=p.vy*dt;p.gait+=Math.hypot(p.vx,p.vy)*dt/18;
    this.clamp(p);
   }
   this.separate();
+  if(this.mode==='crown'){this.updateCrown(dt,previousTime);return;}
   const alive=this.fighters.map((p,i)=>p.alive?i:-1).filter(i=>i>=0);if(alive.length<=1)this.finish(alive[0]??-1);
   else if(this.time>=ARENA.roundTime){const sorted=alive.sort((a,b)=>this.fighters[b].hp-this.fighters[a].hp);this.finish(this.fighters[sorted[0]].hp===this.fighters[sorted[1]].hp?-1:sorted[0]);}
  }
- private eliminate(i:number){const p=this.fighters[i];p.alive=false;p.hp=0;p.fall=0;p.windup=0;p.poseTime=0;p.specialLeft=0;this.event('fall',p,'K.O.');}
+ private navigate(i:number,goal:{x:number;y:number}){
+  const p=this.fighters[i];let route=this.routes[i];
+  if(!route||route.until<=this.time||Math.hypot(route.x-p.x,route.y-p.y)<14){
+   const cols=17,rows=11,spacing=64,node=(x:number,y:number)=>y*cols+x;
+   const sx=Math.max(0,Math.min(cols-1,Math.round((p.x+512)/spacing))),sy=Math.max(0,Math.min(rows-1,Math.round((p.y+320)/spacing))),start=node(sx,sy);
+   const queue=[start],prev=new Map<number,number>([[start,-1]]),steps=new Map<number,number>([[start,0]]);let best=start,bestScore=Infinity;
+   for(let k=0;k<queue.length;k++){
+    const id=queue[k],gx=id%cols,gy=Math.floor(id/cols),x=gx*spacing-512,y=gy*spacing-320;
+    const score=Math.hypot(x-goal.x,(y-goal.y)*1.5)+(steps.get(id)??0)*3;if(score<bestScore){bestScore=score;best=id;}
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=gx+dx,ny=gy+dy;if(nx<0||nx>=cols||ny<0||ny>=rows)continue;const next=node(nx,ny);if(prev.has(next))continue;
+     const xx=nx*spacing-512,yy=ny*spacing-320;if(this.fighters.some((q,j)=>j!==i&&q.alive&&Math.abs(q.x-xx)<BODY.x-.5&&Math.abs(q.y-yy)<BODY.y-.5))continue;
+     prev.set(next,id);steps.set(next,(steps.get(id)??0)+1);queue.push(next);
+    }
+   }
+   while(prev.get(best)!==start&&prev.get(best)!==-1&&prev.get(best)!==undefined)best=prev.get(best)!;
+   route={x:best%cols*spacing-512,y:Math.floor(best/cols)*spacing-320,until:this.time+.24};this.routes[i]=route;
+  }
+  const dx=route.x-p.x,dy=route.y-p.y,n=Math.hypot(dx,dy);return n<5?{x:0,y:0}:{x:dx/Math.max(1,n),y:dy/Math.max(1,n)};
+ }
+ private dropCrown(i:number,angle:number){
+  if(this.mode!=='crown'||this.crown.owner!==i)return;
+  const p=this.fighters[i];this.crown={owner:-1,x:Math.max(-480,Math.min(480,p.x-Math.cos(angle)*100)),y:Math.max(-300,Math.min(300,p.y-Math.sin(angle)*100)),lock:.3,previous:i,ban:1.2};
+  this.event('crown',p,'왕관 떨어짐!');
+ }
+ private respawn(i:number){
+  const old=this.fighters[i],spots=[[-480,-300],[480,-300],[-480,300],[480,300],[0,-300],[0,300]];
+  const living=this.fighters.filter(p=>p.alive);
+  spots.sort((a,b)=>Math.min(...living.map(p=>Math.hypot(b[0]-p.x,b[1]-p.y)))-Math.min(...living.map(p=>Math.hypot(a[0]-p.x,a[1]-p.y))));
+  const p=this.make(old.cast,i,old.wins);p.x=spots[0][0];p.y=spots[0][1];p.invulnerable=1.2;p.meter=50;this.fighters[i]=p;
+  this.event('respawn',p,'다시 도전!');
+ }
+ private updateCrown(dt:number,previousTime:number){
+  const c=this.crown;c.lock=Math.max(0,c.lock-dt);c.ban=Math.max(0,c.ban-dt);
+  if(c.owner<0&&c.lock<=0){
+   const candidates=this.fighters.map((p,i)=>({p,i,d:Math.hypot(p.x-c.x,(p.y-c.y)*.6)})).filter(({p,i})=>p.alive&&p.down<=0&&p.stun<=0&&p.jump<=.12&&!(c.previous===i&&c.ban>0)&&Math.abs(p.x-c.x)<140&&Math.abs(p.y-c.y)<145).sort((a,b)=>a.d-b.d);
+   if(candidates[0]){c.owner=candidates[0].i;this.event('crown',candidates[0].p,'왕관 획득!');}
+  }
+  if(c.owner>=0){const p=this.fighters[c.owner];c.x=p.x;c.y=p.y;const normal=Math.max(0,Math.min(dt,CROWN_RULES.doubleAt-previousTime));this.scores[c.owner]+=normal+(dt-normal)*2;}
+  if(this.time>=this.duration-1e-8){this.time=this.duration;const order=this.scores.map((score,i)=>({i,score:Math.round(score*10)})).sort((a,b)=>b.score-a.score);this.finish(order[0].score===order[1].score?-1:order[0].i);}
+ }
+ private eliminate(i:number){this.dropCrown(i,this.fighters[i].angle);if(this.mode==='crown')this.respawns[i]=CROWN_RULES.respawn;const p=this.fighters[i];p.alive=false;p.hp=0;p.fall=0;p.windup=0;p.poseTime=0;p.specialLeft=0;this.event('fall',p,'K.O.');}
 }

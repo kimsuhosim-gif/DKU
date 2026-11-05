@@ -1,6 +1,6 @@
 import {SuperCue,SUPER_CUE_SECONDS,superCutIn,superContact} from './rooftopCinematic';
 import {loadSpecialFx,drawChargeFx,drawSpecialFx} from './rooftopSpecialFx';
-import {CAST,RooftopMatch,Action,ARENA,MAX_HP,WEAPONS,Fighter,SPECIALS} from './rooftopModel';
+import {CAST,RooftopMatch,Action,GameMode,ARENA,MAX_HP,WEAPONS,Fighter,SPECIALS} from './rooftopModel';
 import {PixelAudio} from './pixelAudio';
 import {actorHeight,attackCell,attackProgress,heavyCell,weaponTrail,contactEffect,specialEffect,motionOffset} from './rooftopCombatVisuals';
 
@@ -47,7 +47,7 @@ export class RooftopGame {
     if(e.kind==='dash'&&!this.reduced){this.dust.push({x:e.x,y:e.y,life:.28});if(this.dust.length>8)this.dust.shift();}
     if(e.kind==='special'){this.superCue={cast:e.cast??0,life:SUPER_CUE_SECONDS};this.freeze=Math.max(this.freeze,this.reduced?.08:.16);this.audio.play('boss');continue;}
     if(e.kind==='special-impact'){this.specialBursts.push({x:e.x,y:e.y,cast:e.cast??0,angle:e.angle??0,range:e.range,life:.65});if(this.specialBursts.length>12)this.specialBursts.shift();this.audio.play(e.cast===6?'shot':e.cast===5?'glass':'throw');continue;}
-    this.audio.play(e.kind==='fall'?'hurt':e.kind==='round'?'win':e.kind==='save'?'upgrade':e.kind==='dash'?'dash':e.kind==='heavy'?'throw':'hit');
+    this.audio.play(e.kind==='crown'||e.kind==='respawn'?'upgrade':e.kind==='fall'?'hurt':e.kind==='round'?'win':e.kind==='save'?'upgrade':e.kind==='dash'?'dash':e.kind==='heavy'?'throw':'hit');
     const hit=e.kind==='hit'||e.kind==='heavy';if(hit){this.freeze=Math.max(this.freeze,e.superHit?(e.kind==='heavy'?.12:.04):e.kind==='heavy'?.075:.025);this.shake=this.reduced?0:e.superHit?(e.kind==='heavy'?8:3):e.kind==='heavy'?5:1.5;}
     if(e.kind!=='round'&&e.kind!=='dash')this.bursts.push({x:e.x,y:e.y,life:.65,text:e.text,hit,color:e.text==='GUARD BREAK'?'#ffad80':e.cast===undefined?'#8bf1dc':WEAPONS[e.cast].color,cast:e.cast??0,angle:e.angle??0,jump:e.jump??0,targetY:e.targetY??e.y,heavy:e.kind==='heavy',block:e.text==='BLOCK',broken:e.text==='GUARD BREAK',superHit:!!e.superHit});
     if(this.bursts.length>24)this.bursts.splice(0,this.bursts.length-24);
@@ -55,6 +55,7 @@ export class RooftopGame {
    this.draw(dt);this.notify+=dt;if(this.notify>.08){this.notify=0;this.changed();}this.raf=requestAnimationFrame(loop);
   };this.raf=requestAnimationFrame(loop);
  }
+ private crownIcon(x:number,y:number,size:number){const c=this.ctx;c.save();c.translate(x,y);c.scale(size,size);c.fillStyle='#ffd75a';c.strokeStyle='#553a13';c.lineWidth=4;c.beginPath();c.moveTo(-26,12);c.lineTo(-32,-15);c.lineTo(-13,-3);c.lineTo(0,-25);c.lineTo(13,-3);c.lineTo(32,-15);c.lineTo(26,12);c.closePath();c.fill();c.stroke();c.fillStyle='#fff5b0';c.fillRect(-23,13,46,6);c.fillStyle='#e65d3c';c.beginPath();c.arc(0,3,5,0,Math.PI*2);c.fill();c.restore();}
  private resize(){const r=this.canvas.getBoundingClientRect();this.width=Math.max(1,r.width);this.height=Math.max(1,r.height);this.dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(this.width*this.dpr);this.canvas.height=Math.round(this.height*this.dpr);}
  private point(x:number,y:number){return{x:768+x*(1.07+y/380*.07),y:610+y*.60};}
  private frame(p:Fighter){
@@ -103,7 +104,9 @@ export class RooftopGame {
   // Telegraphs stay on the floor, behind actors, so an enemy special is readable.
   for(const p of this.model.fighters)if(p.alive&&p.specialLeft>0){const pos=this.point(p.x,p.y),s=SPECIALS[p.cast],elapsed=s.duration-p.specialLeft;c.save();c.translate(pos.x,pos.y);c.strokeStyle=WEAPONS[p.cast].color;c.globalAlpha=.6;c.lineWidth=4;c.setLineDash([12,9]);c.beginPath();if(p.cast===2)c.ellipse(0,0,s.range,s.range*.6,0,0,Math.PI*2);else{const dx=Math.cos(p.angle)*s.range,dy=Math.sin(p.angle)*s.range*.6;c.moveTo(0,0);c.lineTo(dx,dy);}c.stroke();c.setLineDash([]);c.lineWidth=5;c.beginPath();c.ellipse(0,0,48,19,0,0,Math.PI*2*Math.min(1,elapsed/.6));c.stroke();c.restore();}
   for(const p of this.model.fighters)if(p.alive&&p.specialLeft>0){const s=SPECIALS[p.cast],elapsed=s.duration-p.specialLeft,windup=s.pulses[0]??s.duration;if(p.cast!==6&&elapsed<windup){const pos=this.point(p.x,p.y),h=actorHeight(p.y,scale);c.save();c.translate(pos.x+Math.cos(p.angle)*42,pos.y-h*.46);drawChargeFx(c,elapsed/windup,this.reduced);c.restore();}}
+  if(this.model.mode==='crown'&&this.model.phase!=='ready'&&this.model.crown.owner<0){const pos=this.point(this.model.crown.x,this.model.crown.y);c.save();c.translate(pos.x,pos.y);c.strokeStyle='#ffdc65';c.lineWidth=4;c.globalAlpha=.85;c.beginPath();c.ellipse(0,0,53,24,0,0,Math.PI*2);c.stroke();this.crownIcon(0,-30,1);c.restore();}
   this.model.fighters.map((p,i)=>({p,i})).sort((a,b)=>a.p.y-b.p.y).forEach(({p,i})=>this.actor(p,i,scale));
+  if(this.model.mode==='crown'&&this.model.crown.owner>=0){const owner=this.model.fighters[this.model.crown.owner],pos=this.point(owner.x,owner.y),jump=owner.jump>0?Math.sin(owner.jump/.65*Math.PI)*90:0;this.crownIcon(pos.x,pos.y-actorHeight(owner.y,scale)*1.03-jump,1);}
   for(const b of this.specialBursts){const pos=this.point(b.x,b.y);c.save();c.translate(pos.x,pos.y-(b.cast===2?0:actorHeight(b.y,scale)*(b.cast===6?.70:.46)));if(b.cast===6)c.translate(Math.cos(b.angle)<0?-100:100,0);if(b.cast!==2)c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));if(b.cast===2)specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);if(!drawSpecialFx(c,b.cast,.65-b.life,this.reduced,b.range))specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);c.restore();}
   for(const b of this.bursts){const pos=this.point(b.x,b.y),age=.65-b.life,jump=b.jump>0?Math.sin(b.jump/.65*Math.PI)*90:0;c.save();c.translate(pos.x,pos.y-actorHeight(b.targetY,scale)*(b.cast===2&&b.heavy?.22:b.cast===3&&b.heavy?.70:.46)-jump);
    c.save();c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));const fxScale=Math.max(.85,Math.min(1.7,.75/scale));c.scale(fxScale,fxScale);if(b.superHit)superContact(c,age,b.color,this.reduced);if(b.hit||b.block||b.broken)contactEffect(c,b.cast,age,b.heavy,b.block,b.broken,b.color,this.reduced);c.restore();
@@ -116,8 +119,8 @@ export class RooftopGame {
  private blur=()=>{if(['playing','countdown'].includes(this.model.phase))this.pause();};
  private visibility=()=>{if(document.hidden)this.blur();};
  holdAttack(value:boolean){this.heldAttack=value;if(value)this.act('push');}
- start(selected:number){void this.audio.unlock();this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected);this.changed();}
- preview(selected:number){this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected);this.model.phase='ready';this.changed();}
+ start(selected:number,mode:GameMode=this.model.mode){void this.audio.unlock();this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected,mode);this.changed();}
+ preview(selected:number,mode:GameMode=this.model.mode){this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected,mode);this.model.phase='ready';this.changed();}
  pause(){this.keys.clear();this.heldAttack=false;this.queued=null;this.model.pause();this.changed();}
  act(action:Action){if(this.keys.size)this.model.stick={x:Number(this.keys.has('d')||this.keys.has('arrowright'))-Number(this.keys.has('a')||this.keys.has('arrowleft')),y:Number(this.keys.has('s')||this.keys.has('arrowdown'))-Number(this.keys.has('w')||this.keys.has('arrowup'))};void this.audio.unlock();if(this.model.phase==='playing'){const p=this.model.fighters[0];if(this.freeze>0){this.queued=action;this.queueTime=.28;}else if(action==='dash'&&p&&p.windup<=0&&p.stun<=0&&p.down<=0){this.model.action(0,action);}else if(p?.cool>0||p?.stun>0||p?.down>0||p?.poseTime>0||p?.dash>0){this.queued=action;this.queueTime=.28;}else this.model.action(0,action);}this.changed();}
  dispose(){this.disposed=true;cancelAnimationFrame(this.raf);this.observer.disconnect();this.audio.dispose();window.removeEventListener('keydown',this.down);window.removeEventListener('keyup',this.up);window.removeEventListener('blur',this.blur);document.removeEventListener('visibilitychange',this.visibility);this.images=[];this.motion=[];this.stage=null;}

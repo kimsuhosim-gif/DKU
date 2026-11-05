@@ -92,3 +92,10 @@
 
 /* Canvas owns the visual cut-in; retain the live announcement for assistive technology. */
 .roof-special-callout{top:auto;left:0;width:1px;height:1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;transform:none}
+.roof-mode-picker{display:flex;gap:8px;margin-bottom:8px}.roof-mode-picker button{flex:1;min-height:40px;padding:8px;border:1px solid #aebeb6;border-radius:7px;background:#e6eeea;font-weight:900;color:#27443c}.roof-mode-picker button[aria-pressed=true]{background:#294d45;color:#fff4ca;border-color:#294d45}.roof-rules{font-size:11px;line-height:1.5;color:#466055;margin:0 0 12px}
+.roof-objective{position:absolute;top:90px;left:50%;transform:translateX(-50%);max-width:94%;padding:7px 15px;border:1px solid #eec660;background:#223b35ed;color:#fff0af;border-radius:7px;font-size:13px;font-weight:800;white-space:nowrap;pointer-events:none}.roof-objective.is-double{background:#873c22;color:#fff4c7;border-color:#ffd665}
+.roof-results{padding:0;list-style:none;margin:8px 0 18px;min-width:220px}.roof-results li{display:flex;justify-content:space-between;gap:25px;padding:7px 3px;border-bottom:1px solid #b3c9bb}.roof-results li:first-child{color:#9a5717;font-weight:900}
+.roof-minimap .roof-map-crown{width:auto;height:auto;background:transparent;color:#ffdd66;font-size:20px;z-index:2;line-height:1;transform:translate(-50%,-65%)}
+@media(max-width:700px){.roof-objective{top:65px;font-size:11px;padding:6px 9px}.roof-mode-picker{gap:6px;margin-bottom:6px}.roof-mode-picker button{min-height:36px;padding:6px;font-size:12px}.roof-rules{font-size:10px;margin-bottom:8px}.roof-results{margin-bottom:10px}.roof-results li{padding:5px 2px}}
+@media(max-height:550px) and (orientation:landscape){.roof-objective{top:44px;font-size:10px;padding:4px 9px}.roof-mode-picker button{min-height:30px;padding:4px}.roof-mode-picker{margin-bottom:4px}.roof-rules{margin-bottom:5px;font-size:9px}.roof-results{margin:4px 0}.roof-results li{padding:3px}}
+.roof-overlay{overflow-y:auto;place-items:safe center}.roof-overlay>div{max-height:100%;overflow-y:auto}

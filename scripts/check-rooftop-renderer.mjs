@@ -57,3 +57,14 @@ for(let cast=0;cast<7;cast++)for(const seed of [121,371,901]){
 }
 fs.mkdirSync('output/combat-v6',{recursive:true});fs.writeFileSync('output/combat-v6/renderer-bots.json',JSON.stringify({date:'2026-11-05',mode:'real RAF and inputs; stub canvas; not rendered FPS',results},null,2));
 console.log('P1 PASS: 21 seeded input-only renderer simulations reach round outcomes with cinematics, hitstop, collision and bounded effects.');
+// Full renderer/RAF crown games: only ordinary movement and action APIs, no health edits.
+const crownResults=[];
+for(let cast=0;cast<7;cast++){
+ let seed=121;const g=new RooftopGame({getContext:()=>ctx,getBoundingClientRect:()=>({width:390,height:620})},()=>{});await g.ready;g.audio.setEnabled(false);g.model=new g.model.constructor(()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296));g.start(cast,'crown');let frame=0,cutins=0,lastCue=null;
+ for(;frame<20000&&g.model.phase!=='finished';frame++){
+  const p=g.model.fighters[0];if(g.model.phase==='playing'&&p.alive){const target=g.model.crown.owner>=0?g.model.fighters[g.model.crown.owner]:g.model.crown;const dx=target.x-p.x,dy=target.y-p.y,d=Math.hypot(dx,dy);g.model.stick=g.model.crown.owner===0?{x:Math.sin(frame/150),y:Math.cos(frame/150)}:{x:dx/Math.max(1,d),y:dy/Math.max(1,d)};if(frame%12===0&&d<240&&Math.abs(dy)<50)g.act(p.meter>=100?'special':'heavy');}
+  tick();if(g.superCue&&g.superCue!==lastCue)cutins++;lastCue=g.superCue;assert(g.bursts.length<=24&&g.specialBursts.length<=12);
+ }
+ assert.equal(g.model.phase,'finished');assert.equal(g.model.time,90);assert(g.model.scores.reduce((a,b)=>a+b,0)>30);assert(cutins>0);crownResults.push({cast,winner:g.model.winner,scores:g.model.scores,elapsedSeconds:frame/100,cutins});g.dispose();
+}
+fs.mkdirSync('output/crown',{recursive:true});fs.writeFileSync('output/crown/renderer-bots.json',JSON.stringify({date:'2026-11-05',inputOnly:true,canvas:'stub; no rendered FPS claim',results:crownResults},null,2));console.log('P1 PASS: 7 crown matches through actual renderer inputs, hitstop, respawn and finished-state pipeline.');
