@@ -1,3 +1,13 @@
+export const AWAKENINGS = [
+ {name:'폭풍왕의 아이언',color:'#73ffe0',finisher:'폭풍왕 · 천공샷',windup:.44},
+ {name:'지옥불 홈런',color:'#ff9a3e',finisher:'지옥불 · 장외포',windup:.57},
+ {name:'흑뢰왕검',color:'#87eaff',finisher:'흑뢰왕 · 천명참',windup:.42},
+ {name:'홍련사자 건틀릿',color:'#ff7253',finisher:'홍련사자 · 승천권',windup:.38},
+ {name:'공허룡의 창',color:'#ff799d',finisher:'공허룡 · 관통',windup:.48},
+ {name:'뇌신의 왕좌',color:'#ffe177',finisher:'뇌신 · 심판',windup:.62},
+ {name:'파성포',color:'#ffbb62',finisher:'파성포 · 성벽파괴',windup:.60},
+] as const;
+export const AWAKEN_SECONDS=10;
 export const CAST=[
  {id:'hyomin',name:'김효민',color:'#88b79b',detail:'흰 모자 · 사각 안경',image:'/images/rooftop-hyomin-v2.png'},
  {id:'jaeyeop',name:'정재엽',color:'#e0bc79',detail:'둥근 앞머리 · 베이지 재킷',image:'/images/rooftop-jaeyeop-v2.png'},
@@ -33,9 +43,10 @@ export const SPECIALS=[
 ] as const;
 export type GameMode='brawl'|'crown';
 export const CROWN_RULES={duration:90,doubleAt:70,respawn:2.5};
-export type Action='push'|'heavy'|'dash'|'jump'|'guard'|'special';
-export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy'|'special';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;meter:number;specialLeft:number;specialPulse:number;specialCooldown:number;momentum:number;empowered:boolean};
-export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact'|'crown'|'respawn';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean;range?:number};
+export type Action='push'|'heavy'|'dash'|'jump'|'guard'|'special'|'awaken';
+export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy'|'special';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;meter:number;specialLeft:number;specialPulse:number;specialCooldown:number;momentum:number;empowered:boolean;awakening:number;awakened:number;awakenedSpecial:boolean};
+export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact'|'crown'|'respawn'|'awaken';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean;range?:number;awakened?:boolean};
+export const specialFor=(p:Fighter)=>p.awakenedSpecial?(p.cast===6?{...SPECIALS[6],name:AWAKENINGS[6].finisher,duration:1.35,pulses:[.72],damage:58,force:460,range:580}:{...SPECIALS[p.cast],name:AWAKENINGS[p.cast].finisher,damage:Math.round(SPECIALS[p.cast].damage*1.3),force:SPECIALS[p.cast].force*1.12}):SPECIALS[p.cast];
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
 export class RooftopMatch{
@@ -47,9 +58,10 @@ export class RooftopMatch{
  constructor(private random:()=>number=Math.random){}
  get bounds(){return{x:ARENA.x,y:ARENA.y};}
  start(selected=0,mode:GameMode=this.mode){this.mode=mode;this.selected=Math.max(0,Math.min(CAST.length-1,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
- private make(cast:number,i:number,wins:number):Fighter{const points=[[-320,170],[320,-170],[-320,-170],[320,170]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),hp:MAX_HP,stamina:100,alive:true,fall:0,cool:0,dash:0,stun:0,down:0,invulnerable:0,poseTime:0,attackDuration:0,windup:0,attackKind:'push',attackStep:1,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0,meter:100,specialLeft:0,specialPulse:0,specialCooldown:0,momentum:0,empowered:false};}
+ private make(cast:number,i:number,wins:number):Fighter{const points=[[-320,170],[320,-170],[-320,-170],[320,170]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),hp:MAX_HP,stamina:100,alive:true,fall:0,cool:0,dash:0,stun:0,down:0,invulnerable:0,poseTime:0,attackDuration:0,windup:0,attackKind:'push',attackStep:1,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0,meter:100,specialLeft:0,specialPulse:0,specialCooldown:0,momentum:0,empowered:false,awakening:0,awakened:0,awakenedSpecial:false};}
  nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.routes=[];this.scores=[0,0,0,0];this.respawns=[0,0,0,0];this.crown={owner:-1,x:0,y:0,lock:0,previous:-1,ban:0};this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
  pause(){if(this.phase==='paused')this.phase=this.resumePhase;else if(this.phase==='playing'||this.phase==='countdown'){this.resumePhase=this.phase;this.phase='paused';}this.stick={x:0,y:0};}
+ private charge(p:Fighter,amount:number){if(p.awakened<=0&&!p.awakenedSpecial)p.awakening=Math.min(100,p.awakening+amount);}
  private aim(i:number,range:number,lane:number){
   const p=this.fighters[i],manual=i===0&&Math.hypot(this.stick.x,this.stick.y)>.1;
   if(manual)p.angle=Math.atan2(this.stick.y,this.stick.x);
@@ -63,20 +75,21 @@ export class RooftopMatch{
   // Dodge cancels recovery, but not the startup or active strike.
   if(action==='dash'&&p.stamina>=25&&p.windup<=0&&p.dash<=0){p.stamina-=25;p.momentum=1.1;p.dash=.25;p.invulnerable=.24;p.cool=.32;p.poseTime=0;p.guard=0;p.combo=0;p.comboTime=0;const n=i===0?Math.hypot(this.stick.x,this.stick.y):0;if(n>.1)p.angle=Math.atan2(this.stick.y,this.stick.x);p.vx=Math.cos(p.angle)*470;p.vy=Math.sin(p.angle)*470;this.event('dash',p,'');return;}
   if(p.cool>0||p.poseTime>0||p.dash>0)return;
+  if(action==='awaken'){if(p.awakening<100||p.awakened>0||p.jump>0)return;p.awakening=0;p.awakened=AWAKEN_SECONDS;p.cool=.35;p.guard=0;p.combo=0;p.comboTime=0;this.events.push({kind:'awaken',x:p.x,y:p.y,cast:p.cast,text:AWAKENINGS[p.cast].name});return;}
   if(action==='guard'){if(p.stamina<12||p.jump>0)return;p.stamina-=12;p.guard=.55;p.cool=.22;return;}
   if(action==='jump'){if(p.stamina<16||p.jump>0)return;p.stamina-=16;p.jump=.65;return;}
   if(action==='special'){
-   if(p.meter<100||p.specialCooldown>0||p.jump>0)return;
-   const s=SPECIALS[p.cast];this.aim(i,s.range+100,180);
+   if((p.awakened<=0&&(p.meter<100||p.specialCooldown>0))||p.jump>0)return;
+   p.awakenedSpecial=p.awakened>0;if(p.awakenedSpecial)p.awakened=0;const s=specialFor(p);this.aim(i,s.range+100,180);
    p.meter=0;p.specialCooldown=10;p.specialLeft=s.duration;p.specialPulse=0;p.attackKind='special';p.attackDuration=s.duration;p.poseTime=s.duration;p.cool=s.duration;p.windup=0;p.combo=0;p.comboTime=0;p.guard=0;
-   this.events.push({kind:'special',x:p.x,y:p.y,text:SPECIALS[p.cast].name,cast:p.cast,angle:p.angle});return;
+   this.events.push({kind:'special',x:p.x,y:p.y,text:s.name,cast:p.cast,angle:p.angle,awakened:p.awakenedSpecial});return;
   }
   if(action!=='push'&&action!=='heavy')return;if(action==='heavy'&&p.stamina<24)return;
   const weapon=WEAPONS[p.cast],chain=action==='heavy'&&p.comboTime>0&&p.combo>=2;this.aim(i,attackReach(p.cast)+50,65);
   p.empowered=p.momentum>0||chain;p.momentum=0;
   p.guard=0;p.attackKind=action;p.attackStep=action==='heavy'?1:p.comboTime>0?p.combo%3+1:1;
   p.attackDuration=action==='heavy'?Math.max(.48,weapon.cool*(chain?1.1:1.6)):Math.max(.26,weapon.cool*.86);
-  p.poseTime=p.attackDuration;p.windup=p.attackDuration*.5;p.cool=p.attackDuration;
+  p.poseTime=p.attackDuration;p.windup=p.attackDuration*(p.awakened>0?AWAKENINGS[p.cast].windup:.5);p.cool=p.attackDuration;
   if(action==='heavy'){p.stamina-=24;p.combo=0;p.comboTime=0;}
  }
  private strike(i:number){
@@ -85,9 +98,9 @@ export class RooftopMatch{
   const target=this.fighters.map((q,j)=>({q,j})).filter(({q,j})=>j!==i&&q.alive&&q.down<=0&&q.invulnerable<=0&&Math.abs(q.y-p.y)<55&&dist(p,q)<attackReach(p.cast)+(heavy?18:0)&&Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.35&&!(q.jump>.12&&p.jump<=0)).sort((a,b)=>dist(p,a.q)-dist(p,b.q))[0];
   if(!target){p.combo=0;p.comboTime=0;return;}const {q,j}=target;
 
-  if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-(heavy?36:15));if(!heavy&&q.stamina>0){p.combo=0;p.comboTime=0;this.event('save',q,'BLOCK',p);return;}q.guard=0;this.event('save',q,'GUARD BREAK',p);}
-  const damage=Math.round(w.damage*(heavy?1.8:finisher?1.35:.8)*(p.empowered?1.3:1));q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.guard=0;q.combo=0;q.comboTime=0;q.specialLeft=0;q.momentum=0;
-  p.meter=Math.min(100,p.meter+damage*.85);q.meter=Math.min(100,q.meter+damage*.45);
+  if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-(heavy?36:15));if(!heavy&&q.stamina>0){p.combo=0;p.comboTime=0;this.charge(q,8);this.event('save',q,'BLOCK',p);return;}q.guard=0;this.event('save',q,'GUARD BREAK',p);}
+  const damage=Math.round(w.damage*(heavy?1.8:finisher?1.35:.8)*(p.empowered?1.3:1)*(p.awakened>0?1.18:1));q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.guard=0;q.combo=0;q.comboTime=0;q.specialLeft=0;q.momentum=0;
+  this.charge(p,damage*.55);this.charge(q,damage*.2);p.meter=Math.min(100,p.meter+damage*.85);q.meter=Math.min(100,q.meter+damage*.45);
   const force=heavy?w.force*.7:finisher?w.force*.48:48;q.vx=Math.cos(p.angle)*force;q.vy=Math.sin(p.angle)*force;q.stun=heavy?.42:finisher?.3:.14;q.invulnerable=heavy?.78:.16;q.down=heavy?.55:0;
   if(heavy||finisher)this.dropCrown(j,p.angle);
   if(!heavy){p.combo=p.attackStep;p.comboTime=1.1;}this.event(heavy||finisher?'heavy':'hit',q,p.empowered?`-${damage} BREAK!`:heavy?`-${damage} POWER`:`-${damage}  ${p.attackStep} HIT`,p);if(q.hp<=0)this.eliminate(j);
@@ -95,7 +108,7 @@ export class RooftopMatch{
  private specialDamage(i:number,j:number,damage:number,force:number,final:boolean){
   const p=this.fighters[i],q=this.fighters[j];
   q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.specialLeft=0;q.momentum=0;q.guard=0;q.combo=0;q.comboTime=0;
-  q.meter=Math.min(100,q.meter+damage*.45);
+  this.charge(p,damage*.3);this.charge(q,damage*.2);q.meter=Math.min(100,q.meter+damage*.45);
   const angle=p.cast===5?Math.atan2(q.y-p.y,q.x-p.x):p.angle;
   q.vx=Math.cos(angle)*force;q.vy=Math.sin(angle)*force;q.stun=final?.38:.10;q.down=final?.36:0;q.invulnerable=final?.5:.08;
   if(final)this.dropCrown(j,angle);
@@ -103,19 +116,19 @@ export class RooftopMatch{
   if(q.hp<=0)this.eliminate(j);
  }
  private specialStrike(i:number,pulse:number){
-  const p=this.fighters[i],s=SPECIALS[p.cast];
+  const p=this.fighters[i],s=specialFor(p);
   if(!p.alive||p.stun>0||p.down>0)return;
   if(p.cast===6){
    // Each shot stops at the first standing body in its aim lane; never pierces a second opponent.
    const candidates=this.fighters.map((q,j)=>({q,j,forward:(q.x-p.x)*Math.cos(p.angle)+(q.y-p.y)*Math.sin(p.angle),side:Math.abs(-(q.x-p.x)*Math.sin(p.angle)+(q.y-p.y)*Math.cos(p.angle))})).filter(({q,j,forward,side})=>j!==i&&q.alive&&q.down<=0&&q.jump<=.12&&forward>0&&forward<s.range&&side<48).sort((a,b)=>a.forward-b.forward);
-   const target=candidates[0];this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle,range:target?.forward??s.range});
+   const target=candidates[0];this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle,awakened:p.awakenedSpecial,range:target?.forward??s.range});
    if(!target||target.q.invulnerable>0)return;
 
-   const final=pulse===2;let damage=final?20:s.damage;
+   const final=p.awakenedSpecial||pulse===2;let damage=p.awakenedSpecial?s.damage:final?20:s.damage;
    if(target.q.guard>0&&Math.cos(Math.atan2(p.y-target.q.y,p.x-target.q.x)-target.q.angle)>0){damage=Math.round(damage*.4);this.event('save',target.q,'BLOCK',p);}
-   this.specialDamage(i,target.j,damage,final?240:s.force,final);return;
+   this.specialDamage(i,target.j,damage,p.awakenedSpecial?s.force:final?240:s.force,final);return;
   }
-  this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle});
+  this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle,awakened:p.awakenedSpecial});
   for(let j=0;j<this.fighters.length;j++){
    const q=this.fighters[j];if(i===j||!q.alive||q.down>0||q.invulnerable>0)continue;
    const dx=q.x-p.x,dy=q.y-p.y,forward=dx*Math.cos(p.angle)+dy*Math.sin(p.angle),side=Math.abs(-dx*Math.sin(p.angle)+dy*Math.cos(p.angle));
@@ -152,12 +165,12 @@ export class RooftopMatch{
   dt=Math.min(.05,Math.max(0,dt));if(this.phase==='countdown'){this.countdown-=dt;if(this.countdown<=0)this.phase='playing';return;}if(this.phase!=='playing')return;dt=Math.min(dt,Math.max(0,this.duration-this.time));const previousTime=this.time;this.time+=dt;
   for(let i=0;i<this.fighters.length;i++){
    const p=this.fighters[i];if(!p.alive){p.fall+=dt;if(this.mode==='crown'){this.respawns[i]=Math.max(0,this.respawns[i]-dt);if(this.respawns[i]<=0)this.respawn(i);}continue;}
-   for(const key of ['cool','stun','down','invulnerable','poseTime','dash','jump','guard','comboTime','specialCooldown','momentum'] as const)p[key]=Math.max(0,p[key]-dt);
+   for(const key of ['cool','stun','down','invulnerable','poseTime','dash','jump','guard','comboTime','specialCooldown','momentum','awakened'] as const)p[key]=Math.max(0,p[key]-dt);
    p.stamina=Math.min(100,p.stamina+dt*(p.guard>0?3:15));
-   p.meter=Math.min(100,p.meter+dt*2);
+   if(p.specialLeft<=0)p.awakenedSpecial=false;this.charge(p,dt*2);p.meter=Math.min(100,p.meter+dt*2);
    if(p.specialLeft>0){
     if(p.stun>0||p.down>0){p.specialLeft=0;p.guard=0;}else{
-     const s=SPECIALS[p.cast];p.specialLeft=Math.max(0,p.specialLeft-dt);const elapsed=s.duration-p.specialLeft;
+     const s=specialFor(p);p.specialLeft=Math.max(0,p.specialLeft-dt);const elapsed=s.duration-p.specialLeft;
      while(p.specialPulse<s.pulses.length&&elapsed>=s.pulses[p.specialPulse]){this.specialStrike(i,p.specialPulse++);if(p.specialLeft<=0||p.stun>0)break;}
     }
    }
@@ -168,7 +181,8 @@ export class RooftopMatch{
     if(Math.abs(target.y-p.y)>45&&Math.abs(target.x-p.x)<BODY.x+18)input.x=p.x<target.x?-1:p.x>target.x?1:i%2?1:-1;
     p.ai-=dt;
     if(p.ai<=0){p.ai=.18+this.random()*.3;if(p.poseTime<=0)p.angle=a;
-     if(p.meter>=100&&p.specialCooldown<=0&&this.time>6+i*2&&d<SPECIALS[p.cast].range&&Math.abs(target.y-p.y)<65&&this.random()<.22)this.action(i,'special');
+     if(p.awakening>=100&&d<400)this.action(i,'awaken');
+     else if((p.awakened>0||p.meter>=100&&p.specialCooldown<=0)&&this.time>6+i*2&&d<SPECIALS[p.cast].range&&Math.abs(target.y-p.y)<65&&this.random()<.22)this.action(i,'special');
      else if(target.windup>0&&d<attackReach(target.cast)+15&&this.random()<.5){if(target.attackKind==='heavy'){p.angle=a+Math.PI;this.action(i,'dash');}else this.action(i,'guard');}
      else if(d<reach+5&&Math.abs(target.y-p.y)<50&&target.down<=0)this.action(i,this.random()<.24?'heavy':'push');
     }
@@ -227,10 +241,10 @@ export class RooftopMatch{
   const c=this.crown;c.lock=Math.max(0,c.lock-dt);c.ban=Math.max(0,c.ban-dt);
   if(c.owner<0&&c.lock<=0){
    const candidates=this.fighters.map((p,i)=>({p,i,d:Math.hypot(p.x-c.x,(p.y-c.y)*.6)})).filter(({p,i})=>p.alive&&p.down<=0&&p.stun<=0&&p.jump<=.12&&!(c.previous===i&&c.ban>0)&&Math.abs(p.x-c.x)<140&&Math.abs(p.y-c.y)<145).sort((a,b)=>a.d-b.d);
-   if(candidates[0]){c.owner=candidates[0].i;this.event('crown',candidates[0].p,'왕관 획득!');}
+   if(candidates[0]){c.owner=candidates[0].i;this.charge(candidates[0].p,12);this.event('crown',candidates[0].p,'왕관 획득!');}
   }
   if(c.owner>=0){const p=this.fighters[c.owner];c.x=p.x;c.y=p.y;const normal=Math.max(0,Math.min(dt,CROWN_RULES.doubleAt-previousTime));this.scores[c.owner]+=normal+(dt-normal)*2;}
   if(this.time>=this.duration-1e-8){this.time=this.duration;const order=this.scores.map((score,i)=>({i,score:Math.round(score*10)})).sort((a,b)=>b.score-a.score);this.finish(order[0].score===order[1].score?-1:order[0].i);}
  }
- private eliminate(i:number){this.dropCrown(i,this.fighters[i].angle);if(this.mode==='crown')this.respawns[i]=CROWN_RULES.respawn;const p=this.fighters[i];p.alive=false;p.hp=0;p.fall=0;p.windup=0;p.poseTime=0;p.specialLeft=0;this.event('fall',p,'K.O.');}
+ private eliminate(i:number){this.dropCrown(i,this.fighters[i].angle);if(this.mode==='crown')this.respawns[i]=CROWN_RULES.respawn;const p=this.fighters[i];p.alive=false;p.hp=0;p.fall=0;p.windup=0;p.poseTime=0;p.specialLeft=0;p.awakened=0;p.awakenedSpecial=false;this.event('fall',p,'K.O.');}
 }

@@ -32,6 +32,15 @@ for(const cast of [2,5,6]){
  for(const pose of [{},{vx:30},{jump:.05},{jump:.325},{jump:.6},{guard:.5},{stun:.1},{poseTime:.48,attackDuration:1,attackKind:'push'},{poseTime:.48,attackDuration:1,attackKind:'heavy'},{poseTime:.72,attackDuration:1.2,attackKind:'special'}])game.actor({...neutral,...pose},0,1);
  assert.equal(drawSizes.length,10);for(const size of drawSizes)assert.deepEqual(size,drawSizes[0],'All redesigned fighter poses share fixed draw size');
 }
+
+// Awakened sprites keep a single square canvas for all states, including airborne and finisher.
+for(let cast=0;cast<7;cast++){
+ game.preview(cast);game.reduced=true;const p={...game.model.fighters[0],awakened:8,x:0,y:0,angle:0};const sizes=[];
+ ctx.drawImage=(...args)=>{assert(args[0].path.includes('-awaken-v1.png'));sizes.push(args.slice(-2));};
+ for(const pose of [{},{vx:30},{jump:.325},{guard:.5},{stun:.1},{poseTime:.48,attackDuration:1,attackKind:'push'},{poseTime:.48,attackDuration:1,attackKind:'heavy'},{awakened:0,awakenedSpecial:true,specialLeft:.5,poseTime:.5,attackDuration:1.35,attackKind:'special'}])game.actor({...p,...pose},0,1);
+ assert.equal(sizes.length,8);for(const size of sizes)assert.deepEqual(size,sizes[0]);
+}
+console.log('P0 PASS: 56 awakened pose cases use correct atlas and fixed draw size.');
 ctx.drawImage=()=>{};console.log('P0 PASS: sword/hammer/rifle fixed body scale across 30 pose/airtime cases.');
 game.dispose();
 console.log('P0 PASS: real renderer RAF input buffer survives hitstop and resumes; preview clears cinematic state. Canvas stub: no rendered FPS claim.');

@@ -1,6 +1,6 @@
-import {CAST,SPECIALS,WEAPONS} from './rooftopModel';
+import {CAST,SPECIALS,AWAKENINGS,WEAPONS} from './rooftopModel';
 
-export type SuperCue={cast:number;life:number};
+export type SuperCue={cast:number;life:number;awakened?:boolean};
 export const SUPER_CUE_SECONDS=.46;
 
 /** Screen-space intro: one short dark band, never a repeated full-screen flash. */
@@ -19,8 +19,8 @@ export function superCutIn(c:CanvasRenderingContext2D,w:number,h:number,cue:Supe
  if(image){const sw=image.width/4,sh=image.height/2,size=bh*2.3;const inset=[2,5,6].includes(cue.cast);c.drawImage(image,inset?sw/6:0,inset?sh*.313:0,inset?sw/1.5:sw,inset?sh/1.5:sh,-bh*.36,bh*.04,size*.75,size);}
  c.restore();
  const textX=Math.max(w*.37,bh*.95),available=w-textX-12;
- c.textAlign='left';c.textBaseline='middle';c.fillStyle=color;c.font=`900 ${Math.min(14,available/13)}px sans-serif`;c.fillText('SUPER SPECIAL',textX,bh*.25);
- c.font=`900 ${Math.min(34,available/(SPECIALS[cue.cast].name.length*.95))}px sans-serif`;c.lineWidth=4;c.strokeStyle='#06101e';c.strokeText(SPECIALS[cue.cast].name,textX,bh*.52);c.fillStyle='#fff7dc';c.fillText(SPECIALS[cue.cast].name,textX,bh*.52);
+ c.textAlign='left';c.textBaseline='middle';c.fillStyle=color;c.font=`900 ${Math.min(14,available/13)}px sans-serif`;c.fillText(cue.awakened?'AWAKENED FINISH':'SUPER SPECIAL',textX,bh*.25);
+ c.font=`900 ${Math.min(34,available/((cue.awakened?AWAKENINGS[cue.cast].finisher:SPECIALS[cue.cast].name).length*.95))}px sans-serif`;c.lineWidth=4;c.strokeStyle='#06101e';c.strokeText((cue.awakened?AWAKENINGS[cue.cast].finisher:SPECIALS[cue.cast].name),textX,bh*.52);c.fillStyle='#fff7dc';c.fillText((cue.awakened?AWAKENINGS[cue.cast].finisher:SPECIALS[cue.cast].name),textX,bh*.52);
  c.font=`700 ${Math.min(15,available/9)}px sans-serif`;c.fillStyle='#dbe8ee';c.fillText(CAST[cue.cast].name,textX,bh*.78);c.restore();
 }
 

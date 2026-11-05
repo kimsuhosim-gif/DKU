@@ -99,3 +99,11 @@
 @media(max-width:700px){.roof-objective{top:65px;font-size:11px;padding:6px 9px}.roof-mode-picker{gap:6px;margin-bottom:6px}.roof-mode-picker button{min-height:36px;padding:6px;font-size:12px}.roof-rules{font-size:10px;margin-bottom:8px}.roof-results{margin-bottom:10px}.roof-results li{padding:5px 2px}}
 @media(max-height:550px) and (orientation:landscape){.roof-objective{top:44px;font-size:10px;padding:4px 9px}.roof-mode-picker button{min-height:30px;padding:4px}.roof-mode-picker{margin-bottom:4px}.roof-rules{margin-bottom:5px;font-size:9px}.roof-results{margin:4px 0}.roof-results li{padding:3px}}
 .roof-overlay{overflow-y:auto;place-items:safe center}.roof-overlay>div{max-height:100%;overflow-y:auto}
+
+/* Keep awakening separate from the six combat buttons and reachable by the movement thumb. */
+.roof-movement{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.roof-awaken{min-width:100px;min-height:44px;border:1px solid #72522a;border-radius:10px;background:#292e3c;color:#ffdf8a;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;touch-action:manipulation}
+.roof-awaken:disabled{opacity:.6}.roof-awaken.is-active{opacity:1;border-color:#ffa73e;background:#4a3024}
+.roof-awaken progress{width:80px;height:5px;accent-color:#ffba52}.roof-awaken:focus-visible{outline:3px solid #ea8727;outline-offset:2px}
+@media(max-width:700px){.roof-movement{flex-direction:column;gap:5px}.roof-movement .roof-pad{width:78px;height:78px}.roof-awaken{min-width:88px;min-height:38px;font-size:9px;padding:3px}.roof-awaken progress{width:68px;height:4px}.roof-controls{gap:6px}.roof-special-meter{max-width:180px}}
+@media(max-height:550px) and (orientation:landscape){.roof-movement{flex-direction:row;gap:6px}.roof-movement .roof-pad{width:60px;height:60px}.roof-awaken{min-width:74px;min-height:44px;font-size:9px}.roof-awaken progress{width:62px}.roof-controls{gap:6px;padding-left:8px;padding-right:8px}.roof-actions{gap:4px}.roof-actions button,.roof-actions .action-push{width:50px}.roof-special-meter{display:none}}

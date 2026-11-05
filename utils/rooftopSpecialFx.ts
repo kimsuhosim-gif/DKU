@@ -6,8 +6,17 @@ export function loadSpecialFx(){return loading??=Promise.all((Object.keys(atlas)
 export function fxFrame(key:Key,t:number){const a=atlas[key];return Math.min(a.last,a.first+Math.floor(Math.max(0,Math.min(.999,t))*(a.last-a.first+1)));}
 function draw(c:CanvasRenderingContext2D,key:Key,t:number,alpha=1,size=1){const img=images.get(key);if(!img)return false;const a=atlas[key],f=fxFrame(key,t),s=a.scale*size;c.save();c.globalAlpha*=alpha;c.imageSmoothingEnabled=false;c.drawImage(img,(f%a.columns)*a.width,Math.floor(f/a.columns)*a.height,a.width,a.height,-a.pivot[0]*s,-a.pivot[1]*s,a.width*s,a.height*s);c.restore();return true;}
 export function drawChargeFx(c:CanvasRenderingContext2D,t:number,reduced:boolean){return draw(c,'charge',reduced?.35:t,.65, .7+Math.min(1,t)*.3);}
-export function drawSpecialFx(c:CanvasRenderingContext2D,cast:number,age:number,reduced:boolean,range=520){
+export function drawSpecialFx(c:CanvasRenderingContext2D,cast:number,age:number,reduced:boolean,range=520,awakened=false){
  if(cast===2)return false; // Sword uses the directional cyan crescent, not stock counter rings.
+ if(cast===6&&awakened){
+  const t=age/.48;if(t>=1)return true;
+  c.save();c.globalAlpha=(1-t)*(reduced?.65:1);const end=Math.max(16,range*1.1-100);
+  c.strokeStyle='#cf641f';c.lineWidth=34*(1-t)+8;c.beginPath();c.moveTo(0,0);c.lineTo(end,0);c.stroke();
+  c.strokeStyle='#ffcd67';c.lineWidth=19*(1-t)+4;c.stroke();c.strokeStyle='#fff5cb';c.lineWidth=7*(1-t)+2;c.stroke();
+  c.strokeStyle='#ffe4a1';c.lineWidth=4;c.beginPath();c.ellipse(0,0,12+t*24,28+t*42,0,0,Math.PI*2);c.stroke();
+  if(!reduced){c.beginPath();c.ellipse(end,0,18+t*36,25+t*60,0,0,Math.PI*2);c.stroke();}
+  c.restore();return true;
+ }
  if(cast===6){
   if(age>.14)return true;
   c.save();c.globalAlpha=(1-age/.14)*(reduced?.55:1);

@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8"><title>각성 실제 렌더 검사</title>
+<style>body{margin:0;background:#263b44;color:white;font:14px sans-serif}button,select{padding:10px;margin:4px}canvas{width:100%;height:620px}p,pre{padding:8px;white-space:pre-wrap}</style>
+<select aria-label="캐릭터" id="cast"></select><button id="compare">일반 / 각성</button><button id="poses">각성 7자세</button><button id="animate">공격 재생</button><button id="stress">10초 렌더 부하 검사</button><p id="labels"></p><canvas></canvas><pre id="report"></pre>
+<script type="module">
+import {RooftopGame} from '/utils/rooftopRenderer.ts';import {RooftopMatch,CAST,AWAKENINGS} from '/utils/rooftopModel.ts';
+const g=new RooftopGame(document.querySelector('canvas'),()=>{});await g.ready;g.audio.setEnabled(false);g.model.phase='paused';g.reduced=false;
+const cast=document.querySelector('#cast');CAST.forEach((p,i)=>cast.add(new Option(p.name,i)));let mode='compare',timer;
+function fighter(c,x,y=100){const m=new RooftopMatch(()=>.5);m.start(c);return Object.assign(m.fighters[0],{x,y,angle:0,vx:0,vy:0});}
+function show(next){clearInterval(timer);mode=next;const c=+cast.value;g.bursts=[];g.specialBursts=[];g.superCue=null;
+ if(next==='compare'){g.model.fighters=[fighter(c,-180),Object.assign(fighter(c,180),{awakened:8})];document.querySelector('#labels').textContent=CAST[c].name+' 일반 / '+AWAKENINGS[c].name;}
+ else {g.model.fighters=Array.from({length:7},(_,i)=>Object.assign(fighter(c,-540+i*180),{awakened:8}));const p=g.model.fighters;p[1].vx=30;p[1].gait=0;p[2].jump=.325;p[3].guard=.5;Object.assign(p[4],{poseTime:.48,attackDuration:1,attackKind:'push'});Object.assign(p[5],{poseTime:.48,attackDuration:1,attackKind:'heavy'});Object.assign(p[6],{poseTime:.48,attackDuration:1.35,specialLeft:.48,attackKind:'special',awakenedSpecial:true});document.querySelector('#labels').textContent='대기 / 이동 / 점프 / 방어 / 일반 공격 / 강공격 / 필살기';}
+ if(next==='animate'){g.model.fighters=[Object.assign(fighter(c,0),{awakened:8,attackDuration:1,attackKind:'push'})];let t=0;timer=setInterval(()=>{t=(t+.025)%1;g.model.fighters[0].poseTime=1-t;},25);}
+}
+cast.onchange=()=>show(mode);for(const id of ['compare','poses','animate'])document.querySelector('#'+id).onclick=()=>show(id);show('compare');
+document.querySelector('#stress').onclick=()=>{
+ clearInterval(timer);const report=document.querySelector('#report');report.textContent='측정 중: seed 121, 7 actors, 12 FX, 10 seconds, actual Canvas renderer';
+ g.model.fighters=Array.from({length:7},(_,i)=>Object.assign(fighter(i,-510+i*170,i%2?170:60),{awakened:8,poseTime:.5,attackDuration:1,attackKind:'push'}));
+ const draw=g.draw.bind(g),times=[],drawTimes=[],actorTimes=[];const actor=g.actor.bind(g);g.actor=(...args)=>{const t=performance.now();const r=actor(...args);actorTimes.push(performance.now()-t);return r;};
+ let last=0,start=0;g.draw=(dt)=>{const now=performance.now();if(!start)start=now;if(last)times.push(now-last);last=now;
+  const phase=((now-start)%650)/1000;g.specialBursts=Array.from({length:12},(_,i)=>({x:-440+(i%4)*280,y:30+Math.floor(i/4)*100,cast:i%7,angle:0,life:.65-phase,range:420,awakened:true}));
+  const t=performance.now();draw(dt);drawTimes.push(performance.now()-t);
+  if(now-start>=10000){g.draw=draw;g.actor=actor;const sorted=[...times].sort((a,b)=>b-a),tail=sorted.slice(0,Math.max(1,Math.ceil(sorted.length*.01))),avg=a=>a.reduce((s,v)=>s+v,0)/a.length;report.textContent=JSON.stringify({date:'2026-11-05',seed:121,environment:navigator.userAgent,build:'Vite dev awakening v1',viewport:[innerWidth,innerHeight],seconds:(now-start)/1000,frames:times.length,averageFPS:1000/avg(times),onePercentLow:1000/avg(tail),averageDrawMs:avg(drawTimes),averageActorMs:avg(actorTimes),note:'Synthetic 7-actor/12-effect stress scene; desktop browser, not physical mobile; no pre-change benchmark.'},null,2);g.specialBursts=[];}
+ };
+};
+</script>

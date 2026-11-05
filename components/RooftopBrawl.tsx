@@ -1,6 +1,6 @@
 import {useEffect,useRef,useState,CSSProperties} from 'react';
 import {ArrowLeft,Pause,Play,Volume2,VolumeX,Shield,ArrowUp,Flame,Zap,Swords,Trophy,RotateCcw} from 'lucide-react';
-import {CAST,stickVector,Action,GameMode,WEAPONS,ARENA,MAX_HP,SPECIALS,attackReach} from '../utils/rooftopModel';
+import {CAST,stickVector,Action,GameMode,WEAPONS,ARENA,MAX_HP,SPECIALS,AWAKENINGS,specialFor,attackReach} from '../utils/rooftopModel';
 import {RooftopGame} from '../utils/rooftopRenderer';
 import './RooftopBrawl.css';
 
@@ -28,7 +28,7 @@ export default function RooftopBrawl(){
  useEffect(()=>{if(phase!=='playing'){pad.current=null;setKnob({x:0,y:0});if(engine.current)engine.current.model.stick={x:0,y:0};}},[phase]);
  function move(e:{pointerId:number;clientX:number;clientY:number}){const p=pad.current;if(!p||p.id!==e.pointerId)return;const v=stickVector(e.clientX-p.x,e.clientY-p.y);setKnob({x:v.x*28,y:v.y*28});if(game)game.model.stick=v;}
  function act(action:Action){game?.act(action);focus();}
- const specialUser=m?.fighters.find(p=>p.alive&&p.specialLeft>SPECIALS[p.cast].duration-.65);
+ const specialUser=m?.fighters.find(p=>p.alive&&p.specialLeft>specialFor(p).duration-.65);
  const actions=[{id:'guard',label:'방어',key:'I',Icon:Shield,cost:12},{id:'jump',label:'점프',key:'SPACE',Icon:ArrowUp,cost:16},{id:'heavy',label:'강공격',key:'K',Icon:Flame,cost:24},{id:'dash',label:'회피',key:'L',Icon:Zap,cost:25},{id:'push',label:'공격',key:'J',Icon:Swords,cost:0},{id:'special',label:'필살기',key:'U',Icon:Zap,cost:0}] as const;
  return <section className="roof" data-phase={phase} ref={root} tabIndex={-1} aria-label="RE09 옥상 난투">
   <header className="roof-nav">
@@ -51,7 +51,7 @@ export default function RooftopBrawl(){
      <div className="roof-roster">{CAST.map((p,i)=><button key={p.id} aria-label={p.name} aria-pressed={selected===i} onClick={()=>{setSelected(i);game?.preview(i);}} style={{'--fighter':p.color} as CSSProperties}><div className="roof-portrait" style={{backgroundImage:`url(${p.image})`,...(["jaeho","seongtae","moseongjin"].includes(p.id)?{backgroundSize:"600% 300%",backgroundPosition:"5% 23.4%"}:{})}}/><strong>{p.name}</strong><span>{WEAPONS[i].name}</span></button>)}</div>
      <div className="roof-enter"><div><b>{CAST[selected].name}</b><span>{WEAPONS[selected].name} · 사거리 {attackReach(selected)}</span></div><button disabled={!loaded||!!error} onClick={start}><Play size={18} fill="currentColor"/>{error?'실행 불가':loaded?'대전 시작':'준비 중'}</button></div>
      <p className="roof-special-help"><b>U · {SPECIALS[selected].name}</b> {SPECIALS[selected].description} · 첫 라운드부터 사용 가능</p>
-     <p className="roof-special-help">방향키로 조준 · L 회피 후 공격은 강화 반격 · J 2타 적중 후 K로 빠른 마무리</p>
+     <p className="roof-special-help">O · 각성: 전투로 게이지 충전 → 10초 무기 해방 → U로 각성 마무리</p>
      {error&&<p role="alert">{error}</p>}
     </div>
    </div>}
@@ -59,7 +59,7 @@ export default function RooftopBrawl(){
    {phase!=='ready'&&!ended&&crownMode&&<div className={`roof-objective ${m?.doublePoints?'is-double':''}`} role="status">{!player?.alive?`${Math.ceil(m?.respawns[0]??0)}초 후 다시 도전!`:crownOwner===0?`👑 왕관을 지켜라! 초당 ${m?.doublePoints?2:1}점`:crownOwner<0?`${crownDirection} 바닥의 왕관을 잡아라!`:`${crownDirection} ${CAST[m!.fighters[crownOwner].cast].name}의 왕관을 뺏어라!`}</div>}
    {phase!=='ready'&&<div className="roof-minimap" aria-label="경기장 미니맵">{crownMode&&m&&<i className="roof-map-crown" style={{left:`${50+m.crown.x/12}%`,top:`${50+m.crown.y/7.6}%`}}>♛</i>}{m?.fighters.filter(p=>p.alive).map(p=><b key={p.cast} style={{left:`${50+p.x/12}%`,top:`${50+p.y/7.6}%`,background:p===player?'#fff':CAST[p.cast].color,outline:p===player?'2px solid #e65d3c':'none'}}/>)}</div>}
    {phase==='countdown'&&<div className="roof-count" aria-live="polite"><span>{crownMode?'왕관을 차지하라!':`ROUND ${m?.round}`}</span><b>{Math.ceil(m?.countdown??3)}</b></div>}
-   {active&&specialUser&&<div className="roof-special-callout" role="status"><small>{specialUser===player?'내 필살기':`${CAST[specialUser.cast].name}의 필살기`}</small><strong>{SPECIALS[specialUser.cast].name}</strong></div>}
+   {active&&specialUser&&<div className="roof-special-callout" role="status"><small>{specialUser===player?'내 필살기':`${CAST[specialUser.cast].name}의 필살기`}</small><strong>{specialFor(specialUser).name}</strong></div>}
    {(phase==='paused'||ended)&&<div className="roof-overlay"><div role="dialog" aria-modal="true" aria-label={ended?'경기 결과':'일시정지'} onKeyDown={e=>{if(e.key==='Escape'&&phase==='paused'){e.preventDefault();game?.pause();focus();}if(e.key==='Tab'){const buttons=(e.currentTarget as HTMLDivElement).querySelectorAll<HTMLButtonElement>('button');const first=buttons[0],last=buttons[buttons.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}}>
     {ended?<Trophy size={38}/>:<Pause size={32}/>}<span>{phase==='finished'?'MATCH FINISHED':ended?'ROUND FINISHED':'TIME OUT'}</span>
     <h2>{!ended?'잠깐, 휴전.':m!.winner<0?'무승부':`${CAST[m!.fighters[m!.winner].cast].name} 승리`}</h2>
@@ -69,10 +69,10 @@ export default function RooftopBrawl(){
    </div></div>}
   </div>
   {phase!=='ready'&&!ended&&<div className="roof-controls">
-   <button className="roof-pad" aria-label="이동 조이스틱" disabled={!active||!player?.alive} onPointerDown={e=>{if(pad.current)return;pad.current={id:e.pointerId,x:e.clientX,y:e.clientY};e.currentTarget.setPointerCapture(e.pointerId);move(e);}} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}><span>W A S D</span><i style={{transform:`translate(${knob.x}px,${knob.y}px)`}}/></button>
+   <div className="roof-movement"><button className="roof-pad" aria-label="이동 조이스틱" disabled={!active||!player?.alive} onPointerDown={e=>{if(pad.current)return;pad.current={id:e.pointerId,x:e.clientX,y:e.clientY};e.currentTarget.setPointerCapture(e.pointerId);move(e);}} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}><span>W A S D</span><i style={{transform:`translate(${knob.x}px,${knob.y}px)`}}/></button><button className={`roof-awaken ${player?.awakened?'is-active':''}`} aria-label="각성" disabled={!active||!player?.alive||(player?.awakening??0)<100||(player?.awakened??0)>0} onClick={()=>act('awaken')}><b>{player&&player.awakened>0?`각성 ${player.awakened.toFixed(1)}초`:`O · 각성 ${Math.floor(player?.awakening??0)}%`}</b><progress aria-label="각성 게이지" max={100} value={player&&player.awakened>0?player.awakened*10:player?.awakening??0}/></button></div>
    <div className="roof-energy"><span>{!player?.alive?'KNOCK OUT':player.momentum>0?'반격 찬스!':player.combo>=2&&player.comboTime>0?'K · 강공격 연결!':'ENERGY'}</span><progress max={100} value={player?.stamina??0}/></div>
-   <div className="roof-special-meter"><span>{player&&player.meter>=100&&player.specialCooldown<=0?'필살기 준비 완료':`필살기 ${Math.floor(player?.meter??0)}%`}</span><progress aria-label="필살기 게이지" max={100} value={player?.meter??0}/></div>
-   <div className="roof-actions">{actions.map(({id,label,key,Icon,cost})=><button key={id} className={`action-${id}`} aria-label={label} title={id==='special'?`${SPECIALS[selected].name} (U)`: `${label} (${key})`} disabled={!active||!player?.alive||(player?.stamina??0)<cost||(id==='special'&&((player?.meter??0)<100||(player?.specialCooldown??0)>0))} onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);if(id==='push')game?.holdAttack(true);else act(id);}} onPointerUp={()=>{if(id==='push')game?.holdAttack(false);}} onPointerCancel={()=>game?.holdAttack(false)} onLostPointerCapture={()=>{if(id==='push')game?.holdAttack(false);}} onClick={e=>{if(e.detail===0)act(id);}}><Icon size={22}/><b>{label}</b><small>{key}</small></button>)}</div>
+   <div className="roof-special-meter"><span>{player&&player.awakened>0?`${AWAKENINGS[player.cast].name} · U 마무리`:player&&player.meter>=100&&player.specialCooldown<=0?'필살기 준비 완료':`필살기 ${Math.floor(player?.meter??0)}%`}</span><progress aria-label="필살기 게이지" max={100} value={player?.meter??0}/></div>
+   <div className="roof-actions">{actions.map(({id,label,key,Icon,cost})=><button key={id} className={`action-${id}`} aria-label={label} title={id==='special'?`${player&&player.awakened>0?AWAKENINGS[selected].finisher:SPECIALS[selected].name} (U)`: `${label} (${key})`} disabled={!active||!player?.alive||(player?.stamina??0)<cost||(id==='special'&&(player?.awakened??0)<=0&&((player?.meter??0)<100||(player?.specialCooldown??0)>0))} onPointerDown={e=>{e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);if(id==='push')game?.holdAttack(true);else act(id);}} onPointerUp={()=>{if(id==='push')game?.holdAttack(false);}} onPointerCancel={()=>game?.holdAttack(false)} onLostPointerCapture={()=>{if(id==='push')game?.holdAttack(false);}} onClick={e=>{if(e.detail===0)act(id);}}><Icon size={22}/><b>{id==='special'&&player&&player.awakened>0?'각성 필살':label}</b><small>{key}</small></button>)}</div>
   </div>}
  </section>;
 }
