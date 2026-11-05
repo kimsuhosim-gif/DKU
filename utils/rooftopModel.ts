@@ -19,7 +19,7 @@ export const OBSTACLES:{x:number;y:number;r:number}[]=[];
 export const MAX_HP=180;
 export type Action='push'|'heavy'|'dash'|'jump'|'guard';
 export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number};
-export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round';x:number;y:number;text:string};
+export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number};
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
 export class RooftopMatch{
@@ -30,7 +30,7 @@ export class RooftopMatch{
  private make(cast:number,i:number,wins:number):Fighter{const points=[[-320,170],[320,-170],[-320,-170],[320,170]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),hp:MAX_HP,stamina:100,alive:true,fall:0,cool:0,dash:0,stun:0,down:0,invulnerable:0,poseTime:0,attackDuration:0,windup:0,attackKind:'push',attackStep:1,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0};}
  nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
  pause(){if(this.phase==='paused')this.phase=this.resumePhase;else if(this.phase==='playing'||this.phase==='countdown'){this.resumePhase=this.phase;this.phase='paused';}this.stick={x:0,y:0};}
- private event(kind:Event['kind'],p:Fighter,text:string){this.events.push({kind,x:p.x,y:p.y,text});}
+ private event(kind:Event['kind'],p:Fighter,text:string,attacker?:Fighter){this.events.push({kind,x:p.x-(attacker?Math.cos(attacker.angle)*22:0),y:p.y,text,cast:attacker?.cast,angle:attacker?.angle,jump:p.jump,targetY:p.y});}
  action(i:number,action:Action){
   const p=this.fighters[i];if(this.phase!=='playing'||!p?.alive||p.down>0||p.stun>0)return;
   // Dodge cancels recovery, but not the startup or active strike.
@@ -50,10 +50,10 @@ export class RooftopMatch{
   const w=WEAPONS[p.cast],heavy=p.attackKind==='heavy',finisher=!heavy&&p.attackStep===3;
   const target=this.fighters.map((q,j)=>({q,j})).filter(({q,j})=>j!==i&&q.alive&&q.down<=0&&q.invulnerable<=0&&Math.abs(q.y-p.y)<55&&dist(p,q)<w.reach+(heavy?18:0)&&Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.35&&!(q.jump>.12&&p.jump<=0)).sort((a,b)=>dist(p,a.q)-dist(p,b.q))[0];
   if(!target){p.combo=0;p.comboTime=0;return;}const {q,j}=target;
-  if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-(heavy?36:15));if(!heavy&&q.stamina>0){p.combo=0;p.comboTime=0;this.event('save',q,'BLOCK');return;}q.guard=0;this.event('save',q,'GUARD BREAK');}
+  if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-(heavy?36:15));if(!heavy&&q.stamina>0){p.combo=0;p.comboTime=0;this.event('save',q,'BLOCK',p);return;}q.guard=0;this.event('save',q,'GUARD BREAK',p);}
   const damage=Math.round(w.damage*(heavy?1.8:finisher?1.35:.8));q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.guard=0;q.combo=0;q.comboTime=0;
   const force=heavy?w.force*.7:finisher?w.force*.48:48;q.vx=Math.cos(p.angle)*force;q.vy=Math.sin(p.angle)*force;q.stun=heavy?.42:finisher?.3:.14;q.invulnerable=heavy?.78:.16;q.down=heavy?.55:0;
-  if(!heavy){p.combo=p.attackStep;p.comboTime=1.1;}this.event(heavy||finisher?'heavy':'hit',q,heavy?`-${damage} POWER`:`-${damage}  ${p.attackStep} HIT`);if(q.hp<=0)this.eliminate(j);
+  if(!heavy){p.combo=p.attackStep;p.comboTime=1.1;}this.event(heavy||finisher?'heavy':'hit',q,heavy?`-${damage} POWER`:`-${damage}  ${p.attackStep} HIT`,p);if(q.hp<=0)this.eliminate(j);
  }
  private finish(winner:number){this.winner=winner;if(winner>=0)this.fighters[winner].wins++;this.phase=winner>=0&&this.fighters[winner].wins>=2?'finished':'round';this.stick={x:0,y:0};this.event('round',this.fighters[Math.max(0,winner)],winner<0?'무승부':`${CAST[this.fighters[winner].cast].name} 승리`);}
  update(dt:number){
