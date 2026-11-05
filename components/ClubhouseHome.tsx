@@ -12,7 +12,7 @@ export default function ClubhouseHome(){
  <motion.h1 id="home-heading" initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{duration:.45}}>함께라서<br/>더 좋은 <em>라운드.</em></motion.h1>
  <p>스코어 너머의 즐거움.<br/>09 동기들과 함께하는 필드 위의 시간.</p>
  <a className="button button-brass" href="#/rounds">우리의 라운드 <ArrowUpRight size={18}/></a>
- <div className="hero-bottom"><img className="hero-mascot" src="/images/dku-re09-bear-male-v2.png" alt="DKU RE09 곰 마스코트"/><span>단국대학교 부동산학과 09 골프 모임<br/><b>MEMBERS' CLUB</b></span></div></div>
+ <div className="hero-bottom"><img className="re09-hero-logo" src="/images/re09-premium-mark.png" alt="RE09"/><span>단국대학교 부동산학과 09 골프 모임<br/><b>MEMBERS' CLUB</b></span></div></div>
  <div className="hero-photograph hero-clubhouse"><img src="/images/clubhouse-hero-ai.png" alt="따뜻한 햇살이 내려앉은 골프장과 클럽하우스 테라스 일러스트" fetchPriority="high"/><div className="photo-caption"><span>THE RE09 CLUBHOUSE</span><span>A PLACE TO COME TOGETHER</span></div></div></section>
  <section className="next-round-strip" aria-label="다음 모임 안내"><span className="round-symbol"><Flag size={23}/></span><div><span className="eyebrow">NEXT MEETING</span><h2>{upcoming?`${nextMeeting.title} · ${nextMeeting.location}`:'다음 만남을 준비하고 있어요.'}</h2><p>{upcoming?nextMeeting.date:'등록된 다음 일정이 없습니다. 지난 라운드의 기록을 먼저 만나보세요.'}</p></div><a href="#/rounds" className="text-link">{upcoming?'일정 확인':'라운드 모아보기'} <ArrowRight size={18}/></a></section>
  <section className="home-journal"><div className="section-heading"><div><span className="eyebrow">THE LATEST CHAPTER</span><h2>우리의 최근 라운드</h2></div><a className="text-link" href="#/rounds">전체 기록 <ArrowUpRight size={17}/></a></div>

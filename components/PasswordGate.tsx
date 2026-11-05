@@ -61,7 +61,7 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ children }) => {
             >
                 <div className="mb-6 md:mb-12 flex flex-col items-center">
                     <div className="w-14 h-14 md:w-20 md:h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-5 shadow-inner border border-white/10">
-                        <img className="login-mascot" src="/images/dku-re09-bear-male-v2.png" alt="DKU 부동산학과 09학번 곰 마스코트" />
+                        <img className="re09-login-logo" src="/images/re09-premium-mark.png" alt="RE09" />
                     </div>
                     <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/50 font-bold mb-2 md:mb-3">WELCOME TO OUR CLUB</span>
                     <h2 className="text-2xl md:text-4xl font-serif text-white italic">DKU-RE09 CLUB</h2>
