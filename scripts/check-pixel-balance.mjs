@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import ts from 'typescript';
-const code=ts.transpileModule(fs.readFileSync(new URL('../utils/pixelOffice.ts',import.meta.url),'utf8')+'\n'+fs.readFileSync(new URL('../utils/pixelSurvivor.ts',import.meta.url),'utf8').replace("import {PixelOffice} from './pixelOffice';",''),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
+const code=ts.transpileModule(fs.readFileSync(new URL('../utils/rooftopEffects.ts',import.meta.url),'utf8')+'\n'+fs.readFileSync(new URL('../utils/pixelOffice.ts',import.meta.url),'utf8')+'\n'+fs.readFileSync(new URL('../utils/pixelSurvivor.ts',import.meta.url),'utf8').replace("import {PixelOffice} from './pixelOffice';",'').replace("import {IMPACTS,ImpactKind} from './rooftopEffects';",''),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
 globalThis.matchMedia=()=>({matches:true});globalThis.Image=class{};globalThis.ResizeObserver=class{observe(){}disconnect(){}};globalThis.requestAnimationFrame=()=>1;globalThis.cancelAnimationFrame=()=>{};globalThis.devicePixelRatio=1;globalThis.window={addEventListener(){},removeEventListener(){}};globalThis.document={hidden:false,addEventListener(){},removeEventListener(){}};
 const {PixelSurvivor}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 const results=[];
