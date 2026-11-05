@@ -25,6 +25,14 @@ tick(15);assert.equal(game.model.fighters[0].poseTime,0);assert(game.queued,'Que
 tick(8);assert(game.model.fighters[0].poseTime>0,'Buffered attack executes after hitstop');
 game.model.fighters[0].poseTime=0;game.model.fighters[0].cool=0;game.model.fighters[0].down=.10;game.model.fighters[0].stun=0;game.freeze=0;game.act('heavy');assert.equal(game.queued,'heavy','Get-up recovery accepts buffered input');tick(13);assert.equal(game.model.fighters[0].attackKind,'heavy');assert(game.model.fighters[0].poseTime>0);
 game.preview(0);assert.equal(game.freeze,0);assert.equal(game.superCue,null);assert.equal(game.shake,0);
+// Regression: pose changes must not change Jaeho's canvas/body scale.
+game.preview(6);game.reduced=true;const neutral={...game.model.fighters[0],x:0,y:0,angle:0};
+const drawSizes=[];ctx.drawImage=(...args)=>drawSizes.push(args.slice(-2));
+for(const pose of [{},{vx:30},{jump:.05},{jump:.325},{jump:.6},{guard:.5},{stun:.1},{poseTime:.48,attackDuration:1,attackKind:'push'},{poseTime:.48,attackDuration:1,attackKind:'heavy'},{poseTime:.72,attackDuration:1.2,attackKind:'special'}]){
+ game.actor({...neutral,...pose},0,1);
+}
+assert.equal(drawSizes.length,10);for(const size of drawSizes)assert.deepEqual(size,drawSizes[0],'Idle/walk/jump/guard/hit/melee/shoot share exact drawing dimensions');
+ctx.drawImage=()=>{};console.log('P0 PASS: Jaeho has a fixed body scale across 10 pose/airtime cases.');
 game.dispose();
 console.log('P0 PASS: real renderer RAF input buffer survives hitstop and resumes; preview clears cinematic state. Canvas stub: no rendered FPS claim.');
 

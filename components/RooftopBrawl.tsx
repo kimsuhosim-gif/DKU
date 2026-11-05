@@ -38,13 +38,13 @@ export default function RooftopBrawl(){
   <div className="roof-stage">
    <canvas ref={canvas} aria-label="2D 옥상 난투 경기장"/>
    {phase!=='ready'&&<div className="roof-score">{m?.fighters.map((p,i)=><div key={p.cast} className={`${!p.alive?'out':''} ${i===0?'is-player':''}`} style={{'--fighter':CAST[p.cast].color} as CSSProperties}>
-    <div className="roof-face" style={{backgroundImage:`url(${CAST[p.cast].image})`}}/>
+    <div className="roof-face" style={{backgroundImage:`url(${CAST[p.cast].image})`,...(p.cast===6?{backgroundSize:"600% 300%",backgroundPosition:"5% 23.4%"}:{})}}/>
     <div className="roof-score-info"><span>{i===0?'YOU':'CPU'} <b>{CAST[p.cast].name}</b></span><strong>{p.alive?`${Math.ceil(p.hp)}`:'OUT'}</strong><progress className="roof-hp" aria-label={`${CAST[p.cast].name} 체력`} max={MAX_HP} value={p.hp}/><i>{'●'.repeat(p.wins)}{'○'.repeat(Math.max(0,2-p.wins))}</i></div>
    </div>)}</div>}
    {phase==='ready'&&<div className="roof-lobby">
     <div className="roof-lobby-title"><span>DKU RE09 / ARCADE CLUB</span><h1>옥상 난투<span>ROOFTOP RUMBLE</span></h1></div>
     <div className="roof-selection"><div className="roof-selection-heading"><b>PLAYER SELECT</b><span>{String(selected+1).padStart(2,'0')} / {String(CAST.length).padStart(2,'0')}</span></div>
-     <div className="roof-roster">{CAST.map((p,i)=><button key={p.id} aria-label={p.name} aria-pressed={selected===i} onClick={()=>{setSelected(i);game?.preview(i);}} style={{'--fighter':p.color} as CSSProperties}><div className="roof-portrait" style={{backgroundImage:`url(${p.image})`}}/><strong>{p.name}</strong><span>{WEAPONS[i].name}</span></button>)}</div>
+     <div className="roof-roster">{CAST.map((p,i)=><button key={p.id} aria-label={p.name} aria-pressed={selected===i} onClick={()=>{setSelected(i);game?.preview(i);}} style={{'--fighter':p.color} as CSSProperties}><div className="roof-portrait" style={{backgroundImage:`url(${p.image})`,...(p.id==="jaeho"?{backgroundSize:"600% 300%",backgroundPosition:"5% 23.4%"}:{})}}/><strong>{p.name}</strong><span>{WEAPONS[i].name}</span></button>)}</div>
      <div className="roof-enter"><div><b>{CAST[selected].name}</b><span>{WEAPONS[selected].name} · 사거리 {attackReach(selected)}</span></div><button disabled={!loaded||!!error} onClick={start}><Play size={18} fill="currentColor"/>{error?'실행 불가':loaded?'대전 시작':'준비 중'}</button></div>
      <p className="roof-special-help"><b>U · {SPECIALS[selected].name}</b> {SPECIALS[selected].description} · 첫 라운드부터 사용 가능</p>
      <p className="roof-special-help">방향키로 조준 · L 회피 후 공격은 강화 반격 · J 2타 적중 후 K로 빠른 마무리</p>

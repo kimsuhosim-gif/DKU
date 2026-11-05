@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>캐릭터 크기 회귀 검사</title><style>body{margin:0;background:#263b44;color:white;font:16px sans-serif}button{padding:12px;margin:5px}canvas{width:100%;height:620px}p{padding:10px}</style><button id="cast">7명 크기 비교</button><button id="poses">재호 자세 비교</button><button id="jump">점프 비교</button><p id="labels"></p><canvas></canvas><script type="module">
+import {RooftopGame} from '/utils/rooftopRenderer.ts';import {RooftopMatch,CAST} from '/utils/rooftopModel.ts';
+const g=new RooftopGame(document.querySelector('canvas'),()=>{});await g.ready;g.audio.setEnabled(false);g.model.phase='paused';g.reduced=true;
+function fighter(cast,x){const m=new RooftopMatch(()=>.5);m.start(cast);return Object.assign(m.fighters[0],{x,y:100,angle:0,vx:0,vy:0});}
+function show(mode){g.model.fighters=Array.from({length:7},(_,i)=>fighter(mode==='cast'?i:6,-540+i*180));g.model.events=[];g.bursts=[];g.specialBursts=[];g.superCue=null;
+if(mode==='poses'){const p=g.model.fighters;p[1].vx=30;p[1].gait=0;p[2].jump=.325;p[3].guard=.5;Object.assign(p[4],{poseTime:.48,attackDuration:1,attackKind:'push'});Object.assign(p[5],{poseTime:.48,attackDuration:1,attackKind:'heavy'});Object.assign(p[6],{poseTime:.72,attackDuration:1.2,attackKind:'special'});}
+if(mode==='jump'){g.model.fighters.forEach((p,i)=>{p.jump=[0,.05,.15,.25,.325,.45,.6][i];});}
+document.querySelector('#labels').textContent=mode==='cast'?CAST.map(p=>p.name).join(' / '):mode==='poses'?'대기 / 이동 / 점프 / 방어 / 일반 공격 / 강공격 / 사격':'대기 / 점프 시작 / 상승 / 상승 / 정점 / 하강 / 착지 직전';}
+for(const id of ['cast','poses','jump'])document.getElementById(id).onclick=()=>show(id);show('cast');
+</script>
