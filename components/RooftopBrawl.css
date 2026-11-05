@@ -48,3 +48,11 @@
  .roof-energy{visibility:hidden}
  .roof-round{bottom:90px}
 }
+.roof-special-help{font-size:11px;margin:10px 0 0;color:#53695f;line-height:1.5}.roof-special-help b{color:#7850ac;margin-right:8px}
+.roof-special-meter{width:120px;display:flex;flex-direction:column;gap:5px;font-size:9px;font-weight:900;color:#7644a5}.roof-special-meter progress{width:100%;height:7px;accent-color:#9858c9}
+.roof-actions .action-special{background:#7545a3;color:#fff;border-color:#4b246f}.roof-special-callout{position:absolute;top:138px;left:50%;transform:translateX(-50%);background:#27203de8;color:#fff1ba;border-left:4px solid #eec570;padding:9px 24px;text-align:center;pointer-events:none;white-space:nowrap;z-index:3}.roof-special-callout small{display:block;font-size:10px;color:#dfc9f6}.roof-special-callout strong{display:block;font-size:24px}
+@media(max-width:1100px){.roof-controls{gap:14px}.roof-energy{width:80px}.roof-special-meter{width:100px}}
+@media(max-width:700px){.roof-controls{height:148px;gap:8px}.roof-energy{width:auto;right:auto}.roof-special-meter{position:absolute;right:12px;top:7px;width:165px;flex-direction:row;align-items:center;gap:6px;font-size:8px}.roof-special-meter progress{width:60px}.roof-actions{display:grid;grid-template-columns:repeat(3,58px);gap:5px;padding-top:18px}.roof-actions button,.roof-actions .action-push{width:58px;height:47px;display:grid;grid-template-columns:18px 1fr;gap:1px;padding:4px}.roof-actions small{grid-column:2}.roof-actions svg{grid-row:1/3;width:17px}.roof-special-callout{top:128px;padding:6px 18px}.roof-special-callout strong{font-size:20px}.roof-special-help{font-size:9px}}
+@media(max-width:360px){.roof-actions{grid-template-columns:repeat(3,51px)}.roof-actions button,.roof-actions .action-push{width:51px}.roof-special-meter{width:150px}}
+@media(max-height:550px) and (orientation:landscape){.roof-special-meter{position:absolute;right:20px;top:-20px;width:140px}.roof-controls{height:86px}.roof-actions{display:flex;padding-top:0}.roof-actions button,.roof-actions .action-push{width:52px;height:60px;display:flex}.roof-special-callout{top:92px}.roof-special-help{font-size:9px;margin-top:4px}}
+@media(max-width:360px){.roof-actions button,.roof-actions .action-push{grid-template-columns:14px 1fr;padding:3px;column-gap:0}.roof-actions b{font-size:8px;white-space:nowrap}.roof-actions svg{width:14px}}

@@ -51,7 +51,32 @@ export function contactEffect(c:CanvasRenderingContext2D,cast:number,age:number,
  c.beginPath();for(let i=0;i<16;i++){const a=i*Math.PI/8,rr=i%2?r*.36:r*(i%4===0?1.2:.8);const x=Math.cos(a)*rr,y=Math.sin(a)*rr*(cast===4?.45:1);if(i===0)c.moveTo(x,y);else c.lineTo(x,y);}c.closePath();
  c.fillStyle='#fffbea';c.strokeStyle='#172933';c.lineWidth=5;c.stroke();c.fill();
  c.strokeStyle=color;c.lineWidth=heavy?5:3;
+ // Distinct material cues: fist compression, piercing cross, metallic shock rings.
+ if(cast===3){c.beginPath();c.ellipse(-r*.25,0,r*1.25,r*.8,0,0,Math.PI*2);c.stroke();}
+ if(cast===4){c.beginPath();c.moveTo(-r*2.3,0);c.lineTo(r*2.8,0);c.moveTo(r,-r*.6);c.lineTo(r,r*.6);c.stroke();}
  for(let i=0;i<6;i++){const a=i*Math.PI/3+.2,near=r+7,far=near+(heavy?28:16);c.beginPath();c.moveTo(Math.cos(a)*near,Math.sin(a)*near);c.lineTo(Math.cos(a)*far,Math.sin(a)*far);c.stroke();}
  if(cast===2||cast===5){c.beginPath();c.ellipse(0,0,r*1.55,r*.7,cast===2?.4:0,0,Math.PI*2);c.stroke();}
  c.restore();
+}
+
+/** Local canvas effects, independent of character artwork. Duration is bounded. */
+export function specialEffect(c:CanvasRenderingContext2D,cast:number,age:number,color:string,reduced:boolean){
+ const t=Math.min(1,age/.65);c.save();c.globalAlpha=Math.max(0,1-t*t);c.lineCap='round';
+ c.strokeStyle=color;c.fillStyle='#fffbe8';c.shadowColor=color;c.shadowBlur=reduced?0:14;
+ if(cast===0){
+  const x=reduced?260:60+t*470;c.lineWidth=12;c.beginPath();c.moveTo(Math.max(0,x-180),0);c.lineTo(x,0);c.stroke();c.lineWidth=4;c.strokeStyle='#fff';c.stroke();c.beginPath();c.arc(x,0,12,0,Math.PI*2);c.fill();
+ }else if(cast===1){
+  c.lineWidth=15;c.beginPath();c.ellipse(65,0,200,75,-.2,-1.5,1.3);c.stroke();c.lineWidth=4;c.strokeStyle='#fff3c4';c.stroke();
+  for(let i=0;i<5;i++){c.beginPath();c.moveTo(90+i*24,-45+i*17);c.lineTo(190+i*27,-65+i*17);c.stroke();}
+ }else if(cast===2){
+  for(let i=0;i<3;i++){const r=55+(reduced?.55:t)*240-i*30;if(r<=0)continue;c.lineWidth=8-i*2;c.beginPath();c.ellipse(0,0,r,r*.60,0,0,Math.PI*2);c.stroke();c.save();c.strokeStyle='#e9fcff';c.lineWidth=2;c.stroke();c.restore();}
+  c.lineWidth=5;for(let i=0;i<8;i++){const a=i*Math.PI/4;c.beginPath();c.moveTo(Math.cos(a)*35,Math.sin(a)*21);c.lineTo(Math.cos(a)*150,Math.sin(a)*90);c.lineTo(Math.cos(a+.12)*220,Math.sin(a+.12)*132);c.stroke();}
+ }else if(cast===3){
+  for(let i=0;i<3;i++){const x=60+i*40+(reduced?0:t*60),y=(i-1)*25;c.lineWidth=8;c.beginPath();c.moveTo(x-50,y);c.lineTo(x,y);c.stroke();c.beginPath();c.ellipse(x,y,17,12,-.25,0,Math.PI*2);c.fill();}
+ }else if(cast===4){
+  const x=reduced?300:180+t*190;c.lineWidth=16;c.beginPath();c.moveTo(0,0);c.lineTo(x,0);c.stroke();c.lineWidth=4;c.strokeStyle='#fff';c.stroke();c.beginPath();c.moveTo(x+25,0);c.lineTo(x-14,-15);c.lineTo(x-14,15);c.closePath();c.fill();
+ }else{
+  c.lineWidth=7;for(let i=0;i<2;i++){const r=40+(reduced?.3:t)*100+i*18;c.beginPath();c.ellipse(70,0,r,r,0,0,Math.PI*2);c.stroke();}
+  c.strokeStyle='#fff8cb';c.lineWidth=4;c.beginPath();c.moveTo(20,25);c.quadraticCurveTo(160,-90,200,0);c.lineTo(178,-10);c.stroke();
+ }c.restore();
 }
