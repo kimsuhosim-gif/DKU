@@ -17,7 +17,7 @@ export function makeWeapon(index:number){
  if(w.kind==='hammer'){box(root,34,36,52,'#263c51',65);box(root,38,26,56,w.color,65);box(root,40,8,58,'#d5eaf3',65);}
  if(w.kind==='glove'){shaft.visible=false;box(root,30,26,30,w.color,23);box(root,12,20,34,'#f3e9d1',3);for(let i=0;i<4;i++)box(root,10,10,7,'#ffe0bc',39,6,-12+i*8);}
  if(w.kind==='spear'){const tip=new THREE.Mesh(new THREE.ConeGeometry(13,36,4),new THREE.MeshStandardMaterial({color:'#d7eced',metalness:.8,roughness:.2}));tip.rotation.z=-Math.PI/2;tip.position.x=103;root.add(tip);box(root,8,12,30,w.color,81);}
- if(w.kind==='pan'){const pan=cylinder(root,24,8,'#303a40',65);pan.rotation.x=Math.PI/2;const rim=new THREE.Mesh(new THREE.TorusGeometry(24,3,8,32),new THREE.MeshStandardMaterial({color:w.color,metalness:.7,roughness:.25}));rim.position.x=65;root.add(rim);}
+ if(w.kind==='sword'){box(root,110,5,15,'#222d3e',72);box(root,100,2,3,w.color,72,4);box(root,8,10,36,'#bdcfda',15);}
  const arc=new THREE.Mesh(new THREE.RingGeometry(WEAPONS[index].reach-12,WEAPONS[index].reach,32,1,-.8,1.6),new THREE.MeshBasicMaterial({color:w.color,transparent:true,opacity:.65,side:THREE.DoubleSide,depthWrite:false}));arc.rotation.x=-Math.PI/2;arc.name='swing';arc.visible=false;root.add(arc);
  return root;
 }

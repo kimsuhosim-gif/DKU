@@ -1,19 +1,19 @@
 export const CAST=[
  {id:'hyomin',name:'김효민',color:'#88b79b',detail:'흰 모자 · 사각 안경',image:'/images/rooftop-hyomin-v2.png'},
  {id:'jaeyeop',name:'정재엽',color:'#e0bc79',detail:'둥근 앞머리 · 베이지 재킷',image:'/images/rooftop-jaeyeop-v2.png'},
- {id:'seongtae',name:'김성태',color:'#9daff0',detail:'가르마 머리 · 네이비 점퍼',image:'/images/rooftop-seongtae-v2.png'},
+ {id:'seongtae',name:'김성태',color:'#9daff0',detail:'가르마 머리 · 네이비 점퍼',image:'/images/rooftop-seongtae-v6.png'},
  {id:'manjong',name:'유만종',color:'#6fbdb6',detail:'베이지 모자 · 청록 점퍼',image:'/images/rooftop-manjong-v2.png'},
  {id:'yeonseong',name:'신연성',color:'#df9396',detail:'흰 모자 · 와인색 재킷',image:'/images/rooftop-yeonseong-v2.png'},
- {id:'moseongjin',name:'모성진',color:'#e4c15b',detail:'크림 모자 · 노랑 포인트',image:'/images/rooftop-moseongjin-v2.png'},
+ {id:'moseongjin',name:'모성진',color:'#e4c15b',detail:'크림 모자 · 노랑 포인트',image:'/images/rooftop-moseongjin-v6.png'},
  {id:'jaeho',name:'최재호',color:'#b5c2cd',detail:'검은 모자 · 검정 조끼 · 회색 소매',image:'/images/rooftop-jaeho-v2.png'},
 ] as const;
 export const WEAPONS=[
  {name:'아이언 09',kind:'club',color:'#54d8c0',reach:125,damage:14,force:245,cool:.34},
  {name:'홈런 배트',kind:'bat',color:'#f4c75c',reach:105,damage:17,force:285,cool:.42},
- {name:'볼트 해머',kind:'hammer',color:'#779cf5',reach:100,damage:25,force:355,cool:.62},
+ {name:'흑뢰검',kind:'sword',color:'#70e5ff',reach:140,damage:17,force:270,cool:.36},
  {name:'파워 글러브',kind:'glove',color:'#ef805b',reach:78,damage:10,force:210,cool:.21},
  {name:'레드 랜스',kind:'spear',color:'#f1789c',reach:165,damage:13,force:235,cool:.46},
- {name:'골든 팬',kind:'pan',color:'#e3b949',reach:95,damage:20,force:310,cool:.49},
+ {name:'뇌신의 해머',kind:'hammer',color:'#ffd15c',reach:100,damage:25,force:355,cool:.62},
  {name:'M16 개머리판',kind:'rifle',color:'#ffd67c',reach:115,damage:18,force:270,cool:.43},
 ] as const;
 export const ARENA={x:600,y:380,roundTime:120};
@@ -25,10 +25,10 @@ export const attackReach=(cast:number)=>WEAPONS[cast].reach+BODY.x-52;
 export const SPECIALS=[
  {name:'홀인원 캐논',description:'직선 관통 샷',duration:1.05,pulses:[.52],range:480,damage:36,force:340},
  {name:'장외 홈런',description:'전방 적들을 크게 날린다',duration:1.15,pulses:[.57],range:290,damage:42,force:780},
- {name:'옥상 지진',description:'주변 충격파 · 점프로 회피',duration:1.25,pulses:[.62],range:310,damage:40,force:390},
+ {name:'흑뢰 · 월광참',description:'전방을 가르는 번개 검기',duration:1.05,pulses:[.52],range:380,damage:44,force:430},
  {name:'퇴근 러시',description:'네 번의 잽과 마무리 어퍼컷',duration:1.25,pulses:[.35,.49,.63,.77,.96],range:210,damage:7,force:35},
  {name:'일직선 출근',description:'충돌을 지키는 돌진 관통 찌르기',duration:1.10,pulses:[.58],range:360,damage:40,force:500},
- {name:'반품 불가',description:'받아치기 자세 · 맞으면 반격',duration:1.20,pulses:[],range:240,damage:46,force:520},
+ {name:'뇌신 강림',description:'해머 내려찍기 · 주변 번개 충격파',duration:1.25,pulses:[.62],range:310,damage:40,force:390},
  {name:'옥상 3점사',description:'조준 후 전방 3연사',duration:1.2,pulses:[.48,.65,.82],range:520,damage:12,force:28},
 ] as const;
 export type GameMode='brawl'|'crown';
@@ -68,7 +68,7 @@ export class RooftopMatch{
   if(action==='special'){
    if(p.meter<100||p.specialCooldown>0||p.jump>0)return;
    const s=SPECIALS[p.cast];this.aim(i,s.range+100,180);
-   p.meter=0;p.specialCooldown=10;p.specialLeft=s.duration;p.specialPulse=0;p.attackKind='special';p.attackDuration=s.duration;p.poseTime=s.duration;p.cool=s.duration;p.windup=0;p.combo=0;p.comboTime=0;p.guard=p.cast===5?s.duration:0;
+   p.meter=0;p.specialCooldown=10;p.specialLeft=s.duration;p.specialPulse=0;p.attackKind='special';p.attackDuration=s.duration;p.poseTime=s.duration;p.cool=s.duration;p.windup=0;p.combo=0;p.comboTime=0;p.guard=0;
    this.events.push({kind:'special',x:p.x,y:p.y,text:SPECIALS[p.cast].name,cast:p.cast,angle:p.angle});return;
   }
   if(action!=='push'&&action!=='heavy')return;if(action==='heavy'&&p.stamina<24)return;
@@ -84,7 +84,7 @@ export class RooftopMatch{
   const w=WEAPONS[p.cast],heavy=p.attackKind==='heavy',finisher=!heavy&&p.attackStep===3;
   const target=this.fighters.map((q,j)=>({q,j})).filter(({q,j})=>j!==i&&q.alive&&q.down<=0&&q.invulnerable<=0&&Math.abs(q.y-p.y)<55&&dist(p,q)<attackReach(p.cast)+(heavy?18:0)&&Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.35&&!(q.jump>.12&&p.jump<=0)).sort((a,b)=>dist(p,a.q)-dist(p,b.q))[0];
   if(!target){p.combo=0;p.comboTime=0;return;}const {q,j}=target;
-  if(this.counter(j,i))return;
+
   if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){q.stamina=Math.max(0,q.stamina-(heavy?36:15));if(!heavy&&q.stamina>0){p.combo=0;p.comboTime=0;this.event('save',q,'BLOCK',p);return;}q.guard=0;this.event('save',q,'GUARD BREAK',p);}
   const damage=Math.round(w.damage*(heavy?1.8:finisher?1.35:.8)*(p.empowered?1.3:1));q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.guard=0;q.combo=0;q.comboTime=0;q.specialLeft=0;q.momentum=0;
   p.meter=Math.min(100,p.meter+damage*.85);q.meter=Math.min(100,q.meter+damage*.45);
@@ -92,18 +92,11 @@ export class RooftopMatch{
   if(heavy||finisher)this.dropCrown(j,p.angle);
   if(!heavy){p.combo=p.attackStep;p.comboTime=1.1;}this.event(heavy||finisher?'heavy':'hit',q,p.empowered?`-${damage} BREAK!`:heavy?`-${damage} POWER`:`-${damage}  ${p.attackStep} HIT`,p);if(q.hp<=0)this.eliminate(j);
  }
- private counter(defender:number,attacker:number){
-  const q=this.fighters[defender],p=this.fighters[attacker];
-  if(q.cast!==5||q.specialLeft<=0||q.guard<=0||Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)<=0)return false;
-  q.specialLeft=0;q.momentum=0;q.guard=0;q.poseTime=.35;q.attackDuration=.7;q.cool=.35;
-  this.events.push({kind:'special-impact',x:q.x,y:q.y,text:'반품 완료!',cast:5,angle:q.angle});
-  this.specialDamage(defender,attacker,SPECIALS[5].damage,SPECIALS[5].force,true);return true;
- }
  private specialDamage(i:number,j:number,damage:number,force:number,final:boolean){
   const p=this.fighters[i],q=this.fighters[j];
   q.hp=Math.max(0,q.hp-damage);q.lastBy=i;q.windup=0;q.poseTime=0;q.specialLeft=0;q.momentum=0;q.guard=0;q.combo=0;q.comboTime=0;
   q.meter=Math.min(100,q.meter+damage*.45);
-  const angle=p.cast===2?Math.atan2(q.y-p.y,q.x-p.x):p.angle;
+  const angle=p.cast===5?Math.atan2(q.y-p.y,q.x-p.x):p.angle;
   q.vx=Math.cos(angle)*force;q.vy=Math.sin(angle)*force;q.stun=final?.38:.10;q.down=final?.36:0;q.invulnerable=final?.5:.08;
   if(final)this.dropCrown(j,angle);
   this.event(final?'heavy':'hit',q,`-${damage}${p.cast===3&&!final?' RUSH':''}`,p,true);
@@ -117,7 +110,7 @@ export class RooftopMatch{
    const candidates=this.fighters.map((q,j)=>({q,j,forward:(q.x-p.x)*Math.cos(p.angle)+(q.y-p.y)*Math.sin(p.angle),side:Math.abs(-(q.x-p.x)*Math.sin(p.angle)+(q.y-p.y)*Math.cos(p.angle))})).filter(({q,j,forward,side})=>j!==i&&q.alive&&q.down<=0&&q.jump<=.12&&forward>0&&forward<s.range&&side<48).sort((a,b)=>a.forward-b.forward);
    const target=candidates[0];this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle,range:target?.forward??s.range});
    if(!target||target.q.invulnerable>0)return;
-   if(this.counter(target.j,i))return;
+
    const final=pulse===2;let damage=final?20:s.damage;
    if(target.q.guard>0&&Math.cos(Math.atan2(p.y-target.q.y,p.x-target.q.x)-target.q.angle)>0){damage=Math.round(damage*.4);this.event('save',target.q,'BLOCK',p);}
    this.specialDamage(i,target.j,damage,final?240:s.force,final);return;
@@ -126,10 +119,10 @@ export class RooftopMatch{
   for(let j=0;j<this.fighters.length;j++){
    const q=this.fighters[j];if(i===j||!q.alive||q.down>0||q.invulnerable>0)continue;
    const dx=q.x-p.x,dy=q.y-p.y,forward=dx*Math.cos(p.angle)+dy*Math.sin(p.angle),side=Math.abs(-dx*Math.sin(p.angle)+dy*Math.cos(p.angle));
-   const radial=p.cast===2;
-   const inside=radial?dist(p,q)<s.range:forward>0&&forward<s.range&&side<(p.cast===1?130:p.cast===3?70:48);
+   const radial=p.cast===5;
+   const inside=radial?dist(p,q)<s.range:forward>0&&forward<s.range&&side<(p.cast===2?95:p.cast===1?130:p.cast===3?70:48);
    if(!inside||q.jump>.12)continue;
-   if(this.counter(j,i))return;
+
    const final=p.cast!==3||pulse===4;
    let damage=p.cast===3&&final?18:s.damage;
    if(q.guard>0&&Math.cos(Math.atan2(p.y-q.y,p.x-q.x)-q.angle)>0){damage=Math.round(damage*.4);this.event('save',q,'BLOCK',p);}

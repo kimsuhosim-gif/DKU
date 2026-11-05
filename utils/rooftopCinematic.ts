@@ -16,7 +16,7 @@ export function superCutIn(c:CanvasRenderingContext2D,w:number,h:number,cue:Supe
  c.save();c.beginPath();c.rect(0,3,w,bh-6);c.clip();
  if(!reduced){c.strokeStyle=color;c.lineWidth=2;c.globalAlpha=fade*.45;for(let i=0;i<12;i++){const sy=(i*37)%bh;const x=((i*127+t*700)%(w+180))-180;c.beginPath();c.moveTo(x,sy);c.lineTo(x+95+(i%3)*28,sy);c.stroke();}c.globalAlpha=fade;}
  // Reuse the actual fighter artwork, keeping its palette and face consistent.
- if(image){const sw=image.width/4,sh=image.height/2,size=bh*2.3;const inset=cue.cast===6;c.drawImage(image,inset?sw/6:0,inset?sh*.313:0,inset?sw/1.5:sw,inset?sh/1.5:sh,-bh*.36,bh*.04,size*.75,size);}
+ if(image){const sw=image.width/4,sh=image.height/2,size=bh*2.3;const inset=[2,5,6].includes(cue.cast);c.drawImage(image,inset?sw/6:0,inset?sh*.313:0,inset?sw/1.5:sw,inset?sh/1.5:sh,-bh*.36,bh*.04,size*.75,size);}
  c.restore();
  const textX=Math.max(w*.37,bh*.95),available=w-textX-12;
  c.textAlign='left';c.textBaseline='middle';c.fillStyle=color;c.font=`900 ${Math.min(14,available/13)}px sans-serif`;c.fillText('SUPER SPECIAL',textX,bh*.25);

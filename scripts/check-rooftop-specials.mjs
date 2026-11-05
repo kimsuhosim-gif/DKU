@@ -17,19 +17,17 @@ for(const mode of ['walk','dash','down','jump']){
 for(const corner of [[530,345],[-530,-345],[0,0]]){const m=fixture();m.fighters.forEach(p=>Object.assign(p,{x:corner[0],y:corner[1]}));for(let i=0;i<20;i++){m.update(.01);noOverlap(m);}}
 for(let cast=0;cast<7;cast++){const m=fixture(cast);m.fighters[1].x=BODY.x+2;m.action(0,'push');step(m,m.fighters[0].attackDuration*.5+.02);assert(m.fighters[1].hp<180,`Weapon ${cast} reaches from body separation`);}
 const damage=[];
-for(const cast of [0,1,2,3,4,6]){
+for(const cast of [0,1,2,3,4,5,6]){
  const m=fixture(cast),p=m.fighters[0],q=m.fighters[1];m.action(0,'special');assert.equal(p.meter,0);assert(p.specialLeft>0);step(m,.15);assert.equal(q.hp,180,'Special has a visible windup');step(m,SPECIALS[cast].duration);assert(q.hp<180,`special ${cast} must hit`);assert(m.events.some(e=>e.superHit&&(e.kind==='hit'||e.kind==='heavy')),`special ${cast} reports confirmed damage`);assert(m.events.filter(e=>e.kind==='special-impact').every(e=>!e.superHit),'Visual pulses are not confirmed hits');noOverlap(m);damage.push({cast,loss:180-q.hp});
  m.action(0,'special');assert.equal(p.specialLeft,0,'Cannot spam with empty meter');
 }
 assert(damage[3].loss>=28,'Rush delivers multiple hits, not a renamed single attack');
-let m=fixture(5);m.action(0,'special');const hp=m.fighters[0].hp;m.action(1,'heavy');step(m,1);assert.equal(m.fighters[0].hp,hp,'Pan counters frontal hit');assert(m.fighters[1].hp<180);assert(m.events.some(e=>e.kind==='special-impact'&&e.text==='반품 완료!'));
-m=fixture(5);m.action(0,'special');step(m,1.3);assert.equal(m.fighters[1].hp,180,'Counter does no free damage on whiff');assert(!m.events.some(e=>e.superHit),'Whiff must not trigger special hitstop');
-m=fixture(2);m.action(0,'special');step(m,.38);m.action(1,'jump');step(m,.3);assert.equal(m.fighters[1].hp,180,'Jump evades earthquake');
+let m=fixture(5);m.action(0,'special');step(m,.38);m.action(1,'jump');step(m,.3);assert.equal(m.fighters[1].hp,180,'Jump evades earthquake');
 m=fixture(0);m.action(0,'special');m.fighters[0].stun=.3;step(m,.8);assert.equal(m.fighters[1].hp,180,'Startup interruption cancels special');assert(!m.events.some(e=>e.superHit),'Interrupted startup must not trigger special hitstop');
 m=fixture(0);m.fighters[1].x=220;m.fighters[2].x=390;m.fighters[2].y=0;m.action(0,'special');step(m,.6);assert(m.fighters[1].hp<180&&m.fighters[2].hp<180,'Cannon pierces aligned targets');
-m=fixture(2);m.fighters[2].x=-180;m.fighters[2].y=0;m.action(0,'special');step(m,.7);assert(m.fighters[1].hp<180&&m.fighters[2].hp<180,'Earthquake hits both directions');
+m=fixture(5);m.fighters[2].x=-180;m.fighters[2].y=0;m.action(0,'special');step(m,.7);assert(m.fighters[1].hp<180&&m.fighters[2].hp<180,'Earthquake hits both directions');
 m=fixture();m.action(0,'special');m.pause();const left=m.fighters[0].specialLeft;step(m,1);assert.equal(m.fighters[0].specialLeft,left,'Pause freezes special');m.pause();
-console.log('P0 PASS: solid bodies walking/dodging/down/jump, walls and four-body piles; seven weapons reach; seven specials, windup, multi-hit, counter/whiff, jump evade, interrupt, piercing, AOE, pause, meter lock.');
+console.log('P0 PASS: solid bodies walking/dodging/down/jump, walls and four-body piles; seven weapons reach; seven specials, windup, multi-hit, jump evade, interrupt, piercing, AOE, pause, meter lock.');
 console.log(JSON.stringify({specialDamage:damage,body:BODY,reach:Array.from({length:7},(_,i)=>attackReach(i))}));
 
 // Rifle: 3 timed shots, first body blocks, and normal attacks never fire.
@@ -39,3 +37,5 @@ m=fixture(6);m.fighters[1].x=220;m.fighters[2].x=390;m.fighters[2].y=0;m.action(
 m=fixture(6);m.fighters[1].invulnerable=2;m.fighters[2].x=390;m.fighters[2].y=0;m.action(0,'special');step(m,1.2);assert.equal(m.fighters[2].hp,180,'Invulnerable foreground body still stops bullets');
 m=fixture(6);m.fighters[1].y=100;m.action(0,'special');step(m,1.2);assert.equal(m.fighters[1].hp,180,'Rifle misses off-axis');
 console.log('P0 PASS: rifle selection, melee-only normal attack, 3 timed shots (12+12+20), foreground occlusion and off-axis miss.');
+
+m=fixture(2);m.fighters[2].x=-180;m.fighters[2].y=0;m.action(0,'special');step(m,.6);assert(m.fighters[1].hp<180);assert.equal(m.fighters[2].hp,180,'Sword cuts forward only, unlike radial hammer');console.log('PASS: sword forward cut vs hammer radial thunder');

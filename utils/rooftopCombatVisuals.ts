@@ -5,13 +5,13 @@ import type {Fighter} from './rooftopModel';
 export const LIGHT_POSES = [
  [[8,9,12,13,15],[15,13,11,12,8],[8,10,12,13,15]],
  [[8,9,12,13,15],[15,10,11,13,8],[8,10,12,13,15]],
- [[8,10,12,13,8],[13,11,12,13,8],[8,10,12,12,13]],
+ [[8,10,11,13,15],[8,9,12,13,15],[8,10,11,13,15]],
  [[8,9,12,14,15],[15,10,13,14,8],[8,11,12,13,15]],
  [[8,9,12,13,15],[15,11,13,12,8],[8,10,12,13,15]],
- [[8,9,12,13,15],[15,10,13,14,8],[8,11,12,13,15]],
+ [[8,10,11,13,15],[8,9,11,13,15],[8,10,11,12,15]],
  [[8,9,11,13,15],[8,10,11,14,15],[8,9,11,13,15]],
 ] as const;
-export const MOTION_LABELS = ['라이징 스윙','홈런 횡타','해머 내려찍기','어퍼컷','런지 찌르기','프라이팬 강타','개머리판 강타'] as const;
+export const MOTION_LABELS = ['라이징 스윙','홈런 횡타','흑뢰검 베기','어퍼컷','런지 찌르기','뇌신 해머 내려찍기','개머리판 강타'] as const;
 export function attackProgress(p:Pick<Fighter,'poseTime'|'attackDuration'>){return Math.max(0,Math.min(1,1-p.poseTime/Math.max(.001,p.attackDuration)));}
 export function attackCell(p:Pick<Fighter,'poseTime'|'attackDuration'|'cast'|'attackStep'>){
  const t=attackProgress(p),beat=t<.22?0:t<.5?1:t<.64?2:t<.8?3:4;
@@ -29,10 +29,10 @@ export function weaponTrail(c:CanvasRenderingContext2D,cast:number,t:number,heav
  const path=()=>{c.beginPath();
   if(cast===4){c.moveTo(12,6);c.lineTo(145,0);}
   else if(cast===3){if(heavy){c.moveTo(25,45);c.quadraticCurveTo(92,25,64,-55);}else{c.moveTo(15,0);c.lineTo(74,-8);}}
-  else if(cast===2){c.moveTo(0,-90);c.bezierCurveTo(90,-95,115,-15,85,60);}
+  else if(cast===5){c.moveTo(0,-90);c.bezierCurveTo(90,-95,115,-15,85,60);}
   else if(cast===6){c.moveTo(0,-15);c.quadraticCurveTo(100,-35,120,20);}
   else if(cast===0){c.moveTo(0,45);c.quadraticCurveTo(140,35,110,-65);}
-  else if(cast===5){c.ellipse(48,0,65,45,.4,-1.8,1.5);}
+  else if(cast===2){c.moveTo(-20,-65);c.quadraticCurveTo(150,-15,160,48);}
   else{c.ellipse(40,0,110,28,-.15,-1.5,1.4);}
  };
  c.strokeStyle='#162731';c.lineWidth=heavy?16:11;path();c.stroke();
@@ -72,9 +72,12 @@ export function specialEffect(c:CanvasRenderingContext2D,cast:number,age:number,
  }else if(cast===1){
   c.lineWidth=15;c.beginPath();c.ellipse(65,0,200,75,-.2,-1.5,1.3);c.stroke();c.lineWidth=4;c.strokeStyle='#fff3c4';c.stroke();
   for(let i=0;i<5;i++){c.beginPath();c.moveTo(90+i*24,-45+i*17);c.lineTo(190+i*27,-65+i*17);c.stroke();}
- }else if(cast===2){
+ }else if(cast===5){
   for(let i=0;i<3;i++){const r=55+(reduced?.55:t)*240-i*30;if(r<=0)continue;c.lineWidth=8-i*2;c.beginPath();c.ellipse(0,0,r,r*.60,0,0,Math.PI*2);c.stroke();c.save();c.strokeStyle='#e9fcff';c.lineWidth=2;c.stroke();c.restore();}
   c.lineWidth=5;for(let i=0;i<8;i++){const a=i*Math.PI/4;c.beginPath();c.moveTo(Math.cos(a)*35,Math.sin(a)*21);c.lineTo(Math.cos(a)*150,Math.sin(a)*90);c.lineTo(Math.cos(a+.12)*220,Math.sin(a+.12)*132);c.stroke();}
+ }else if(cast===2){
+  const x=reduced?190:60+t*280;c.lineWidth=18;c.strokeStyle='#132c48';c.beginPath();c.ellipse(x,0,70,100,-.45,-1.2,1.25);c.stroke();c.lineWidth=11;c.strokeStyle=color;c.stroke();c.lineWidth=3;c.strokeStyle='#efffff';c.stroke();
+  c.lineWidth=3;for(let i=0;i<4;i++){const y=-60+i*35;c.beginPath();c.moveTo(x-50,y);c.lineTo(x-90,y+12);c.lineTo(x-105,y+2);c.lineTo(x-135,y+20);c.stroke();}
  }else if(cast===3){
   for(let i=0;i<3;i++){const x=60+i*40+(reduced?0:t*60),y=(i-1)*25;c.lineWidth=8;c.beginPath();c.moveTo(x-50,y);c.lineTo(x,y);c.stroke();c.beginPath();c.ellipse(x,y,17,12,-.25,0,Math.PI*2);c.fill();}
  }else if(cast===4){
@@ -90,8 +93,8 @@ export function motionOffset(cast:number,t:number,heavy:boolean){
  const wind=t<.42?Math.sin(t/.42*Math.PI):0;
  const hit=t>=.42?Math.sin(Math.min(1,(t-.42)/.58)*Math.PI):0;
  const power=heavy?1:.55;
- return {x:(-wind*5+hit*[12,16,5,18,23,11,17][cast])*power,
-  y:hit*(cast===3?-8:cast===2?4:-2)*power,
+ return {x:(-wind*5+hit*[12,16,20,18,23,5,17][cast])*power,
+  y:hit*(cast===3?-8:cast===5?4:-2)*power,
   tilt:(-wind*.025+hit*[.035,.065,.035,-.04,.06,.055,.05][cast])*power,
-  squash:cast===2?hit*.035*power:0};
+  squash:cast===5?hit*.035*power:0};
 }

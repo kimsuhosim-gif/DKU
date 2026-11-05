@@ -15,7 +15,7 @@ for(let cast=0;cast<7;cast++){
  assert.equal(visual.heavyCell(.5),3);assert.equal(visual.heavyCell(.499),2);assert.equal(new Set(Array.from({length:101},(_,i)=>visual.heavyCell(i/100))).size,8);
  for(const t of [0,.22,.5,.7,1]){const pose=visual.motionOffset(cast,t,true);assert(Object.values(pose).every(Number.isFinite));assert(Math.abs(pose.x)<=24&&Math.abs(pose.y)<=8&&Math.abs(pose.tilt)<.1);}
  assert(Object.values(visual.motionOffset(cast,0,true)).every(v=>Math.abs(v)<1e-9));
- const png=fs.readFileSync(new URL(`public/images/rooftop-${current.CAST[cast].id}-heavy-v5.png`,root));
+ const png=fs.readFileSync(new URL(`public/images/rooftop-${current.CAST[cast].id}-heavy-${[2,5].includes(cast)?'v6':'v5'}.png`,root));
  assert.equal(png.readUInt32BE(16),2048);assert.equal(png.readUInt32BE(20),256);
 }
 assert(!visual.LIGHT_POSES[2].flat().includes(14),'Hammer must not play hurt frame during attack');

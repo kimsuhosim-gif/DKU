@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>검·해머 실제 렌더 검사</title><style>body{margin:0;background:#263b44;color:white;font:16px sans-serif}button{padding:12px;margin:5px}canvas{width:100%;height:620px}p{padding:10px}</style><button id="cast">7명 크기 비교</button><button id="sword">김성태 모션</button><button id="hammer">모성진 모션</button><button id="fx">필살기 효과 비교</button><p id="labels"></p><canvas></canvas><script type="module">
+import {RooftopGame} from '/utils/rooftopRenderer.ts';import {RooftopMatch,CAST} from '/utils/rooftopModel.ts';
+const g=new RooftopGame(document.querySelector('canvas'),()=>{});await g.ready;g.audio.setEnabled(false);g.model.phase='paused';g.reduced=true;
+function fighter(cast,x,y=100){const m=new RooftopMatch(()=>.5);m.start(cast);return Object.assign(m.fighters[0],{x,y,angle:0,vx:0,vy:0});}
+function show(mode){g.model.fighters=Array.from({length:7},(_,i)=>fighter(mode==='cast'?i:mode==='hammer'?5:2,-540+i*180));g.bursts=[];g.specialBursts=[];g.superCue=null;
+if(mode==='sword'||mode==='hammer'){const p=g.model.fighters;p[1].vx=30;p[1].gait=0;p[2].jump=.325;p[3].guard=.5;Object.assign(p[4],{poseTime:.48,attackDuration:1,attackKind:'push'});Object.assign(p[5],{poseTime:.48,attackDuration:1,attackKind:'heavy'});Object.assign(p[6],{poseTime:.48,attackDuration:1,attackKind:'special'});}
+if(mode==='fx'){g.model.fighters=[fighter(2,-340),fighter(5,300)];g.specialBursts=[{x:-340,y:100,cast:2,angle:0,life:.45},{x:300,y:100,cast:5,angle:0,life:.45}];}
+document.querySelector('#labels').textContent=mode==='cast'?CAST.map(p=>p.name).join(' / '):mode==='fx'?'흑뢰 · 월광참 / 뇌신 강림':'대기 / 이동 / 점프 / 방어 / 일반 공격 / 강공격 / 필살기';}
+for(const id of ['cast','sword','hammer','fx'])document.getElementById(id).onclick=()=>show(id);show('cast');
+</script>
