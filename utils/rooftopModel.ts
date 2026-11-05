@@ -5,6 +5,7 @@ export const CAST=[
  {id:'manjong',name:'유만종',color:'#6fbdb6',detail:'베이지 모자 · 청록 점퍼',image:'/images/rooftop-manjong-v2.png'},
  {id:'yeonseong',name:'신연성',color:'#df9396',detail:'흰 모자 · 와인색 재킷',image:'/images/rooftop-yeonseong-v2.png'},
  {id:'moseongjin',name:'모성진',color:'#e4c15b',detail:'크림 모자 · 노랑 포인트',image:'/images/rooftop-moseongjin-v2.png'},
+ {id:'jaeho',name:'최재호',color:'#b5c2cd',detail:'검은 모자 · 검정 조끼 · 회색 소매',image:'/images/rooftop-jaeho-v2.png'},
 ] as const;
 export const WEAPONS=[
  {name:'아이언 09',kind:'club',color:'#54d8c0',reach:125,damage:14,force:245,cool:.34},
@@ -13,6 +14,7 @@ export const WEAPONS=[
  {name:'파워 글러브',kind:'glove',color:'#ef805b',reach:78,damage:10,force:210,cool:.21},
  {name:'레드 랜스',kind:'spear',color:'#f1789c',reach:165,damage:13,force:235,cool:.46},
  {name:'골든 팬',kind:'pan',color:'#e3b949',reach:95,damage:20,force:310,cool:.49},
+ {name:'M16 개머리판',kind:'rifle',color:'#ffd67c',reach:115,damage:18,force:270,cool:.43},
 ] as const;
 export const ARENA={x:600,y:380,roundTime:120};
 export const OBSTACLES:{x:number;y:number;r:number}[]=[];
@@ -27,17 +29,18 @@ export const SPECIALS=[
  {name:'퇴근 러시',description:'네 번의 잽과 마무리 어퍼컷',duration:1.25,pulses:[.35,.49,.63,.77,.96],range:210,damage:7,force:35},
  {name:'일직선 출근',description:'충돌을 지키는 돌진 관통 찌르기',duration:1.10,pulses:[.58],range:360,damage:40,force:500},
  {name:'반품 불가',description:'받아치기 자세 · 맞으면 반격',duration:1.20,pulses:[],range:240,damage:46,force:520},
+ {name:'옥상 3점사',description:'조준 후 전방 3연사',duration:1.2,pulses:[.48,.65,.82],range:520,damage:12,force:28},
 ] as const;
 export type Action='push'|'heavy'|'dash'|'jump'|'guard'|'special';
 export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy'|'special';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;meter:number;specialLeft:number;specialPulse:number;specialCooldown:number;momentum:number;empowered:boolean};
-export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean};
+export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean;range?:number};
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
 export class RooftopMatch{
  fighters:Fighter[]=[];events:Event[]=[];phase:'ready'|'countdown'|'playing'|'paused'|'round'|'finished'='ready';round=1;time=0;countdown=2.4;winner=-1;selected=0;stick={x:0,y:0};private resumePhase:'countdown'|'playing'='playing';
  constructor(private random:()=>number=Math.random){}
  get bounds(){return{x:ARENA.x,y:ARENA.y};}
- start(selected=0){this.selected=Math.max(0,Math.min(5,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
+ start(selected=0){this.selected=Math.max(0,Math.min(CAST.length-1,selected));const others=CAST.map((_,i)=>i).filter(i=>i!==this.selected);for(let i=others.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[others[i],others[j]]=[others[j],others[i]];}this.fighters=[this.selected,...others.slice(0,3)].map((cast,i)=>this.make(cast,i,0));this.round=1;this.nextRound(false);}
  private make(cast:number,i:number,wins:number):Fighter{const points=[[-320,170],[320,-170],[-320,-170],[320,170]];return{cast,x:points[i][0],y:points[i][1],vx:0,vy:0,angle:Math.atan2(-points[i][1],-points[i][0]),hp:MAX_HP,stamina:100,alive:true,fall:0,cool:0,dash:0,stun:0,down:0,invulnerable:0,poseTime:0,attackDuration:0,windup:0,attackKind:'push',attackStep:1,ai:.5+i*.2,gait:0,wins,lastBy:-1,jump:0,guard:0,combo:0,comboTime:0,meter:100,specialLeft:0,specialPulse:0,specialCooldown:0,momentum:0,empowered:false};}
  nextRound(increment=true){if(increment&&this.phase!=='round')return;if(increment)this.round++;this.fighters=this.fighters.map((p,i)=>this.make(p.cast,i,p.wins));this.time=0;this.countdown=2.4;this.winner=-1;this.events=[];this.stick={x:0,y:0};this.phase='countdown';}
  pause(){if(this.phase==='paused')this.phase=this.resumePhase;else if(this.phase==='playing'||this.phase==='countdown'){this.resumePhase=this.phase;this.phase='paused';}this.stick={x:0,y:0};}
@@ -101,6 +104,16 @@ export class RooftopMatch{
  private specialStrike(i:number,pulse:number){
   const p=this.fighters[i],s=SPECIALS[p.cast];
   if(!p.alive||p.stun>0||p.down>0)return;
+  if(p.cast===6){
+   // Each shot stops at the first standing body in its aim lane; never pierces a second opponent.
+   const candidates=this.fighters.map((q,j)=>({q,j,forward:(q.x-p.x)*Math.cos(p.angle)+(q.y-p.y)*Math.sin(p.angle),side:Math.abs(-(q.x-p.x)*Math.sin(p.angle)+(q.y-p.y)*Math.cos(p.angle))})).filter(({q,j,forward,side})=>j!==i&&q.alive&&q.down<=0&&q.jump<=.12&&forward>0&&forward<s.range&&side<48).sort((a,b)=>a.forward-b.forward);
+   const target=candidates[0];this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle,range:target?.forward??s.range});
+   if(!target||target.q.invulnerable>0)return;
+   if(this.counter(target.j,i))return;
+   const final=pulse===2;let damage=final?20:s.damage;
+   if(target.q.guard>0&&Math.cos(Math.atan2(p.y-target.q.y,p.x-target.q.x)-target.q.angle)>0){damage=Math.round(damage*.4);this.event('save',target.q,'BLOCK',p);}
+   this.specialDamage(i,target.j,damage,final?240:s.force,final);return;
+  }
   this.events.push({kind:'special-impact',x:p.x,y:p.y,text:'',cast:p.cast,angle:p.angle});
   for(let j=0;j<this.fighters.length;j++){
    const q=this.fighters[j];if(i===j||!q.alive||q.down>0||q.invulnerable>0)continue;

@@ -7,7 +7,7 @@ const modelSource=fs.readFileSync(new URL('utils/rooftopModel.ts',root),'utf8');
 const current=await moduleOf(modelSource);
 
 const visual=await moduleOf(fs.readFileSync(new URL('utils/rooftopCombatVisuals.ts',root),'utf8'));
-for(let cast=0;cast<6;cast++){
+for(let cast=0;cast<7;cast++){
  for(let attackStep=1;attackStep<=3;attackStep++){
   const p={cast,attackStep,poseTime:.5,attackDuration:1};
   assert.equal(visual.attackCell(p),visual.LIGHT_POSES[cast][attackStep-1][2]);
@@ -41,9 +41,9 @@ function run(api,cast,seed){let s=seed;const random=()=>{s=(s*1664525+1013904223
  return {cast,seed,winner:m.winner,time:Number(m.time.toFixed(2)),hp:m.fighters.map(p=>p.hp),playerHpLost:180-m.fighters[0].hp,hitCount};
 }
 const results=[];
-for(let cast=0;cast<6;cast++)for(const seed of [121,371,901]){
+for(let cast=0;cast<7;cast++)for(const seed of [121,371,901]){
  const before=run(current,cast,seed),after=run(current,cast,seed);assert.deepEqual(after,before,'Same seed and inputs must be deterministic');assert(after.hitCount>0);results.push(after);
 }
 fs.mkdirSync(new URL('output/combat-v5',root),{recursive:true});
 fs.writeFileSync(new URL('output/combat-v5/bot-results.json',root),JSON.stringify({date:'2026-11-05',validation:'input-only; deterministic replay; solid body invariant checked every step; no rendered FPS claim',results},null,2));
-console.log('P0 PASS: contact frames synchronized, six atlases, no hammer hurt pose. P1 PASS: 18 input-only bot matches replay deterministically without body overlap; hit event metadata valid.');
+console.log('P0 PASS: contact frames synchronized, seven atlases, no hammer hurt pose. P1 PASS: 21 input-only bot matches replay deterministically without body overlap; hit event metadata valid.');

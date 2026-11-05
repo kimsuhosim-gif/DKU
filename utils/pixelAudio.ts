@@ -1,4 +1,4 @@
-export type PixelSound='throw'|'hit'|'hurt'|'dash'|'step'|'glass'|'upgrade'|'transform'|'boss'|'win';
+export type PixelSound='shot'|'throw'|'hit'|'hurt'|'dash'|'step'|'glass'|'upgrade'|'transform'|'boss'|'win';
 
 /** Small, local synthesized cues. Audio is unlocked only by a user gesture. */
 export class PixelAudio {
@@ -23,7 +23,8 @@ export class PixelAudio {
    gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(volume,at+.006);gain.gain.exponentialRampToValueAtTime(.0001,at+duration);
    osc.connect(gain);gain.connect(this.master!);osc.onended=()=>{osc.disconnect();gain.disconnect();};osc.start(at);osc.stop(at+duration+.01);
   };
-  if(kind==='throw')note(420,130,.09,.12,'triangle');
+  if(kind==='shot'){note(1600,80,.075,.14,'square');note(110,40,.12,.2,'triangle');}
+  else if(kind==='throw')note(420,130,.09,.12,'triangle');
   else if(kind==='hit'){note(165,55,.065,.24,'triangle');note(1150,440,.035,.07,'square');}
   else if(kind==='hurt')note(155,55,.22,.3,'sawtooth');
   else if(kind==='dash')note(160,700,.13,.12,'triangle');

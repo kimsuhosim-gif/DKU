@@ -43,7 +43,7 @@ export default function RooftopBrawl(){
    </div>)}</div>}
    {phase==='ready'&&<div className="roof-lobby">
     <div className="roof-lobby-title"><span>DKU RE09 / ARCADE CLUB</span><h1>옥상 난투<span>ROOFTOP RUMBLE</span></h1></div>
-    <div className="roof-selection"><div className="roof-selection-heading"><b>PLAYER SELECT</b><span>{String(selected+1).padStart(2,'0')} / 06</span></div>
+    <div className="roof-selection"><div className="roof-selection-heading"><b>PLAYER SELECT</b><span>{String(selected+1).padStart(2,'0')} / {String(CAST.length).padStart(2,'0')}</span></div>
      <div className="roof-roster">{CAST.map((p,i)=><button key={p.id} aria-label={p.name} aria-pressed={selected===i} onClick={()=>{setSelected(i);game?.preview(i);}} style={{'--fighter':p.color} as CSSProperties}><div className="roof-portrait" style={{backgroundImage:`url(${p.image})`}}/><strong>{p.name}</strong><span>{WEAPONS[i].name}</span></button>)}</div>
      <div className="roof-enter"><div><b>{CAST[selected].name}</b><span>{WEAPONS[selected].name} · 사거리 {attackReach(selected)}</span></div><button disabled={!loaded||!!error} onClick={start}><Play size={18} fill="currentColor"/>{error?'실행 불가':loaded?'대전 시작':'준비 중'}</button></div>
      <p className="roof-special-help"><b>U · {SPECIALS[selected].name}</b> {SPECIALS[selected].description} · 첫 라운드부터 사용 가능</p>

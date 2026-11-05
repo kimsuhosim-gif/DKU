@@ -9,8 +9,9 @@ export const LIGHT_POSES = [
  [[8,9,12,14,15],[15,10,13,14,8],[8,11,12,13,15]],
  [[8,9,12,13,15],[15,11,13,12,8],[8,10,12,13,15]],
  [[8,9,12,13,15],[15,10,13,14,8],[8,11,12,13,15]],
+ [[8,9,11,13,15],[8,10,11,14,15],[8,9,11,13,15]],
 ] as const;
-export const MOTION_LABELS = ['라이징 스윙','홈런 횡타','해머 내려찍기','어퍼컷','런지 찌르기','프라이팬 강타'] as const;
+export const MOTION_LABELS = ['라이징 스윙','홈런 횡타','해머 내려찍기','어퍼컷','런지 찌르기','프라이팬 강타','개머리판 강타'] as const;
 export function attackProgress(p:Pick<Fighter,'poseTime'|'attackDuration'>){return Math.max(0,Math.min(1,1-p.poseTime/Math.max(.001,p.attackDuration)));}
 export function attackCell(p:Pick<Fighter,'poseTime'|'attackDuration'|'cast'|'attackStep'>){
  const t=attackProgress(p),beat=t<.22?0:t<.5?1:t<.64?2:t<.8?3:4;
@@ -29,6 +30,7 @@ export function weaponTrail(c:CanvasRenderingContext2D,cast:number,t:number,heav
   if(cast===4){c.moveTo(12,6);c.lineTo(145,0);}
   else if(cast===3){if(heavy){c.moveTo(25,45);c.quadraticCurveTo(92,25,64,-55);}else{c.moveTo(15,0);c.lineTo(74,-8);}}
   else if(cast===2){c.moveTo(0,-90);c.bezierCurveTo(90,-95,115,-15,85,60);}
+  else if(cast===6){c.moveTo(0,-15);c.quadraticCurveTo(100,-35,120,20);}
   else if(cast===0){c.moveTo(0,45);c.quadraticCurveTo(140,35,110,-65);}
   else if(cast===5){c.ellipse(48,0,65,45,.4,-1.8,1.5);}
   else{c.ellipse(40,0,110,28,-.15,-1.5,1.4);}
@@ -88,8 +90,8 @@ export function motionOffset(cast:number,t:number,heavy:boolean){
  const wind=t<.42?Math.sin(t/.42*Math.PI):0;
  const hit=t>=.42?Math.sin(Math.min(1,(t-.42)/.58)*Math.PI):0;
  const power=heavy?1:.55;
- return {x:(-wind*5+hit*[12,16,5,18,23,11][cast])*power,
+ return {x:(-wind*5+hit*[12,16,5,18,23,11,17][cast])*power,
   y:hit*(cast===3?-8:cast===2?4:-2)*power,
-  tilt:(-wind*.025+hit*[.035,.065,.035,-.04,.06,.055][cast])*power,
+  tilt:(-wind*.025+hit*[.035,.065,.035,-.04,.06,.055,.05][cast])*power,
   squash:cast===2?hit*.035*power:0};
 }

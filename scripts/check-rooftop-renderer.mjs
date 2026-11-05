@@ -29,7 +29,7 @@ game.dispose();
 console.log('P0 PASS: real renderer RAF input buffer survives hitstop and resumes; preview clears cinematic state. Canvas stub: no rendered FPS claim.');
 
 const results=[];
-for(let cast=0;cast<6;cast++)for(const seed of [121,371,901]){
+for(let cast=0;cast<7;cast++)for(const seed of [121,371,901]){
  let state=seed;const rng=()=>((state=(state*1664525+1013904223)>>>0)/4294967296);
  const g=new RooftopGame({getContext:()=>ctx,getBoundingClientRect:()=>({width:390,height:620})},()=>{});await g.ready;g.audio.setEnabled(false);g.model=new g.model.constructor(rng);g.start(cast);
  let frame=0,cutins=0,lastCue=null;
@@ -48,4 +48,4 @@ for(let cast=0;cast<6;cast++)for(const seed of [121,371,901]){
  results.push({cast,seed,winner:g.model.winner,simulationSeconds:+g.model.time.toFixed(2),elapsedSeconds:frame/100,hpLost:180-g.model.fighters[0].hp,cutins});g.dispose();
 }
 fs.mkdirSync('output/combat-v6',{recursive:true});fs.writeFileSync('output/combat-v6/renderer-bots.json',JSON.stringify({date:'2026-11-05',mode:'real RAF and inputs; stub canvas; not rendered FPS',results},null,2));
-console.log('P1 PASS: 18 seeded input-only renderer simulations reach round outcomes with cinematics, hitstop, collision and bounded effects.');
+console.log('P1 PASS: 21 seeded input-only renderer simulations reach round outcomes with cinematics, hitstop, collision and bounded effects.');
