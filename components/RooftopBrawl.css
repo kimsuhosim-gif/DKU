@@ -89,3 +89,6 @@
 }
 @media(max-width:700px) and (max-height:550px) and (orientation:landscape){.roof-special-meter{display:none}}
 @media(max-height:550px) and (orientation:landscape){.roof-actions{margin-left:auto}}
+
+/* Canvas owns the visual cut-in; retain the live announcement for assistive technology. */
+.roof-special-callout{top:auto;left:0;width:1px;height:1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;transform:none}

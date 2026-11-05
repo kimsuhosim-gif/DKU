@@ -1,9 +1,10 @@
+import {SuperCue,SUPER_CUE_SECONDS,superCutIn,superContact} from './rooftopCinematic';
 import {loadSpecialFx,drawChargeFx,drawSpecialFx} from './rooftopSpecialFx';
 import {CAST,RooftopMatch,Action,ARENA,MAX_HP,WEAPONS,Fighter,SPECIALS} from './rooftopModel';
 import {PixelAudio} from './pixelAudio';
 import {actorHeight,attackCell,attackProgress,heavyCell,weaponTrail,contactEffect,specialEffect,motionOffset} from './rooftopCombatVisuals';
 
-type Burst={x:number;y:number;life:number;text:string;hit:boolean;color:string;cast:number;angle:number;jump:number;targetY:number;heavy:boolean;block:boolean;broken:boolean};
+type Burst={x:number;y:number;life:number;text:string;hit:boolean;color:string;cast:number;angle:number;jump:number;targetY:number;heavy:boolean;block:boolean;broken:boolean;superHit:boolean};
 const load=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error(`Asset failed: ${src}`));i.src=src;});
 
 /** Painted stage and hand-drawn animation frames. No mesh or detached weapon. */
@@ -14,6 +15,7 @@ export class RooftopGame {
  private width=1;private height=1;private dpr=1;private clock=0;private notify=0;private freeze=0;private shake=0;
  private cameraX=768;private heldAttack=false;private queued:Action|null=null;private queueTime=0;private bursts:Burst[]=[];
  private reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ private superCue:SuperCue|null=null;
  private heavyMotion:HTMLImageElement[]=[];
  private dust:{x:number;y:number;life:number}[]=[];
  private specialBursts:{x:number;y:number;cast:number;angle:number;life:number}[]=[];
@@ -34,6 +36,7 @@ export class RooftopGame {
    if(this.model.phase!=='paused'){
     if(this.freeze>0)this.freeze=Math.max(0,this.freeze-dt);else this.model.update(dt);
     if(['round','finished'].includes(this.model.phase))for(const p of this.model.fighters)if(!p.alive)p.fall+=dt;
+    if(this.superCue){this.superCue.life-=dt;if(this.superCue.life<=0)this.superCue=null;}
     this.clock+=dt;this.shake=Math.max(0,this.shake-dt*30);
     for(const b of this.bursts)b.life-=dt;this.bursts=this.bursts.filter(b=>b.life>0);
     for(const b of this.dust)b.life-=dt;this.dust=this.dust.filter(b=>b.life>0);
@@ -41,11 +44,11 @@ export class RooftopGame {
    }
    for(const e of this.model.events.splice(0)){
     if(e.kind==='dash'&&!this.reduced){this.dust.push({x:e.x,y:e.y,life:.28});if(this.dust.length>8)this.dust.shift();}
-    if(e.kind==='special'){this.audio.play('boss');continue;}
+    if(e.kind==='special'){this.superCue={cast:e.cast??0,life:SUPER_CUE_SECONDS};this.freeze=Math.max(this.freeze,this.reduced?.08:.16);this.audio.play('boss');continue;}
     if(e.kind==='special-impact'){this.specialBursts.push({x:e.x,y:e.y,cast:e.cast??0,angle:e.angle??0,life:.65});if(this.specialBursts.length>12)this.specialBursts.shift();this.audio.play(e.cast===5?'glass':'throw');continue;}
     this.audio.play(e.kind==='fall'?'hurt':e.kind==='round'?'win':e.kind==='save'?'upgrade':e.kind==='dash'?'dash':e.kind==='heavy'?'throw':'hit');
-    const hit=e.kind==='hit'||e.kind==='heavy';if(hit){this.freeze=e.kind==='heavy'?.075:.025;this.shake=this.reduced?0:e.kind==='heavy'?5:1.5;}
-    if(e.kind!=='round'&&e.kind!=='dash')this.bursts.push({x:e.x,y:e.y,life:.65,text:e.text,hit,color:e.text==='GUARD BREAK'?'#ffad80':e.cast===undefined?'#8bf1dc':WEAPONS[e.cast].color,cast:e.cast??0,angle:e.angle??0,jump:e.jump??0,targetY:e.targetY??e.y,heavy:e.kind==='heavy',block:e.text==='BLOCK',broken:e.text==='GUARD BREAK'});
+    const hit=e.kind==='hit'||e.kind==='heavy';if(hit){this.freeze=Math.max(this.freeze,e.superHit?(e.kind==='heavy'?.12:.04):e.kind==='heavy'?.075:.025);this.shake=this.reduced?0:e.superHit?(e.kind==='heavy'?8:3):e.kind==='heavy'?5:1.5;}
+    if(e.kind!=='round'&&e.kind!=='dash')this.bursts.push({x:e.x,y:e.y,life:.65,text:e.text,hit,color:e.text==='GUARD BREAK'?'#ffad80':e.cast===undefined?'#8bf1dc':WEAPONS[e.cast].color,cast:e.cast??0,angle:e.angle??0,jump:e.jump??0,targetY:e.targetY??e.y,heavy:e.kind==='heavy',block:e.text==='BLOCK',broken:e.text==='GUARD BREAK',superHit:!!e.superHit});
     if(this.bursts.length>24)this.bursts.splice(0,this.bursts.length-24);
    }
    this.draw(dt);this.notify+=dt;if(this.notify>.08){this.notify=0;this.changed();}this.raf=requestAnimationFrame(loop);
@@ -76,10 +79,10 @@ export class RooftopGame {
   c.translate(motion.x,motion.y);c.rotate(motion.tilt);c.scale(1+motion.squash,1-motion.squash);
   if(!this.reduced&&p.poseTime<=0&&p.down<=0&&p.stun<=0)c.rotate(Math.max(-.045,Math.min(.045,(left?-p.vx:p.vx)/6000)));
   const bob=this.reduced?0:Math.hypot(p.vx,p.vy)>20?Math.sin(p.gait*Math.PI)*3:Math.sin(this.clock*3+index)*1.2;
-  if(p.down>0||!p.alive){c.translate(0,-18);c.rotate(-1.15);c.scale(.8,.8);}else if(!this.reduced&&p.dash>0)c.rotate(-.15);
+  if(p.down>0||!p.alive){c.translate(0,-18);c.rotate(-1.15);c.scale(.8,.8);}else if(!this.reduced&&p.stun>0){c.translate(-Math.min(16,p.stun*60),-4);c.rotate(-.16);}else if(!this.reduced&&p.dash>0)c.rotate(-.15);
   c.globalAlpha=p.alive?1:Math.max(0,1-p.fall);
   const cell=heavy?heavyCell(progress):animated?frame:frame-20,sw=image.width/4,sh=heavy?image.height:image.height/(animated?4:2),sx=cell%4*sw,sy=heavy?0:Math.floor(cell/4)*sh;
-  if(p.dash>0&&!this.reduced){c.globalAlpha=.18;c.drawImage(image,sx,sy,sw,sh,-width/2-32,-height*.94+bob,width,height);c.globalAlpha=1;}
+  if(!this.reduced&&(p.dash>0||(special&&progress>.38&&progress<.82))){for(let k=3;k>0;k--){c.globalAlpha=.24/k;c.drawImage(image,sx,sy,sw,sh,-width/2-k*24,-drawHeight*(heavy?.9375:.94)+bob,width,drawHeight);}c.globalAlpha=1;}
   c.drawImage(image,sx,sy,sw,sh,-width/2,-drawHeight*(heavy?.9375:.94)+bob,width,drawHeight);
   c.restore();
   if(p.alive){c.save();c.fillStyle='#18272c';c.fillRect(pos.x-29,pos.y+18,58,5);c.fillStyle=p.hp<50?'#f26b63':index===0?'#ffe58e':'#77d8bc';c.fillRect(pos.x-29,pos.y+18,58*p.hp/MAX_HP,5);c.restore();}
@@ -92,6 +95,8 @@ export class RooftopGame {
   this.cameraX+=(Math.max(worldWidth/2,Math.min(1536-worldWidth/2,target))-this.cameraX)*Math.min(1,dt*5);
   const tx=this.width/2-this.cameraX*scale+(this.reduced?0:Math.sin(this.clock*95)*this.shake),ty=(this.height-1024*scale)/2;
   c.save();c.translate(tx,ty);c.scale(scale,scale);c.drawImage(this.stage,0,0,1536,1024);
+  const superActive=this.model.fighters.some(p=>p.alive&&p.specialLeft>0)||this.specialBursts.length>0;
+  if(superActive||this.superCue){c.fillStyle=`rgba(3,9,24,${this.superCue?.life? .70:.43})`;c.fillRect(0,0,1536,1024);}
 
   for(const b of this.dust){const pos=this.point(b.x,b.y),t=1-b.life/.28;c.save();c.translate(pos.x,pos.y);c.globalAlpha=(1-t)*.65;c.strokeStyle='#f5e4ba';c.lineWidth=3;c.beginPath();c.ellipse(0,0,25+t*38,8+t*12,0,0,Math.PI*2);c.stroke();for(let k=0;k<4;k++){const a=k*Math.PI/2;c.fillStyle='#d5d6bd';c.beginPath();c.ellipse(Math.cos(a)*(22+t*40),Math.sin(a)*(8+t*14),5*(1-t),3*(1-t),0,0,Math.PI*2);c.fill();}c.restore();}
   // Telegraphs stay on the floor, behind actors, so an enemy special is readable.
@@ -100,17 +105,18 @@ export class RooftopGame {
   this.model.fighters.map((p,i)=>({p,i})).sort((a,b)=>a.p.y-b.p.y).forEach(({p,i})=>this.actor(p,i,scale));
   for(const b of this.specialBursts){const pos=this.point(b.x,b.y);c.save();c.translate(pos.x,pos.y-(b.cast===2?0:actorHeight(b.y,scale)*.46));if(b.cast!==2)c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));if(b.cast===2)specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);if(!drawSpecialFx(c,b.cast,.65-b.life,this.reduced))specialEffect(c,b.cast,.65-b.life,WEAPONS[b.cast].color,this.reduced);c.restore();}
   for(const b of this.bursts){const pos=this.point(b.x,b.y),age=.65-b.life,jump=b.jump>0?Math.sin(b.jump/.65*Math.PI)*90:0;c.save();c.translate(pos.x,pos.y-actorHeight(b.targetY,scale)*(b.cast===2&&b.heavy?.22:b.cast===3&&b.heavy?.70:.46)-jump);
-   c.save();c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));const fxScale=Math.max(.85,Math.min(1.7,.75/scale));c.scale(fxScale,fxScale);if(b.hit||b.block||b.broken)contactEffect(c,b.cast,age,b.heavy,b.block,b.broken,b.color,this.reduced);c.restore();
+   c.save();c.rotate(Math.atan2(Math.sin(b.angle)*.6,Math.cos(b.angle)));const fxScale=Math.max(.85,Math.min(1.7,.75/scale));c.scale(fxScale,fxScale);if(b.superHit)superContact(c,age,b.color,this.reduced);if(b.hit||b.block||b.broken)contactEffect(c,b.cast,age,b.heavy,b.block,b.broken,b.color,this.reduced);c.restore();
    if(b.text){c.globalAlpha=Math.min(1,b.life*4);const font=Math.max(22,Math.min(38,(this.width<700?18:15)/scale));c.font=`900 ${font}px sans-serif`;c.textAlign='center';c.lineWidth=5;c.strokeStyle='#14232c';const y=-55-(this.reduced?0:age*35);const label=this.width<700?b.text.replace('POWER','강타').replace('BREAK!','반격').replace('HIT','타').replace('RUSH','연타'):b.text;c.strokeText(label,0,y);c.fillStyle=b.block?'#adffff':'#fff7db';c.fillText(label,0,y);}c.restore();
   }c.restore();
+  if(this.superCue)superCutIn(c,this.width,this.height,this.superCue,this.images[this.superCue.cast],this.reduced);
  }
  private down=(e:KeyboardEvent)=>{if(/INPUT|TEXTAREA|BUTTON|A/.test((e.target as HTMLElement)?.tagName))return;const key=e.key.toLowerCase();if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)){e.preventDefault();this.keys.add(key);return;}const actions:Record<string,Action>={j:'push',k:'heavy',l:'dash',' ':'jump',i:'guard',u:'special'};if(actions[key]||key==='escape'){e.preventDefault();if(e.repeat)return;if(key==='escape')this.pause();else if(key==='j')this.holdAttack(true);else this.act(actions[key]);}};
  private up=(e:KeyboardEvent)=>{if(e.key.toLowerCase()==='j')this.holdAttack(false);if(this.keys.delete(e.key.toLowerCase())&&!this.keys.size)this.model.stick={x:0,y:0};};
  private blur=()=>{if(['playing','countdown'].includes(this.model.phase))this.pause();};
  private visibility=()=>{if(document.hidden)this.blur();};
  holdAttack(value:boolean){this.heldAttack=value;if(value)this.act('push');}
- start(selected:number){void this.audio.unlock();this.keys.clear();this.heldAttack=false;this.queued=null;this.freeze=0;this.bursts=[];this.dust=[];this.specialBursts=[];this.model.start(selected);this.changed();}
- preview(selected:number){this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.model.start(selected);this.model.phase='ready';this.changed();}
+ start(selected:number){void this.audio.unlock();this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected);this.changed();}
+ preview(selected:number){this.keys.clear();this.heldAttack=false;this.queued=null;this.bursts=[];this.dust=[];this.specialBursts=[];this.superCue=null;this.freeze=0;this.shake=0;this.model.start(selected);this.model.phase='ready';this.changed();}
  pause(){this.keys.clear();this.heldAttack=false;this.queued=null;this.model.pause();this.changed();}
  act(action:Action){if(this.keys.size)this.model.stick={x:Number(this.keys.has('d')||this.keys.has('arrowright'))-Number(this.keys.has('a')||this.keys.has('arrowleft')),y:Number(this.keys.has('s')||this.keys.has('arrowdown'))-Number(this.keys.has('w')||this.keys.has('arrowup'))};void this.audio.unlock();if(this.model.phase==='playing'){const p=this.model.fighters[0];if(action==='dash'&&p&&p.windup<=0&&p.stun<=0){this.model.action(0,action);}else if(p?.cool>0||p?.stun>0){this.queued=action;this.queueTime=.28;}else this.model.action(0,action);}this.changed();}
  dispose(){this.disposed=true;cancelAnimationFrame(this.raf);this.observer.disconnect();this.audio.dispose();window.removeEventListener('keydown',this.down);window.removeEventListener('keyup',this.up);window.removeEventListener('blur',this.blur);document.removeEventListener('visibilitychange',this.visibility);this.images=[];this.motion=[];this.stage=null;}

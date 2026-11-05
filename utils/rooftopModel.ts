@@ -30,7 +30,7 @@ export const SPECIALS=[
 ] as const;
 export type Action='push'|'heavy'|'dash'|'jump'|'guard'|'special';
 export type Fighter={cast:number;x:number;y:number;vx:number;vy:number;angle:number;hp:number;stamina:number;alive:boolean;fall:number;cool:number;dash:number;stun:number;down:number;invulnerable:number;poseTime:number;attackDuration:number;windup:number;attackKind:'push'|'heavy'|'special';attackStep:number;ai:number;gait:number;wins:number;lastBy:number;jump:number;guard:number;combo:number;comboTime:number;meter:number;specialLeft:number;specialPulse:number;specialCooldown:number;momentum:number;empowered:boolean};
-export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number};
+export type Event={kind:'hit'|'heavy'|'fall'|'save'|'dash'|'round'|'special'|'special-impact';x:number;y:number;text:string;cast?:number;angle?:number;jump?:number;targetY?:number;superHit?:boolean};
 export const stickVector=(x:number,y:number)=>{const n=Math.hypot(x,y);if(n<6)return{x:0,y:0};const a=Math.min(1,(n-6)/30);return{x:x/n*a,y:y/n*a};};
 const dist=(a:Fighter,b:Fighter)=>Math.hypot(a.x-b.x,a.y-b.y);
 export class RooftopMatch{
@@ -47,7 +47,7 @@ export class RooftopMatch{
   const target=this.fighters.filter(q=>q!==p&&q.alive&&q.down<=0&&dist(p,q)<range&&Math.abs(q.y-p.y)<lane&&(!manual||Math.cos(Math.atan2(q.y-p.y,q.x-p.x)-p.angle)>.65)).sort((a,b)=>dist(p,a)-dist(p,b))[0];
   if(target)p.angle=Math.atan2(target.y-p.y,target.x-p.x);
  }
- private event(kind:Event['kind'],p:Fighter,text:string,attacker?:Fighter){this.events.push({kind,x:p.x-(attacker?Math.cos(attacker.angle)*22:0),y:p.y,text,cast:attacker?.cast,angle:attacker?.angle,jump:p.jump,targetY:p.y});}
+ private event(kind:Event['kind'],p:Fighter,text:string,attacker?:Fighter,superHit=false){this.events.push({kind,superHit,x:p.x-(attacker?Math.cos(attacker.angle)*22:0),y:p.y,text,cast:attacker?.cast,angle:attacker?.angle,jump:p.jump,targetY:p.y});}
  action(i:number,action:Action){
   const p=this.fighters[i];if(this.phase!=='playing'||!p?.alive||p.down>0||p.stun>0)return;
   if(p.specialLeft>0)return;
@@ -95,7 +95,7 @@ export class RooftopMatch{
   q.meter=Math.min(100,q.meter+damage*.45);
   const angle=p.cast===2?Math.atan2(q.y-p.y,q.x-p.x):p.angle;
   q.vx=Math.cos(angle)*force;q.vy=Math.sin(angle)*force;q.stun=final?.38:.10;q.down=final?.36:0;q.invulnerable=final?.5:.08;
-  this.event(final?'heavy':'hit',q,`-${damage}${p.cast===3&&!final?' RUSH':''}`,p);
+  this.event(final?'heavy':'hit',q,`-${damage}${p.cast===3&&!final?' RUSH':''}`,p,true);
   if(q.hp<=0)this.eliminate(j);
  }
  private specialStrike(i:number,pulse:number){

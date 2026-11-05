@@ -18,14 +18,14 @@ for(const corner of [[530,345],[-530,-345],[0,0]]){const m=fixture();m.fighters.
 for(let cast=0;cast<6;cast++){const m=fixture(cast);m.fighters[1].x=BODY.x+2;m.action(0,'push');step(m,m.fighters[0].attackDuration*.5+.02);assert(m.fighters[1].hp<180,`Weapon ${cast} reaches from body separation`);}
 const damage=[];
 for(let cast=0;cast<5;cast++){
- const m=fixture(cast),p=m.fighters[0],q=m.fighters[1];m.action(0,'special');assert.equal(p.meter,0);assert(p.specialLeft>0);step(m,.15);assert.equal(q.hp,180,'Special has a visible windup');step(m,SPECIALS[cast].duration);assert(q.hp<180,`special ${cast} must hit`);noOverlap(m);damage.push({cast,loss:180-q.hp});
+ const m=fixture(cast),p=m.fighters[0],q=m.fighters[1];m.action(0,'special');assert.equal(p.meter,0);assert(p.specialLeft>0);step(m,.15);assert.equal(q.hp,180,'Special has a visible windup');step(m,SPECIALS[cast].duration);assert(q.hp<180,`special ${cast} must hit`);assert(m.events.some(e=>e.superHit&&(e.kind==='hit'||e.kind==='heavy')),`special ${cast} reports confirmed damage`);assert(m.events.filter(e=>e.kind==='special-impact').every(e=>!e.superHit),'Visual pulses are not confirmed hits');noOverlap(m);damage.push({cast,loss:180-q.hp});
  m.action(0,'special');assert.equal(p.specialLeft,0,'Cannot spam with empty meter');
 }
 assert(damage[3].loss>=28,'Rush delivers multiple hits, not a renamed single attack');
 let m=fixture(5);m.action(0,'special');const hp=m.fighters[0].hp;m.action(1,'heavy');step(m,1);assert.equal(m.fighters[0].hp,hp,'Pan counters frontal hit');assert(m.fighters[1].hp<180);assert(m.events.some(e=>e.kind==='special-impact'&&e.text==='반품 완료!'));
-m=fixture(5);m.action(0,'special');step(m,1.3);assert.equal(m.fighters[1].hp,180,'Counter does no free damage on whiff');
+m=fixture(5);m.action(0,'special');step(m,1.3);assert.equal(m.fighters[1].hp,180,'Counter does no free damage on whiff');assert(!m.events.some(e=>e.superHit),'Whiff must not trigger special hitstop');
 m=fixture(2);m.action(0,'special');step(m,.38);m.action(1,'jump');step(m,.3);assert.equal(m.fighters[1].hp,180,'Jump evades earthquake');
-m=fixture(0);m.action(0,'special');m.fighters[0].stun=.3;step(m,.8);assert.equal(m.fighters[1].hp,180,'Startup interruption cancels special');
+m=fixture(0);m.action(0,'special');m.fighters[0].stun=.3;step(m,.8);assert.equal(m.fighters[1].hp,180,'Startup interruption cancels special');assert(!m.events.some(e=>e.superHit),'Interrupted startup must not trigger special hitstop');
 m=fixture(0);m.fighters[1].x=220;m.fighters[2].x=390;m.fighters[2].y=0;m.action(0,'special');step(m,.6);assert(m.fighters[1].hp<180&&m.fighters[2].hp<180,'Cannon pierces aligned targets');
 m=fixture(2);m.fighters[2].x=-180;m.fighters[2].y=0;m.action(0,'special');step(m,.7);assert(m.fighters[1].hp<180&&m.fighters[2].hp<180,'Earthquake hits both directions');
 m=fixture();m.action(0,'special');m.pause();const left=m.fighters[0].specialLeft;step(m,1);assert.equal(m.fighters[0].specialLeft,left,'Pause freezes special');m.pause();

@@ -14,6 +14,13 @@ export function drawSpecialFx(c:CanvasRenderingContext2D,cast:number,age:number,
  if(cast===2)c.translate(75,0);
  if(cast===3)c.translate(45,-8);
  if(cast===5)c.translate(55,0);
+ // Thicken energy perpendicular to travel, preserving beam and spear reach.
+ // Circular/slashing effects expand around their existing weapon pivot.
+ if(cast===0)c.scale(1,2.2);
+ else if(cast===4)c.scale(1,2);
+ else if(cast===1)c.scale(1.3,1.6);
+ else if(cast===3)c.scale(1.25,1.45);
+ else if(cast===5)c.scale(1.35,1.35);
  // Hold the first bright stroke, then decay; never replay the original multi-flash thunder sequence.
  const frameTime=cast===2?(t<.45?0:.38+(t-.45)/.55*.62):Math.pow(t,1.8);
  const ok=draw(c,keys[cast],reduced?0:frameTime,alpha,cast===3?1.2:cast===5?1.15:1);c.restore();return ok;
