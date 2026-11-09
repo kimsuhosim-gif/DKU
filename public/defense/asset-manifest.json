@@ -709,5 +709,16 @@
       "assets/crew-v5/frost.png",
       "assets/crew-v5/support.png"
     ]
+  },
+  "campaignV6": {
+    "waves": 50,
+    "bosses": 10,
+    "masteryMax": 10,
+    "members": {
+      "frost": "최재호",
+      "support": "신연성"
+    },
+    "memberFrameCount": 6,
+    "memberArt": "existing member identity + built-in imagegen keyposes; local packing; no synthetic in-betweens"
   }
 }

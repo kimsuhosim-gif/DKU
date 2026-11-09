@@ -8,7 +8,7 @@ export function drawExpansionGround(c,g,reduced){
 }
 export function drawExpansionFront(c,g,reduced,text){
  for(const e of g.enemies){if(e.chillUntil>g.time){c.save();c.strokeStyle='#a3ecff';c.lineWidth=3;c.beginPath();c.ellipse(e.x,e.y,30,10,0,0,TAU);c.stroke();c.restore();}if(e.vulnerableUntil>g.time)text('취약',e.x,e.y-110,18,'#e4baff');}
- for(const f of g.effects){if(!['frost','support','piercing','execution','plasma','shatter','rally','repair','blizzard-tick'].includes(f.kind))continue;
+ for(const f of g.effects){if(!['piercing','execution','plasma','rally','repair'].includes(f.kind))continue;
   c.save();c.globalAlpha=Math.max(0,1-f.age/f.life);const targets=f.targets||[];
   for(const [i,p] of targets.entries()){
    if(f.kind==='frost'){ray(c,f.x,f.y-65,p.x,p.y,'#c0f5ff',3);crystal(c,p.x,p.y,18,'#8be0ff');}
@@ -20,5 +20,5 @@ export function drawExpansionFront(c,g,reduced,text){
    if(f.kind==='rally'||f.kind==='repair'){ray(c,f.x,f.y,p.x,p.y,f.kind==='repair'?'#a4ffc6':'#ffe7a5',3);text(f.kind==='repair'?`+${f.amount}`:'공격 ↑',p.x,p.y-30,24,f.kind==='repair'?'#a4ffc6':'#ffe7a5');}
   }c.restore();
  }
- if(g.phase==='build'&&g.autoRemaining!==null){c.save();c.fillStyle='#10292dec';c.fillRect(180,650,664,160);text('웨이브 클리어 · +35G',512,692,30,'#e3efbd');text(`${Math.ceil(g.autoRemaining)}초 후 자동 출발`,512,753,36,'#f9f1cf');c.restore();}
+ if(g.phase==='build'&&g.autoRemaining!==null){c.save();c.fillStyle='#10292dec';c.fillRect(180,650,664,160);text(`웨이브 ${g.wave} 클리어 · +${g.lastReward}G`,512,692,30,'#e3efbd');text(`${Math.ceil(g.autoRemaining)}초 후 자동 출발`,512,753,36,'#f9f1cf');c.restore();}
 }
