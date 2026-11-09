@@ -28,7 +28,7 @@ export function command(g,input){
 function spawn(g,type){const armored=type==='armored';if(armored)type='imp';const b=ENEMIES[type],spec=waveSpec(g.wave),hp=(armored?170:b.hp)*(type==='guardian'?spec.bossHp:spec.hp);g.enemies.push({role:armored?'armored':type,reward:Math.round((armored?22:b.reward)*(1+.012*(g.wave-1))),bossName:type==='guardian'?spec.name:null,healClock:3.2,id:g.nextId++,type,...routePoint(0),distance:0,hp,maxHp:hp,speed:b.speed*spec.speed*(.94+random(g)*.12),attackClock:0,stun:0,slowUntil:0,arrived:false});g.spawned++;}
 function finishDeaths(g){for(const e of g.enemies)if(e.hp<=0&&!e.dead){e.dead=true;g.kills++;g.gold+=e.reward??ENEMIES[e.type].reward;if(e.type==='guardian'){g.bossKilled=true;g.bossesKilled++;}g.effects.push({kind:'death',enemyType:e.type,x:e.x,y:e.y-28,hit:e.hit,reward:e.reward??ENEMIES[e.type].reward,age:0,life:.4});g.events.push('kill');}g.enemies=g.enemies.filter(e=>!e.dead);}
 function targetsAt(g,s,range){return g.enemies.filter(e=>e.hp>0&&Math.hypot(e.x-s.x,e.y-s.y)<range).sort((a,b)=>b.distance-a.distance||a.id-b.id);}
-function attackFX(g,a,s,hit,extra={}){g.effects.push({kind:a.type,x:s.x,y:s.y-35,targets:hit.map(e=>({x:e.x,y:e.y-25})),level:a.level,followup:a.followup,skill:a.skill,age:0,life:.35,...extra});}
+function attackFX(g,a,s,hit,extra={}){g.effects.push({kind:a.type,x:s.x,y:s.y-35,targets:hit.map(e=>({x:e.x,y:e.y-25})),level:a.level,followup:a.followup,skill:a.skill,castIndex:a.castIndex,age:0,life:['frost','support'].includes(a.type)?.58:.35,...extra});}
 function resolveAttack(g,a){
  const t=g.towers[a.slot];if(!t||t.id!==a.owner)return;
  const s=SLOTS[a.slot],targets=targetsAt(g,s,a.range);if(!targets.length)return;
@@ -63,8 +63,8 @@ function beginAttack(g,t,slot){
  const every=w.evolution.every;const skill=t.level===3&&t.cycle+1>=every?w.evolution.skill:null;
  t.cycle=t.level===3?(skill?0:t.cycle+1):0;t.casts++;g.telemetry.primary++;if(t.buff?.damage>1)g.telemetry.expansion.buffedAttacks++;
  const windup=skill?SKILL_WINDUP:WINDUP;
- t.action={at:g.time,windup,skill,followup:false,level:t.level};t.aim={x:target.x,y:target.y};t.cooldown=Math.max(w.interval,windup+.24);
- const a={slot,owner:t.id,type:t.type,level:t.level,branch:t.branch,range:w.range,damage:w.damage,targetId:target.id,skill,followup:false,stage:'hit',due:g.time+windup};g.pending.push(a);
+ t.action={at:g.time,windup,skill,followup:false,level:t.level,castIndex:t.casts};t.aim={x:target.x,y:target.y};t.cooldown=Math.max(w.interval,windup+.24);
+ const a={slot,owner:t.id,type:t.type,level:t.level,branch:t.branch,range:w.range,damage:w.damage,targetId:target.id,castIndex:t.casts,skill,followup:false,stage:'hit',due:g.time+windup};g.pending.push(a);
  if(t.level>=2&&['shotgun','blades'].includes(t.type)&&!skill)g.pending.push({...a,skill:null,followup:true,damage:w.damage*.6,stage:'begin',due:g.time+FOLLOWUP_DELAY});
 }
 function tickPending(g){
@@ -93,7 +93,7 @@ export function step(g,dt=DT){
 function resolveExpansionSkill(g,a,s,lead,targets){
  const stats=g.telemetry.expansion;if(!Object.hasOwn(stats.skills,a.skill))return false;
  stats.skills[a.skill]++;const t=g.towers[a.slot];t.skillCasts++;
- const effect={kind:a.skill,x:s.x,y:s.y-75,targets:[],age:0,life:.65};
+ const effect={kind:a.skill,type:a.type,level:a.level,castIndex:a.castIndex,x:s.x,y:s.y-75,targets:[],age:0,life:.65};
  function hit(e,mult){damageEnemy(g,e,a.damage*mult,a.type,s);stats.hits[a.skill]++;effect.targets.push({x:e.x,y:e.y-25});}
  if(a.skill==='piercing'){
   const dx=lead.x-s.x,dy=lead.y-s.y,len=Math.hypot(dx,dy)||1;

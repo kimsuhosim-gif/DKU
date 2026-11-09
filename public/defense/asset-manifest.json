@@ -1,29 +1,467 @@
 {
-  "version": 6,
+  "version": 7,
   "characterMotion": {
-    "type": "model-generated attack sprites",
-    "source": "built-in image_gen and existing member baselines",
+    "type": "model-drawn whole-body spell animations",
+    "source": "user supplied member photos -> new caster masters -> six poses per clip plus identical master endpoints",
     "runtimeSheets": {
-      "frost": "assets/members-v6/jaeho/attack.png",
-      "support": "assets/members-v6/yeonseong/attack.png",
+      "frost": "assets/members-v7/jaeho/bolt.png",
+      "support": "assets/members-v7/yeonseong/bolt.png",
       "blades": "assets/motion-v3/B02/attack.png",
       "shotgun": "assets/motion-v3/S01/attack.png",
       "lightning": "assets/motion-v3/E08/attack.png"
     },
+    "memberClips": {
+      "jaeho": {
+        "bolt": {
+          "file": "members-v7/jaeho/bolt.png",
+          "hands": [
+            [
+              [
+                340,
+                285
+              ]
+            ],
+            [
+              [
+                311,
+                281
+              ]
+            ],
+            [
+              [
+                298,
+                248
+              ]
+            ],
+            [
+              [
+                395,
+                203
+              ]
+            ],
+            [
+              [
+                404,
+                180
+              ]
+            ],
+            [
+              [
+                370,
+                211
+              ]
+            ],
+            [
+              [
+                326,
+                282
+              ]
+            ],
+            [
+              [
+                340,
+                285
+              ]
+            ]
+          ]
+        },
+        "fan": {
+          "file": "members-v7/jaeho/fan.png",
+          "hands": [
+            [
+              [
+                340,
+                285
+              ]
+            ],
+            [
+              [
+                251,
+                247
+              ]
+            ],
+            [
+              [
+                256,
+                211
+              ]
+            ],
+            [
+              [
+                131,
+                164
+              ],
+              [
+                385,
+                164
+              ]
+            ],
+            [
+              [
+                127,
+                197
+              ],
+              [
+                384,
+                197
+              ]
+            ],
+            [
+              [
+                198,
+                254
+              ],
+              [
+                349,
+                254
+              ]
+            ],
+            [
+              [
+                234,
+                274
+              ],
+              [
+                325,
+                274
+              ]
+            ],
+            [
+              [
+                340,
+                285
+              ]
+            ]
+          ]
+        },
+        "storm": {
+          "file": "members-v7/jaeho/storm.png",
+          "hands": [
+            [
+              [
+                340,
+                285
+              ]
+            ],
+            [
+              [
+                240,
+                283
+              ],
+              [
+                304,
+                283
+              ]
+            ],
+            [
+              [
+                188,
+                168
+              ],
+              [
+                326,
+                168
+              ]
+            ],
+            [
+              [
+                211,
+                84
+              ],
+              [
+                310,
+                84
+              ]
+            ],
+            [
+              [
+                126,
+                100
+              ],
+              [
+                367,
+                100
+              ]
+            ],
+            [
+              [
+                131,
+                196
+              ],
+              [
+                381,
+                196
+              ]
+            ],
+            [
+              [
+                221,
+                264
+              ],
+              [
+                320,
+                264
+              ]
+            ],
+            [
+              [
+                340,
+                285
+              ]
+            ]
+          ]
+        }
+      },
+      "yeonseong": {
+        "bolt": {
+          "file": "members-v7/yeonseong/bolt.png",
+          "hands": [
+            [
+              [
+                340,
+                285
+              ]
+            ],
+            [
+              [
+                249,
+                290
+              ],
+              [
+                296,
+                290
+              ]
+            ],
+            [
+              [
+                249,
+                228
+              ],
+              [
+                304,
+                228
+              ]
+            ],
+            [
+              [
+                335,
+                190
+              ],
+              [
+                380,
+                217
+              ]
+            ],
+            [
+              [
+                324,
+                187
+              ],
+              [
+                370,
+                215
+              ]
+            ],
+            [
+              [
+                249,
+                238
+              ],
+              [
+                338,
+                238
+              ]
+            ],
+            [
+              [
+                218,
+                280
+              ],
+              [
+                321,
+                280
+              ]
+            ],
+            [
+              [
+                340,
+                285
+              ]
+            ]
+          ]
+        },
+        "ward": {
+          "file": "members-v7/yeonseong/ward.png",
+          "hands": [
+            [
+              [
+                340,
+                285
+              ]
+            ],
+            [
+              [
+                237,
+                241
+              ],
+              [
+                285,
+                241
+              ]
+            ],
+            [
+              [
+                246,
+                208
+              ],
+              [
+                294,
+                208
+              ]
+            ],
+            [
+              [
+                122,
+                203
+              ],
+              [
+                398,
+                203
+              ]
+            ],
+            [
+              [
+                111,
+                205
+              ],
+              [
+                390,
+                205
+              ]
+            ],
+            [
+              [
+                151,
+                288
+              ],
+              [
+                359,
+                288
+              ]
+            ],
+            [
+              [
+                233,
+                287
+              ],
+              [
+                330,
+                287
+              ]
+            ],
+            [
+              [
+                340,
+                285
+              ]
+            ]
+          ]
+        },
+        "bless": {
+          "file": "members-v7/yeonseong/bless.png",
+          "hands": [
+            [
+              [
+                340,
+                285
+              ]
+            ],
+            [
+              [
+                248,
+                312
+              ],
+              [
+                283,
+                312
+              ]
+            ],
+            [
+              [
+                254,
+                232
+              ],
+              [
+                292,
+                232
+              ]
+            ],
+            [
+              [
+                194,
+                109
+              ],
+              [
+                328,
+                109
+              ]
+            ],
+            [
+              [
+                139,
+                114
+              ],
+              [
+                366,
+                114
+              ]
+            ],
+            [
+              [
+                218,
+                215
+              ],
+              [
+                335,
+                215
+              ]
+            ],
+            [
+              [
+                243,
+                281
+              ],
+              [
+                345,
+                281
+              ]
+            ],
+            [
+              [
+                340,
+                285
+              ]
+            ]
+          ]
+        }
+      }
+    },
     "framesByRole": {
-      "blades": 14,
       "shotgun": 14,
+      "blades": 14,
       "lightning": 14,
-      "frost": 6,
-      "support": 6
+      "frost": 8,
+      "support": 8
     },
     "cellSizeByRole": {
-      "blades": 512,
       "shotgun": 512,
+      "blades": 512,
       "lightning": 512,
-      "frost": 768,
-      "support": 768
-    }
+      "frost": 512,
+      "support": 512
+    },
+    "clipsPerMember": 3,
+    "spellAtlas": "assets/members-v7/spells.png"
   },
   "artSource": "built-in image_gen",
   "logicalSize": [
@@ -591,33 +1029,33 @@
   "defenders": {
     "frost": {
       "id": "jaeho",
-      "name": "재호 · 냉기 사수",
+      "name": "재호 · 빙결술사",
       "color": "#a9eaff",
-      "file": "members-v6/jaeho/portrait.png",
+      "file": "members-v7/jaeho/portrait.png",
       "face": [
-        186,
-        100,
-        142,
-        150
+        310,
+        90,
+        190,
+        215
       ],
       "height": 144,
       "memberMotion": true,
-      "description": "최재호 · 검은 모자와 조끼의 냉기 사수. 조준·사격·반동으로 빙결탄을 날려요. 눈보라 제압과 빙정 파쇄 중 선택해요."
+      "description": "최재호 · 손끝에서 얼음을 빚는 빙결술사. 한 손 결정탄, 양손 빙정 방출, 머리 위 눈보라 소환으로 길목을 제압해요. 최종 진화는 눈보라와 빙정 파쇄 중 선택해요."
     },
     "support": {
       "id": "yeonseong",
-      "name": "연성 · 전술 창술사",
+      "name": "연성 · 수호술사",
       "color": "#f1dfab",
-      "file": "members-v6/yeonseong/portrait.png",
+      "file": "members-v7/yeonseong/portrait.png",
       "face": [
-        209,
-        100,
-        148,
-        155
+        265,
+        90,
+        190,
+        220
       ],
       "height": 144,
       "memberMotion": true,
-      "description": "신연성 · 흰 모자와 와인색 재킷의 전술 창술사. 창을 찔러 황금 파동을 보내고 동기를 강화해요. 돌격 지휘와 아지트 회복 중 선택해요."
+      "description": "신연성 · 흰 모자와 황금 망토의 수호술사. 양손으로 빛 구체를 쏘고 팔을 펼쳐 강화 결계를 만들어요. 최종 진화는 동료 축복과 아지트 회복 중 선택해요."
     },
     "blades": {
       "id": "B02",
@@ -692,7 +1130,10 @@
       "description": "가까운 적 세 마리까지 전격이 이어져요. 흩어진 적을 정리할 때 좋아요."
     }
   },
-  "defenderProvenance": "assets/characters-v1/provenance.json",
+  "defenderProvenance": {
+    "originalThree": "existing game characters",
+    "members": "User-provided photographs used for new unarmed fantasy caster designs; generated images only are published."
+  },
   "evolutionMotion": {
     "version": 3,
     "framesPerAttack": 14,
@@ -704,16 +1145,21 @@
     }
   },
   "expansion": {
-    "version": 6,
+    "version": 7,
     "roles": 5,
     "finalBranches": 10,
     "intermissionSeconds": 6,
-    "newCharacterMotion": "4 model-drawn key poses plus identical baseline endpoints: 6 frames",
+    "newCharacterMotion": "Three 8-frame spell clips per member; six model-drawn poses and identical master endpoints per clip",
     "newArtFiles": [
-      "assets/members-v6/jaeho/portrait.png",
-      "assets/members-v6/jaeho/attack.png",
-      "assets/members-v6/yeonseong/portrait.png",
-      "assets/members-v6/yeonseong/attack.png"
+      "assets/members-v7/jaeho/portrait.png",
+      "assets/members-v7/yeonseong/portrait.png",
+      "assets/members-v7/jaeho/bolt.png",
+      "assets/members-v7/yeonseong/bolt.png",
+      "assets/members-v7/jaeho/fan.png",
+      "assets/members-v7/jaeho/storm.png",
+      "assets/members-v7/yeonseong/ward.png",
+      "assets/members-v7/yeonseong/bless.png",
+      "assets/members-v7/spells.png"
     ]
   },
   "campaignV6": {
@@ -723,8 +1169,27 @@
     "members": {
       "frost": "최재호",
       "support": "신연성"
+    }
+  },
+  "castersV7": {
+    "roles": {
+      "frost": "빙결술사",
+      "support": "수호술사"
     },
-    "memberFrameCount": 6,
-    "memberArt": "existing member identity + built-in imagegen keyposes; local packing; no synthetic in-betweens"
+    "clips": {
+      "frost": [
+        "서리 결정탄",
+        "빙정 방출",
+        "눈보라 소환"
+      ],
+      "support": [
+        "빛 구체",
+        "황금 결계",
+        "회복 축복"
+      ]
+    },
+    "generatedPoses": 36,
+    "framesPerClip": 8,
+    "full14Frames": false
   }
 }

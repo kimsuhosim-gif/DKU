@@ -1,19 +1,19 @@
 // V5: five roles and ten mutually exclusive final evolutions.
 export const INTERMISSION_SECONDS = 6;
 export const NEW_WEAPONS = {
- frost: {name:'재호 · 냉기 사수',cost:65,range:265,damage:18,interval:1.15,icon:'frost',fx:1},
- support: {name:'연성 · 전술 창술사',cost:65,range:240,damage:14,interval:1.1,icon:'support',fx:1}
+ frost: {name:'재호 · 빙결술사',cost:65,range:265,damage:18,interval:1.15,icon:'frost',fx:1},
+ support: {name:'연성 · 수호술사',cost:65,range:240,damage:14,interval:1.1,icon:'support',fx:1}
 };
 export const NEW_EVOLUTIONS = {
  frost: [
-  {name:'냉기 사격',short:'단일 공격 · 35% 감속',description:'냉기 사격로 적 한 명을 공격하고 1.2초간 35% 감속.',color:'#9deaff'},
+  {name:'서리 결정탄',short:'단일 공격 · 35% 감속',description:'서리 결정탄으로 적 한 명을 공격하고 1.2초간 35% 감속.',color:'#9deaff'},
   {name:'빙결 파편',short:'주변 3명 · 45% 감속',description:'목표 주변 3명에게 파편 피해. 1.5초간 45% 감속.',color:'#a9f3ff'},
   {name:'백야의 눈보라',short:'4회마다 광역 눈보라',description:'4번째 공격마다 반경 180 눈보라. 4회 피해와 짧은 빙결로 길목을 막는다.',color:'#cefaff',every:4,skill:'blizzard'}
  ],
  support: [
-  {name:'응원 신호',short:'주변 동기 피해 +15%',description:'창격 파동으로 공격. 반경 370 안의 다른 동기에게 피해 +15%. 지원 효과는 중첩되지 않는다.',color:'#d8eaa1'},
-  {name:'전술 지휘',short:'피해 +20% · 공격속도 +15%',description:'주변 동기 피해 +20%, 공격속도 +15%. 본인과 다른 지원가에게는 적용하지 않는다.',color:'#e3f3aa'},
-  {name:'승리의 깃발',short:'주변 피해 +30% · 돌격 명령',description:'주변 동기 피해 +30%, 공격속도 +20%. 3번째 공격마다 2.5초 동안 전체 전투 동기의 피해 +40%, 공격속도 +25%.',color:'#ffe39d',every:3,skill:'rally'}
+  {name:'빛 구체',short:'주변 동기 피해 +15%',description:'손에서 빚은 빛 구체로 공격. 반경 370 안의 다른 동기에게 피해 +15%. 지원 효과는 중첩되지 않는다.',color:'#d8eaa1'},
+  {name:'황금 결계',short:'피해 +20% · 공격속도 +15%',description:'주변 동기 피해 +20%, 공격속도 +15%. 본인과 다른 지원가에게는 적용하지 않는다.',color:'#e3f3aa'},
+  {name:'수호자의 축복',short:'주변 피해 +30% · 축복 해방',description:'주변 동기 피해 +30%, 공격속도 +20%. 3번째 공격마다 2.5초 동안 전체 전투 동기의 피해 +40%, 공격속도 +25%.',color:'#ffe39d',every:3,skill:'rally'}
  ]
 };
 export const ALTERNATE_EVOLUTIONS = {
