@@ -1,0 +1,2 @@
+.homepage-return{position:absolute;right:8px;bottom:8px;z-index:4;display:flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #85b99e;border-radius:8px;background:#173a34eF;color:#e4f1d8;text-decoration:none;font-size:11px;line-height:1.4;font-weight:700;touch-action:manipulation}
+.homepage-return:hover{background:#315d4e}.homepage-return:focus-visible{outline:3px solid #d5ffc6;outline-offset:2px}

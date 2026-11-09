@@ -1,0 +1,713 @@
+{
+  "version": 4,
+  "characterMotion": {
+    "type": "model-generated-14-frame-attack",
+    "source": "built-in image_gen",
+    "runtimeSheets": {
+      "blades": "assets/motion-v3/B02/attack.png",
+      "shotgun": "assets/motion-v3/S01/attack.png",
+      "lightning": "assets/motion-v3/E08/attack.png"
+    },
+    "frameSize": [
+      512,
+      512
+    ],
+    "frameCount": 14,
+    "root": [
+      256,
+      450
+    ],
+    "full14FrameSequence": true,
+    "prompts": "verification/evolution-v3/prompts.json",
+    "columns": 7
+  },
+  "artSource": "built-in image_gen",
+  "logicalSize": [
+    1024,
+    1536
+  ],
+  "camera": "orthographic semi-overhead; image perspective requires visual judgment",
+  "stage": {
+    "image": "assets/clubhouse-mobile-v2.png",
+    "mapBundle": "map-bundle.json",
+    "path": "engine.mjs ROUTE",
+    "mode": "portrait fixed-road clubhouse defense",
+    "artSource": "host_image",
+    "prompt": "map-prompt-v2.txt"
+  },
+  "sprites": {
+    "imp": {
+      "image": "assets/enemies.png",
+      "rect": [
+        172,
+        183,
+        319,
+        312
+      ],
+      "cell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "hound": {
+      "image": "assets/enemies.png",
+      "rect": [
+        722,
+        169,
+        420,
+        339
+      ],
+      "cell": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "caster": {
+      "image": "assets/enemies.png",
+      "rect": [
+        162,
+        730,
+        375,
+        439
+      ],
+      "cell": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "guardian": {
+      "image": "assets/enemies.png",
+      "rect": [
+        636,
+        700,
+        565,
+        472
+      ],
+      "cell": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "shotgun": {
+      "image": "assets/items.png",
+      "rect": [
+        64,
+        106,
+        280,
+        191
+      ],
+      "cell": [
+        0,
+        0,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "orbit-blades": {
+      "image": "assets/items.png",
+      "rect": [
+        449,
+        67,
+        261,
+        246
+      ],
+      "cell": [
+        384,
+        0,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "lightning-gauntlet": {
+      "image": "assets/items.png",
+      "rect": [
+        817,
+        72,
+        279,
+        240
+      ],
+      "cell": [
+        768,
+        0,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "treasure": {
+      "image": "assets/items.png",
+      "rect": [
+        1207,
+        66,
+        272,
+        249
+      ],
+      "cell": [
+        1152,
+        0,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "xp-crystal": {
+      "image": "assets/items.png",
+      "rect": [
+        116,
+        390,
+        179,
+        255
+      ],
+      "cell": [
+        0,
+        341,
+        384,
+        342
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "heal-potion": {
+      "image": "assets/items.png",
+      "rect": [
+        489,
+        395,
+        179,
+        246
+      ],
+      "cell": [
+        384,
+        341,
+        384,
+        342
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "crate": {
+      "image": "assets/items.png",
+      "rect": [
+        835,
+        397,
+        247,
+        241
+      ],
+      "cell": [
+        768,
+        341,
+        384,
+        342
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "pedestal": {
+      "image": "assets/items.png",
+      "rect": [
+        1196,
+        422,
+        294,
+        196
+      ],
+      "cell": [
+        1152,
+        341,
+        384,
+        342
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "lantern": {
+      "image": "assets/items.png",
+      "rect": [
+        109,
+        707,
+        182,
+        278
+      ],
+      "cell": [
+        0,
+        683,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "bush": {
+      "image": "assets/items.png",
+      "rect": [
+        424,
+        748,
+        305,
+        216
+      ],
+      "cell": [
+        384,
+        683,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "corruption-crystal": {
+      "image": "assets/items.png",
+      "rect": [
+        828,
+        738,
+        261,
+        235
+      ],
+      "cell": [
+        768,
+        683,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    },
+    "bench": {
+      "image": "assets/items.png",
+      "rect": [
+        1195,
+        791,
+        294,
+        150
+      ],
+      "cell": [
+        1152,
+        683,
+        384,
+        341
+      ],
+      "anchor": [
+        0.5,
+        1
+      ],
+      "animation": "master-still-only"
+    }
+  },
+  "effects": {
+    "muzzle": {
+      "image": "assets/effects-v2.png",
+      "frames": [
+        [
+          0,
+          0,
+          256,
+          256
+        ],
+        [
+          256,
+          0,
+          256,
+          256
+        ],
+        [
+          512,
+          0,
+          256,
+          256
+        ],
+        [
+          768,
+          0,
+          256,
+          256
+        ],
+        [
+          1024,
+          0,
+          256,
+          256
+        ],
+        [
+          1280,
+          0,
+          256,
+          256
+        ]
+      ],
+      "durationsMs": [
+        40,
+        40,
+        60,
+        60,
+        70,
+        80
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "loop": false,
+      "afterLastFrame": "draw nothing",
+      "note": "shared cell origin; do not individually autocrop frames"
+    },
+    "lightning": {
+      "image": "assets/effects-v2.png",
+      "frames": [
+        [
+          0,
+          256,
+          256,
+          256
+        ],
+        [
+          256,
+          256,
+          256,
+          256
+        ],
+        [
+          512,
+          256,
+          256,
+          256
+        ],
+        [
+          768,
+          256,
+          256,
+          256
+        ],
+        [
+          1024,
+          256,
+          256,
+          256
+        ],
+        [
+          1280,
+          256,
+          256,
+          256
+        ]
+      ],
+      "durationsMs": [
+        35,
+        40,
+        55,
+        65,
+        70,
+        80
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "loop": false,
+      "afterLastFrame": "draw nothing",
+      "note": "shared cell origin; do not individually autocrop frames"
+    },
+    "blade-sweep": {
+      "image": "assets/effects-v2.png",
+      "frames": [
+        [
+          0,
+          512,
+          256,
+          256
+        ],
+        [
+          256,
+          512,
+          256,
+          256
+        ],
+        [
+          512,
+          512,
+          256,
+          256
+        ],
+        [
+          768,
+          512,
+          256,
+          256
+        ],
+        [
+          1024,
+          512,
+          256,
+          256
+        ],
+        [
+          1280,
+          512,
+          256,
+          256
+        ]
+      ],
+      "durationsMs": [
+        40,
+        50,
+        70,
+        70,
+        80,
+        80
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "loop": false,
+      "afterLastFrame": "draw nothing",
+      "note": "shared cell origin; do not individually autocrop frames"
+    },
+    "enemy-shatter": {
+      "image": "assets/effects-v2.png",
+      "frames": [
+        [
+          0,
+          768,
+          256,
+          256
+        ],
+        [
+          256,
+          768,
+          256,
+          256
+        ],
+        [
+          512,
+          768,
+          256,
+          256
+        ],
+        [
+          768,
+          768,
+          256,
+          256
+        ],
+        [
+          1024,
+          768,
+          256,
+          256
+        ],
+        [
+          1280,
+          768,
+          256,
+          256
+        ]
+      ],
+      "durationsMs": [
+        35,
+        45,
+        65,
+        75,
+        80,
+        100
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "loop": false,
+      "afterLastFrame": "draw nothing",
+      "note": "shared cell origin; do not individually autocrop frames"
+    }
+  },
+  "qa": "evidence/browser-art-qa.json",
+  "defenders": {
+    "frost": {
+      "id": "F01",
+      "name": "서리 연금술사",
+      "color": "#a9eaff",
+      "file": "crew-v5/frost.png",
+      "face": [
+        447,
+        173,
+        323,
+        365
+      ],
+      "height": 144,
+      "still": true,
+      "description": "감속과 빙결로 시간을 벌거나, 얼어붙은 적을 파쇄하는 새 지원 동료예요."
+    },
+    "support": {
+      "id": "T01",
+      "name": "전술 지원가",
+      "color": "#f1dfab",
+      "file": "crew-v5/support.png",
+      "face": [
+        340,
+        80,
+        410,
+        450
+      ],
+      "height": 144,
+      "still": true,
+      "description": "주변 동기를 강화해요. 최종 진화에서 화력 지휘와 아지트 수리를 선택해요."
+    },
+    "blades": {
+      "id": "B02",
+      "name": "회전검 수호자",
+      "color": "#9ee8d2",
+      "file": "characters-v1/B02.png",
+      "rect": [
+        90,
+        35,
+        836,
+        1194
+      ],
+      "root": [
+        625,
+        1229
+      ],
+      "face": [
+        455,
+        48,
+        440,
+        440
+      ],
+      "height": 144,
+      "description": "가까이 몰려든 적을 한꺼번에 베어요. 굽이 안쪽에 배치하면 오래 공격할 수 있어요."
+    },
+    "shotgun": {
+      "id": "S01",
+      "name": "산탄 사수",
+      "color": "#efce95",
+      "file": "characters-v1/S01.png",
+      "rect": [
+        281,
+        12,
+        687,
+        1233
+      ],
+      "root": [
+        625,
+        1245
+      ],
+      "face": [
+        435,
+        20,
+        380,
+        420
+      ],
+      "height": 144,
+      "description": "앞장선 적과 주변 무리를 산탄으로 공격해요. 적이 뭉치는 길목에 잘 맞아요."
+    },
+    "lightning": {
+      "id": "E08",
+      "name": "전격 기술자",
+      "color": "#9ddfe8",
+      "file": "characters-v1/E08.png",
+      "rect": [
+        245,
+        0,
+        763,
+        1254
+      ],
+      "root": [
+        625,
+        1250
+      ],
+      "face": [
+        430,
+        0,
+        405,
+        470
+      ],
+      "height": 144,
+      "description": "가까운 적 세 마리까지 전격이 이어져요. 흩어진 적을 정리할 때 좋아요."
+    }
+  },
+  "defenderProvenance": "assets/characters-v1/provenance.json",
+  "evolutionMotion": {
+    "version": 3,
+    "framesPerAttack": 14,
+    "atlasColumns": 7,
+    "files": {
+      "B02": "assets/motion-v3/B02/attack.png",
+      "S01": "assets/motion-v3/S01/attack.png",
+      "E08": "assets/motion-v3/E08/attack.png"
+    }
+  },
+  "expansion": {
+    "version": 5,
+    "roles": 5,
+    "finalBranches": 10,
+    "intermissionSeconds": 6,
+    "newCharacterMotion": "still master sprites with procedural spell VFX",
+    "newArtFiles": [
+      "assets/crew-v5/frost.png",
+      "assets/crew-v5/support.png"
+    ]
+  }
+}

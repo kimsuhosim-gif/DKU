@@ -26,5 +26,22 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "permanent": true,
+      "destination": "/defense/index.html",
+      "source": "/elemental/:path*"
+    },
+    {
+      "permanent": false,
+      "destination": "/defense/index.html",
+      "source": "/defense"
+    },
+    {
+      "permanent": false,
+      "destination": "/defense/index.html",
+      "source": "/defense/"
+    }
   ]
 }

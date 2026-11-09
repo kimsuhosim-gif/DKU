@@ -1,0 +1,29 @@
+/* V5: five portraits stay in a horizontally scrollable strip on compact screens. */
+#weapons{display:grid;grid-template-columns:1fr;gap:5px}
+.weapon{margin:0;min-height:48px}
+#evolve-dialog{width:min(680px,94vw);max-height:90svh;overflow:auto;background:#172c2d;color:#edf2ec;border:1px solid #83b49c;border-radius:16px;padding:20px}
+#evolve-dialog::backdrop{background:#051316d9}
+#evolve-title{font-size:19px;margin:0}
+#evolve-cost{color:#c6d5bf;font-size:12px;line-height:1.7}
+.evolve-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.evolve-options button{padding:18px;text-align:left;min-height:180px;background:linear-gradient(135deg,#365448,#203a41);border-color:#719e85}
+.evolve-options small,.evolve-options strong,.evolve-options span{display:block;line-height:1.7}
+.evolve-options small{font-size:10px;letter-spacing:.06em;color:#b3d4b9}
+.evolve-options strong{font-size:19px;color:#eef5ca;margin:10px 0}
+.evolve-options span{font-size:12px;color:#d2dfd9}
+@media(max-width:700px) and (orientation:portrait){
+ #weapons{display:flex;overflow-x:auto;gap:5px;padding:0 0 3px;scroll-snap-type:x proximity;max-width:100%;min-width:0}
+ .weapon{flex:0 0 104px;min-width:104px;min-height:48px;scroll-snap-align:start}
+ .panel{min-width:0}.panel .crew-heading{min-width:0}.crew-heading h2{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .evolve-options{grid-template-columns:1fr}.evolve-options button{min-height:140px;padding:14px}
+ #evolve-title{font-size:16px}#evolve-dialog{padding:14px}
+ .canvas-wrap{min-width:0;width:min(100%,calc((100svh - 404px - env(safe-area-inset-bottom))*2/3))}
+}
+@media(max-width:950px) and (orientation:landscape){
+ #weapons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+ .weapon{display:grid;grid-template-columns:24px 1fr;padding:3px;gap:2px;min-height:48px}
+ .weapon canvas{width:24px;height:24px;grid-row:1/3}.weapon strong,.weapon em{font-size:9px}.weapon small{display:none}
+ .crew-heading button,.manage button{min-height:44px}.panel{gap:4px}.slots{margin:4px 0}
+ .evolve-options button{min-height:150px;padding:12px}
+}
+@media(prefers-reduced-motion:reduce){#weapons{scroll-behavior:auto}}

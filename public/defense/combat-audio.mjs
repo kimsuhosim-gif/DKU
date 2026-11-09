@@ -1,0 +1,9 @@
+// Small synthesized weapon cues. Audio starts only after the player enables it.
+const buffers=new WeakMap(),lastPlayed=new WeakMap();
+function noise(ctx){if(buffers.has(ctx))return buffers.get(ctx);const b=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*.3),ctx.sampleRate),a=b.getChannelData(0);let seed=193;for(let i=0;i<a.length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;a[i]=seed/2147483648-1;}buffers.set(ctx,b);return b;}
+export function playCombatSound(ctx,kind){if(!ctx||ctx.state!=='running'||!['shotgun','blades','lightning','explosion','storm-tick'].includes(kind))return;const now=ctx.currentTime;if(now-(lastPlayed.get(ctx)??-10)<.055)return;lastPlayed.set(ctx,now);const heavy=kind==='explosion',electric=kind==='lightning'||kind==='storm-tick',length=heavy?.22:electric?.13:.1;
+ const gain=ctx.createGain();gain.gain.setValueAtTime(heavy?.12:.065,now);gain.gain.exponentialRampToValueAtTime(.001,now+length);gain.connect(ctx.destination);
+ const filter=ctx.createBiquadFilter();filter.type=kind==='blades'?'bandpass':'lowpass';filter.frequency.setValueAtTime(heavy?600:electric?3400:kind==='blades'?2400:1600,now);filter.frequency.exponentialRampToValueAtTime(heavy?80:300,now+length);filter.connect(gain);
+ const n=ctx.createBufferSource();n.buffer=noise(ctx);n.connect(filter);n.start(now);n.stop(now+length);
+ const tone=ctx.createOscillator();tone.type=electric?'sawtooth':'triangle';tone.frequency.setValueAtTime(heavy?100:electric?720:kind==='blades'?580:180,now);tone.frequency.exponentialRampToValueAtTime(heavy?34:electric?180:70,now+length);const tg=ctx.createGain();tg.gain.value=.25;tone.connect(tg).connect(gain);tone.start(now);tone.stop(now+length);
+}
