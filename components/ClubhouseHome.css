@@ -1,0 +1,54 @@
+/* Home polish using unslop by Damir Sokolovsky, CC BY 4.0.
+   https://github.com/heydamir/unslop */
+.home-content { color: #252c29; }
+.home-content .edition-line { padding: 20px 0; font-size: 12px; letter-spacing: 0; }
+.home-content .editorial-hero { display: grid; grid-template-columns: 1fr; min-height: 0; height: 420px; position: relative; border-radius: 0; background: #e2e6e3; }
+.home-content .hero-photograph { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+.home-content .hero-photograph > img { object-position: center; }
+.home-content .hero-copy { z-index: 1; align-self: start; padding: 40px; background: none; color: #173c32; pointer-events: none; }
+.home-content .hero-copy h1 { margin: 0 0 8px; font-size: 56px; line-height: 1.1; font-weight: 500; letter-spacing: 0; }
+.home-content .hero-copy > p { margin: 0; font-size: 14px; color: #303b35; line-height: 1.6; }
+.home-content .next-round-strip { padding: 24px 0; background: transparent; border: 0; border-bottom: 1px solid #dcded5; border-radius: 0; gap: 20px; }
+.home-content .round-symbol { border: 0; border-radius: 0; width: 32px; }
+.home-content .next-round-strip h2 { font-size: 20px; letter-spacing: 0; margin: 8px 0; line-height: 1.5; }
+.home-content .eyebrow { letter-spacing: 0; font-size: 12px; color: #616a64; }
+.home-content .home-journal, .home-content .home-memories { padding-top: 48px; }
+.home-content .section-heading { margin-bottom: 24px; }
+.home-content .section-heading h2 { font-size: 26px; font-weight: 500; letter-spacing: 0; }
+.home-content .section-heading .eyebrow { display: none; }
+.home-content .journal-grid { gap: 32px; }
+.home-content .journal-feature { border: 0; border-radius: 0; background: transparent; }
+.home-content .journal-copy { padding: 24px; }
+.home-content .journal-copy h3 { font-size: 24px; letter-spacing: 0; }
+.home-content .image-label { top: 16px; left: 16px; padding: 8px 12px; letter-spacing: 0; font-size: 12px; }
+.home-content .home-side { gap: 0; }
+.home-content .champion-card, .home-content .finance-card { padding: 24px 0; background: transparent; border: 0; border-bottom: 1px solid #dcded5; border-radius: 0; box-shadow: none; }
+.home-content .champion-card { padding-top: 0; }
+.home-content .champion-card > svg, .home-content .finance-card .eyebrow { display: none; }
+.home-content .champion-card strong, .home-content .finance-card > strong, .home-content .pulse-item strong { letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.home-content .finance-card h3 { margin: 0 0 16px; }
+.home-content .memory-grid img { border-radius: 4px; transition: none; }
+.home-content .memory-grid a:hover img { transform: none; }
+.home-content .text-link { min-height: 44px; font-size: 13px; gap: 8px; }
+.home-content .text-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+@media(max-width:767px) {
+ .home-content .editorial-hero { height: 320px; }
+ .home-content .hero-copy { padding: 24px; }
+ .home-content .hero-copy h1 { font-size: 40px; }
+ .home-content .hero-copy > p { font-size: 12px; }
+ .home-content .hero-photograph > img { object-position: 60% center; }
+ .home-content .edition-line { padding: 16px 0; font-size: 11px; }
+ .home-content .next-round-strip { padding: 20px 0; gap: 8px; }
+ .home-content .next-round-strip h2 { font-size: 18px; }
+ .home-content .next-round-strip > .text-link { margin-left: 0; }
+ .home-content .home-journal, .home-content .home-memories { padding-top: 32px; }
+ .home-content .section-heading { gap: 12px; margin-bottom: 16px; }
+ .home-content .section-heading h2 { font-size: 22px; }
+ .home-content .journal-copy { padding: 20px 0; }
+ .home-content .journal-copy h3 { font-size: 22px; }
+ .home-content .home-side { gap: 20px; }
+ .home-content .champion-card, .home-content .finance-card { padding: 16px 0; }
+ .home-content .finance-card > strong { font-size: 22px; overflow-wrap: anywhere; }
+ .home-content .champion-card strong { font-size: 32px; }
+ .home-content .champion-card .text-link { font-size: 12px; }
+}
