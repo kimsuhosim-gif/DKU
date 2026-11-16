@@ -47,6 +47,16 @@
       "permanent": false,
       "destination": "/defense/index.html",
       "source": "/defense/"
+    },
+    {
+      "permanent": false,
+      "destination": "/skybound/index.html",
+      "source": "/skybound"
+    },
+    {
+      "permanent": false,
+      "destination": "/skybound/index.html",
+      "source": "/skybound/"
     }
   ]
 }
