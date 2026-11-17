@@ -1,3 +1,4 @@
+import {encounterAt,formationSlots} from './encounters.mjs';
 export const W=960,H=540,DT=1/60;
 export const HEROES={
  jaeho:{name:'재호',title:'빙결술사',color:'#8de5ff',speed:275,rate:.15,damage:19,shot:'ice',charge:'빙룡 관통',bomb:'백야 · 천빙진',option:'빙정 위성',desc:'관통하는 결정탄과 넓게 펼쳐지는 얼음 날개. 차지로 적의 대열을 꿰뚫어요.'},
@@ -20,7 +21,7 @@ export function createGame(hero='jaeho',difficulty='normal',seed=19){
  if(!HEROES[hero])hero='jaeho';if(!['easy','normal','hard'].includes(difficulty))difficulty='normal';
  return {version:1,hero,difficulty,seed,rng:seed>>>0,phase:'playing',stage:0,stageTime:0,time:0,tick:0,route:null,
  player:{x:180,y:270,lives:difficulty==='easy'?7:5,power:1,bombs:3,invincible:2,shotTimer:0,charge:0,charging:false,action:0,actionKind:'bolt'},
- enemies:[],shots:[],bullets:[],items:[],fx:[],boss:null,spawnTimer:1,nextId:1,score:0,kills:0,hits:0,charges:0,bombsUsed:0,grazes:0,
+ enemies:[],shots:[],bullets:[],items:[],fx:[],boss:null,spawnTimer:1,encounterIndex:0,formation:'',formationTimer:0,nextId:1,score:0,kills:0,hits:0,charges:0,bombsUsed:0,grazes:0,
  stageKills:0,bossLog:[],transition:0,lastExtend:0,peakBullets:0,checkpoint:null,lastEvent:'',eventId:0};
 }
 export function checkpoint(s){return {version:1,hero:s.hero,difficulty:s.difficulty,seed:s.seed,rng:s.rng,stage:s.stage,route:s.route,score:s.score,kills:s.kills,hits:s.hits,charges:s.charges,bombsUsed:s.bombsUsed,grazes:s.grazes,bossLog:s.bossLog.map(b=>({...b})),time:s.time,player:{lives:s.player.lives,power:s.player.power,bombs:s.player.bombs},lastExtend:s.lastExtend};}
@@ -57,7 +58,7 @@ function bomb(s){const p=s.player;if(!p.bombs||s.phase!=='playing')return;p.bomb
 }
 function enemyBullet(s,x,y,angle,speed=170,r=6,kind='aim'){if(s.bullets.length>=420)return;s.bullets.push({x,y,px:x,py:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r,kind,life:9,grazed:false});}
 function aim(s,e,count=1,spread=.17,speed=180){const a=Math.atan2(s.player.y-e.y,s.player.x-e.x);for(let i=0;i<count;i++)enemyBullet(s,e.x-18,e.y,a+(i-(count-1)/2)*spread,speed,6,'aim');}
-function spawn(s){const kind=Math.floor(random(s)*3),y=65+random(s)*(H-130);let hp=[38,60,115][kind]*(1+s.stage*.13);s.enemies.push({id:s.nextId++,kind,x:W+45,y,baseY:y,hp,maxHp:hp,age:0,timer:1.1+random(s)*.8,vx:[105,135,62][kind]+s.stage*4,r:[20,23,31][kind],flash:0,dead:false});}
+function spawnFormation(s,wave){for(const slot of formationSlots(wave,s.stage)){const hp=[38,60,115][slot.kind]*(1+s.stage*.13);s.enemies.push({...slot,id:s.nextId++,baseY:slot.y,hp,maxHp:hp,age:0,timer:1.65+random(s)*.65,r:[20,23,31][slot.kind],flash:0,dead:false});}s.formation=wave.formation;s.formationTimer=2;s.encounterIndex++;}
 function spawnBoss(s){const hp=1900+s.stage*450;s.boss={id:s.nextId++,boss:true,kind:STAGES[s.stage].skin,x:W+160,y:H/2,hp,maxHp:hp,r:68,age:0,timer:2.8,volley:0,phase:0,flash:0,dead:false,startHits:s.hits};event(s,'warning');}
 function bossAttack(s,b){const level=s.stage+1,phase=b.hp/b.maxHp<.45?1:0;const speed=(s.difficulty==='easy'?130:s.difficulty==='hard'?220:165)+level*8;
  b.phase=phase;const pattern=(b.volley+STAGES[s.stage].pattern+(s.route==='gorge'?1:0))%4;
@@ -69,7 +70,7 @@ function bossAttack(s,b){const level=s.stage+1,phase=b.hp/b.maxHp<.45?1:0;const 
 }
 function hitPlayer(s){const p=s.player;if(p.invincible>0)return;p.lives--;s.hits++;p.power=Math.max(1,p.power-1);p.invincible=2.6;p.charge=0;p.charging=false;s.bullets=s.bullets.filter(b=>Math.hypot(b.x-p.x,b.y-p.y)>110);effect(s,p.x,p.y,'burst','#fff',75,.65);event(s,'hurt');if(p.lives<=0){s.phase='lose';event(s,'lose');}}
 export function command(s,cmd){if(cmd==='pause'&&(s.phase==='playing'||s.phase==='paused')){s.phase=s.phase==='paused'?'playing':'paused';s.player.charging=false;s.player.charge=0;}if(cmd==='bomb')bomb(s);if((cmd==='sky'||cmd==='gorge')&&s.phase==='branch'){s.route=cmd;advance(s);} }
-function advance(s){s.stage++;s.stageTime=0;s.stageKills=0;s.enemies=[];s.boss=null;s.bullets=[];s.shots=[];s.items=[];s.spawnTimer=1.5;s.phase='playing';s.player.invincible=2;s.player.bombs=Math.min(5,s.player.bombs+1);s.player.charge=0;s.player.charging=false;s.player.x=180;s.player.y=H/2;s.checkpoint=checkpoint(s);event(s,'stage');}
+function advance(s){s.stage++;s.stageTime=0;s.stageKills=0;s.enemies=[];s.boss=null;s.bullets=[];s.shots=[];s.items=[];s.spawnTimer=1.5;s.encounterIndex=0;s.formation='';s.formationTimer=0;s.phase='playing';s.player.invincible=2;s.player.bombs=Math.min(5,s.player.bombs+1);s.player.charge=0;s.player.charging=false;s.player.x=180;s.player.y=H/2;s.checkpoint=checkpoint(s);event(s,'stage');}
 export function step(s,input={},dt=DT){if(s.phase==='paused'||s.phase==='branch'||s.phase==='win'||s.phase==='lose')return;
  s.tick++;s.time+=dt;for(const f of s.fx)f.life-=dt;s.fx=s.fx.filter(f=>f.life>0);
  if(s.phase==='clear'){s.transition-=dt;if(s.transition<=0){if(s.stage===6){s.phase='win';event(s,'win');}else if(s.stage===2&&!s.route)s.phase='branch';else advance(s);}return;}
@@ -79,11 +80,11 @@ export function step(s,input={},dt=DT){if(s.phase==='paused'||s.phase==='branch'
  if(input.charge){p.charging=true;p.charge=Math.min(1.3,p.charge+dt);}else if(p.charging){if(p.charge>=.85)chargeFire(s);p.charge=0;p.charging=false;}
  if(input.shoot&&!input.charge&&p.shotTimer<=0){fire(s);p.shotTimer=h.rate;}
  if(input.bomb)bomb(s);
- s.spawnTimer-=dt;if(s.stageTime<STAGES[s.stage].duration&&s.spawnTimer<=0){spawn(s);s.spawnTimer=Math.max(.48,1.15-s.stage*.075);}
+ s.formationTimer=Math.max(0,(s.formationTimer||0)-dt);const next=encounterAt(s.stage,s.encounterIndex||0,STAGES[s.stage].duration,s.route);if(next&&s.stageTime>=next.time)spawnFormation(s,next);
  if(s.stageTime>=STAGES[s.stage].duration&&!s.boss)spawnBoss(s);
- for(const e of s.enemies){e.age+=dt;e.x-=e.vx*dt;e.y=e.baseY+Math.sin(e.age*(e.kind===1?3:1.5))*[18,60,10][e.kind];e.timer-=dt;e.flash=Math.max(0,e.flash-dt);if(e.timer<=0&&e.x<W-30&&e.x>p.x+40){aim(s,e,e.kind===2?3:1,.2,(s.difficulty==='easy'?105:145)+s.stage*8);e.timer=e.kind===2?1.8:2.5;}if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+7)hitPlayer(s);}
+ for(const e of s.enemies){e.age+=dt;const moveX=e.flight==='rank'&&e.age<3.7&&e.x<790?22:e.vx;e.x-=moveX*dt;const previousY=e.y;if(e.flight==='cross'||e.flight==='dive')e.y=clamp(e.baseY+e.vy*e.age+Math.sin(e.age*1.8+e.phase)*18,65,H-65);else e.y=e.baseY+Math.sin(e.age*(e.flight==='wave'?2.7:1.5)+(e.phase||0))*(e.flight==='wave'?65:14);e.bank=clamp((e.y-previousY)*.075,-.18,.18);e.timer-=dt;e.flash=Math.max(0,e.flash-dt);if(e.timer<=0&&e.x<W-30&&e.x>p.x+40){aim(s,e,e.kind===2?3:1,.2,(s.difficulty==='easy'?105:145)+s.stage*8);e.timer=e.kind===2?1.8:2.5;}if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+7)hitPlayer(s);}
  s.enemies=s.enemies.filter(e=>!e.dead&&e.x>-100);
- const b=s.boss;if(b&&!b.dead){b.age+=dt;b.x=Math.max(W-170,b.x-100*dt);b.y=H/2+Math.sin(b.age*.7)*110;b.timer-=dt;b.flash=Math.max(0,b.flash-dt);if(b.timer<=0)bossAttack(s,b);if(Math.hypot(b.x-p.x,b.y-p.y)<b.r+7)hitPlayer(s);}
+ const b=s.boss;if(b&&!b.dead){b.age+=dt;b.x=Math.max(W-170,b.x-170*dt);b.y=H/2+Math.sin(b.age*.7)*110;b.timer-=dt;b.flash=Math.max(0,b.flash-dt);if(b.timer<=0)bossAttack(s,b);if(Math.hypot(b.x-p.x,b.y-p.y)<b.r+7)hitPlayer(s);}
  for(const q of s.shots){q.px=q.x;q.py=q.y;if(q.kind==='light'){const target=[...s.enemies,...(b&&!b.dead?[b]:[])].filter(e=>e.x>q.x-20).sort((a,b)=>Math.hypot(a.x-q.x,a.y-q.y)-Math.hypot(b.x-q.x,b.y-q.y))[0];if(target){const a=Math.atan2(target.y-q.y,target.x-q.x),v=Math.hypot(q.vx,q.vy);q.vx+=(Math.cos(a)*v-q.vx)*dt*4;q.vy+=(Math.sin(a)*v-q.vy)*dt*4;}}
  q.x+=q.vx*dt;q.y+=q.vy*dt;q.life-=dt;for(const e of [...s.enemies,...(b?[b]:[])]){if(e.dead||q.hit.includes(e.id)||q.pierce<=0)continue;if(segmentDistance(e.x,e.y,q.px,q.py,q.x,q.y)<e.r+q.r){q.hit.push(e.id);q.pierce--;damageEnemy(s,e,q.damage);effect(s,e.x,e.y,'spark',h.color,20,.18);if(q.kind==='meteor'||q.kind==='fire'){const radius=q.kind==='meteor'?120:48;effect(s,e.x,e.y,'burst','#ffae63',radius,.4);for(const other of s.enemies)if(other!==e&&Math.hypot(other.x-e.x,other.y-e.y)<radius)damageEnemy(s,other,q.damage*.5);}}}}
  s.shots=s.shots.filter(q=>q.life>0&&q.pierce>0&&q.x<W+80&&q.y>-80&&q.y<H+80);

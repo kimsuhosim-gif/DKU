@@ -5,3 +5,31 @@
 @media(prefers-reduced-motion:reduce){*{transition:none!important}.hero-card[aria-pressed=true]{transform:none}}
 @media(min-width:751px) and (min-height:551px){#play .arena{width:min(100%,calc((100dvh - 275px)*1.77778));margin:auto}#play .flight-controls{max-width:960px;margin:14px auto}}
 @media(max-height:550px) and (orientation:landscape){#play .arena{width:min(100%,calc((100dvh - 185px)*1.77778))}.flight-controls button{min-height:44px}.top .edition{display:none}}
+
+/* Combat owns the viewport. HUD and controls stay outside the central flight lane. */
+body.in-flight{overflow:hidden;background:#050e15}
+body.in-flight main{padding:0;margin:0;max-width:none}
+body.in-flight .top{position:fixed;top:8px;right:10px;z-index:20;margin:0;padding:0;border:0}
+body.in-flight .top>a,body.in-flight .edition,body.in-flight footer,body.in-flight #diagnostics-wrap{display:none}
+body.in-flight .top div{gap:5px}
+body.in-flight .top button{min-height:44px;padding:8px 10px;font-size:11px;background:#071723b8;border-color:#b4c7c744;backdrop-filter:blur(6px)}
+body.in-flight #play{position:fixed;inset:0;display:grid;place-items:center;margin:0;max-width:none}
+body.in-flight #play .arena{width:min(100vw,177.77778dvh);aspect-ratio:16/9;margin:0;border:0;border-radius:0;box-shadow:none;overflow:visible}
+body.in-flight canvas{width:100%;height:100%;aspect-ratio:16/9}
+body.in-flight .hud{position:absolute;top:13px;left:18px;right:260px;z-index:3;margin:0;padding:0;text-shadow:0 2px 4px #000;pointer-events:none;align-items:start}
+body.in-flight .hud small{font-size:10px;letter-spacing:1px;color:#d0e2e5}
+body.in-flight .hud strong{font-size:18px;margin-top:4px}
+body.in-flight .hud .stage{position:fixed;bottom:16px;left:18px;text-align:left}
+body.in-flight .stage strong{font-size:11px;letter-spacing:2px}
+.route-progress{height:2px;width:190px;background:#d8e6e52b;margin-top:8px}.route-progress i{display:block;height:100%;background:#e4be89;width:0}
+body.in-flight #play .flight-controls{position:absolute;bottom:12px;right:14px;left:auto;z-index:4;max-width:none;display:flex;gap:8px;align-items:center;margin:0;flex-wrap:nowrap;pointer-events:none}
+body.in-flight .flight-controls button{pointer-events:auto;flex:none;min-height:48px;background:#071723ba;border-color:#bdd3d14a;font-size:12px;padding:10px 14px;backdrop-filter:blur(6px)}
+body.in-flight .charge-meter{flex:none;min-width:0;width:155px;margin:0 8px 0 0;text-shadow:0 2px 4px #000}
+body.in-flight .charge-meter small{font-size:10px;letter-spacing:1px}
+body.in-flight .charge-meter span{display:block;margin-top:3px;color:#c6dbd9}
+body.in-flight .charge-meter>div{margin-top:6px;height:4px}
+body.in-flight .play-guide{display:none}
+body.in-flight #overlay{z-index:10}
+body.in-flight #toast{top:20%;z-index:5}
+@media(orientation:landscape) and (max-width:950px){body.in-flight .hud{left:12px;top:8px;right:230px}body.in-flight .hud strong{font-size:14px}body.in-flight .top button{padding:7px 8px;font-size:10px}body.in-flight .hud .stage{left:12px;bottom:9px}body.in-flight .stage small{font-size:8px}body.in-flight .route-progress{width:125px}body.in-flight #auto{display:none}body.in-flight .charge-meter{width:100px}body.in-flight .flight-controls button{font-size:11px;padding:8px 10px}body.in-flight .top{top:4px;right:7px}}
+@media(orientation:portrait){body.in-flight .top{top:10px;left:10px;right:10px;justify-content:flex-end}body.in-flight .hud{top:-62px;left:12px;right:12px;gap:8px}body.in-flight .hud small{font-size:9px}body.in-flight .hud strong{font-size:15px}body.in-flight .hud .stage{position:absolute;top:auto;bottom:-24px;left:0;right:0;display:flex;align-items:center;justify-content:space-between}body.in-flight .stage strong{margin:0;font-size:9px}body.in-flight .stage small{font-size:8px}.route-progress{display:none}body.in-flight #play .flight-controls{left:10px;right:10px;bottom:-100px;flex-wrap:wrap;gap:6px}body.in-flight .charge-meter{width:100%;margin:0}body.in-flight .charge-meter span{display:inline}body.in-flight .flight-controls button{flex:1;padding:8px 6px;font-size:11px}body.in-flight .play-guide{display:block;position:fixed;bottom:8px;left:0;right:0;font-size:10px;line-height:1.8;margin:0}body.in-flight #overlay h2{font-size:22px}body.in-flight #overlay-desc{font-size:10px}body.in-flight #overlay-actions button{font-size:11px;padding:7px 9px;min-height:40px}body.in-flight #toast{font-size:11px;top:10%}}
